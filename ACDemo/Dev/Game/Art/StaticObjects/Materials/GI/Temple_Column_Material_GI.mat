@@ -1,0 +1,12 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Temple_Column_Textures\T_Temple_Column_D.dds" />
+	</Textures>
+	
+	<Constants>
+	</Constants>
+	
+</Material>

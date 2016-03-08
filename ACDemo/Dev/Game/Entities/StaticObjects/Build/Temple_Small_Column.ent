@@ -1,0 +1,10 @@
+<Entity type="Entity" resource="Entities\StaticObjects\Build\Temple_Small_Column_Entity.ent">
+	
+    <MeshRenderComponent Static="true">
+		<MeshResource Path="Art\StaticObjects\Build\Temple_Small_Column.dae" />
+		<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+		<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Temple_Column_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Temple_Column_Material_GI.mat"/>
+		<Shaders ShaderFill="Shaders\MaterialShaders\Temple_Column_Shader.shd" Material = "Art\StaticObjects\Materials\Temple_Column_Material.mat"/>
+	</MeshRenderComponent>
+
+</Entity>

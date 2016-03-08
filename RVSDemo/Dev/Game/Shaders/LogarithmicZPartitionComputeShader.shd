@@ -1,0 +1,55 @@
+[Compute shader]
+
+/**********************************************************************
+	Split Frustum in logarithmic partition
+***********************************************************************/
+
+#extension GL_ARB_compute_shader: enable
+#extension GL_ARB_shader_storage_buffer_object: enable
+
+#define PARTITIONS 4
+
+layout (local_size_x = 4, local_size_y = 1, local_size_z = 1) in;
+
+struct FrustumPartition
+{
+	float fBeginPartiton;
+	float fEndPartition;
+	vec2 unused;
+	vec4 scale;
+	vec4 bias;
+};
+
+layout(std430, binding = 9) buffer blockBuffer
+{
+	FrustumPartition frustumPartitionBuffer[];
+};
+
+uniform vec2 cameraNearFar;
+
+float LogPartitionFromRange(uint partition, float minZ, float maxZ)
+{
+    float z = maxZ;   // Exclusive on this end
+    if (partition < PARTITIONS) 
+	{
+        float ratio = maxZ / minZ;
+        float power = float(partition) * (1.0f / float(PARTITIONS));
+        z = minZ * pow(ratio, power);
+    }
+    return z;
+}
+
+void main()
+{
+	// Grab min/max Z from previous reduction
+    float minZ = frustumPartitionBuffer[0].fBeginPartiton;
+    float maxZ = frustumPartitionBuffer[PARTITIONS - 1].fEndPartition;
+	
+	barrier();
+	
+    // Work out partition intervals
+    frustumPartitionBuffer[gl_GlobalInvocationID.x].fBeginPartiton =
+        gl_GlobalInvocationID.x == 0 ? cameraNearFar.x : LogPartitionFromRange(gl_GlobalInvocationID.x, minZ, maxZ);
+    frustumPartitionBuffer[gl_GlobalInvocationID.x].fEndPartition =
+        gl_GlobalInvocationID.x == (PARTITIONS - 1) ? cameraNearFar.y : LogPartitionFromRange(gl_GlobalInvocationID.x + 1, minZ, maxZ);
+}

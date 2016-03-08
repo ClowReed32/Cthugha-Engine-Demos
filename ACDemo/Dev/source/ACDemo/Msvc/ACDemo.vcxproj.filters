@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\DynamicPlayerController.cpp" />
+    <ClCompile Include="..\KinematicPlayerControlled.cpp" />
+    <ClCompile Include="ACDemo.cpp" />
+    <ClCompile Include="..\ACDemoEvents.cpp" />
+    <ClCompile Include="..\ACDemoView.cpp" />
+    <ClCompile Include="..\Entity\ACDemoEntityFactory.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MainLoop\MoveSceneObject.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\DynamicPlayerController.h" />
+    <ClInclude Include="..\KinematicPlayerController.h" />
+    <ClInclude Include="ACDemo.h" />
+    <ClInclude Include="..\ACDemoEvents.h" />
+    <ClInclude Include="..\ACDemoView.h" />
+    <ClInclude Include="..\Entity\ACDemoEntityFactory.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MainLoop\MoveSceneObject.h">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{b1102cf3-e426-416e-921d-d24209135752}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{91860b80-0c3f-40ae-88c3-c6a02dab5227}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{b3f7ae95-f737-4bf3-8f67-ac6b0ab3fb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{a665ff71-c84a-42c9-b8f3-52cbee705cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainLoop">
+      <UniqueIdentifier>{fa7f0987-fe1a-4131-baf1-8cbc0e791672}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+<Entity type="Entity" resource="Entities\StaticObjects\Rocks\Medium_Rock_00_Entity.ent">
+	
+    <MeshRenderComponent Static="true">
+		<MeshResource Path="Art\StaticObjects\Rocks\Medium_Rock_00.dae" />
+		<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+		<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Shader.shd" Material = "Art\StaticObjects\Materials\Medium_Rock_00_Material.mat"/>
+	</MeshRenderComponent>
+
+</Entity>

@@ -1,0 +1,22 @@
+[Compute shader]
+
+RWTexture3D<uint> voxelizationSceneData;
+RWTexture3D<float4> giSceneData;
+
+int cascadeResolution;
+int cascade;
+
+[numthreads(16, 8, 1)]
+
+void main( uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex )
+{
+	voxelizationSceneData[int3(DTid.x, DTid.y, DTid.z + cascadeResolution*cascade)] = 0x00000000;
+	voxelizationSceneData[int3(DTid.x, DTid.y + cascadeResolution, DTid.z + cascadeResolution*cascade)] = 0x00000000;
+	
+	giSceneData[int3(DTid.x, DTid.y, DTid.z + cascadeResolution*cascade)] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	giSceneData[int3(DTid.x, DTid.y + cascadeResolution, DTid.z + cascadeResolution*cascade)] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	giSceneData[int3(DTid.x, DTid.y + 2*cascadeResolution, DTid.z + cascadeResolution*cascade)] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	giSceneData[int3(DTid.x, DTid.y + 3*cascadeResolution, DTid.z + cascadeResolution*cascade)] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	giSceneData[int3(DTid.x, DTid.y + 4*cascadeResolution, DTid.z + cascadeResolution*cascade)] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	giSceneData[int3(DTid.x, DTid.y + 5*cascadeResolution, DTid.z + cascadeResolution*cascade)] = float4(0.0f, 0.0f, 0.0f, 0.0f);
+}

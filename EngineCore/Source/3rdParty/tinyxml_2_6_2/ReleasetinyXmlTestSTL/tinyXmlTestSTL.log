@@ -1,0 +1,21 @@
+﻿Build started 20/02/2015 2:01:49.
+     1>Project "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\tinyXmlTestSTL.vcxproj" on node 3 (Build target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.tlog\".
+       InitializeBuildStatus:
+         Creating "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D TIXML_USE_STL /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\\" /Fd"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt xmltest.cpp
+         xmltest.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.lib" /MACHINE:X86 /SAFESEH "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\xmltest.obj"
+         "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyxmlSTL\tinyxmlSTL.lib"
+         tinyXmlTestSTL.vcxproj -> C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.exe
+       FinalizeBuildStatus:
+         Deleting file "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.tlog\unsuccessfulbuild".
+         Touching "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\ReleasetinyXmlTestSTL\tinyXmlTestSTL.tlog\tinyXmlTestSTL.lastbuildstate".
+     1>Done Building Project "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\tinyXmlTestSTL.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.92

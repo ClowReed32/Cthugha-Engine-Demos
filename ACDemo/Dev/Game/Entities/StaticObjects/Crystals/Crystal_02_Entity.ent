@@ -1,0 +1,10 @@
+<Entity type="Entity" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent">
+	
+    <MeshRenderComponent Static="true">
+		<MeshResource Path="Art\StaticObjects\Crystals\Rock_Crystal_02.dae" />
+		<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+		<Shaders ShaderFill="Shaders\MaterialShaders\Glass_Simple_Shader.shd" Material = "Art\StaticObjects\Materials\Glass_Simple_Material.mat"/>
+		<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Rock_Crystal_GI.shd" Material = "Art\StaticObjects\Materials\GI\Rock_Crystal_Material_GI.mat"/>
+	</MeshRenderComponent>
+
+</Entity>

@@ -1,0 +1,57 @@
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+};
+
+[Vertex shader]
+
+//Uniform Matrix
+float4x4 World;
+
+float4 scaleBias;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World);
+	output.vertexPosition_worldspace.xy = output.vertexPosition_worldspace.xy * scaleBias.xy + scaleBias.zw;
+	output.vertexUV = In.vertexPosition_modelspace.xy;
+	
+	return output;
+ }
+
+[Fragment shader]
+
+//Target
+Texture2D ImageGUITexture;
+Texture2D BorderMaskTexture;
+SamplerState ImageGUISampler;
+
+float4 main(PsIn In) : SV_Target
+{
+	float4 outputColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	outputColor = ImageGUITexture.SampleLevel(ImageGUISampler, In.vertexUV, 0.0f);
+	float4 borderMask = BorderMaskTexture.Sample(ImageGUISampler, In.vertexUV);
+	
+	if(outputColor.a == 0.0f)
+	{
+		float fDegradate = 2.0f*In.vertexUV.y - 1.0f;
+		outputColor.rgb = float3(fDegradate, fDegradate, fDegradate);
+	}
+	
+	outputColor.rgb *= borderMask.rgb;
+	outputColor.a = borderMask.a;
+	
+	return outputColor;
+}

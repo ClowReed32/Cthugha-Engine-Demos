@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Debugging">
+      <UniqueIdentifier>{ddfbe60a-a701-48cd-afcf-ee81409d55d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{359792ef-aa20-46bc-924e-71a184ac09ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{97341c47-cc40-4bf2-bc78-333e2ede3f94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Multicore">
+      <UniqueIdentifier>{dce4258f-2603-4058-9fcf-81c4daa86c95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CthughaEngine">
+      <UniqueIdentifier>{e76b2221-ec80-43b9-ad1e-2d7c331afce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainLoop">
+      <UniqueIdentifier>{dd02e6db-989d-41d3-b294-0e6091fe53a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceCache">
+      <UniqueIdentifier>{76185d5f-aae0-4074-9c56-eb4dbc9e155e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{23209a41-cd11-4eff-bbaa-8448f1a196fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{db404e8c-6880-4feb-92e4-e6b3e01d9107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\GUI">
+      <UniqueIdentifier>{22021170-120b-4f7f-bf8d-548b89323aaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventManager">
+      <UniqueIdentifier>{4a7b1474-cd4f-48a0-ad81-d5ad874d63df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{1cf0f358-76e9-431a-8b97-1c85c62b2754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\DirectX">
+      <UniqueIdentifier>{b410e6d1-e3e8-4122-815c-498c3e730285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\GUI">
+      <UniqueIdentifier>{e24dc601-36b6-4173-aa84-8b6cd1c8eb08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\Resources">
+      <UniqueIdentifier>{90d0e9eb-aa13-4b50-ae35-b8915c47924f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CthughaStd.cpp" />
+    <ClCompile Include="..\Debugging\Logger.cpp">
+      <Filter>Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Geometry.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Image.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="CthughaAppEntry.cpp">
+      <Filter>CthughaEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CthughaEngine\CthughaApp.cpp">
+      <Filter>CthughaEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MainLoop\Initialization.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ResourceCache\ResCache.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ResourceCache\XmlResource.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ResourceCache\ZipFile.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utilities\String.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Material.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Mesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MainLoop\Process.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MainLoop\ProcessManager.cpp">
+      <Filter>MainLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\EntityFactory.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\TransformComponent.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CthughaEngine\BaseGameLogic.cpp">
+      <Filter>CthughaEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\BitMapFont.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UserInterface\HumanView.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\TextHelper.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Scene.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\SceneNodes.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\RenderComponent.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Light.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EventManager\EventManager.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EventManager\EventManagerImpl.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EventManager\Events.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\MovementController.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\ShadowMap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\QueryQueue.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\VoxelManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Physics\Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Physics\PhysicsEventListener.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\PhysicsComponent.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Physics\MeshColliderResource.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\D3DX11Renderer.cpp">
+      <Filter>Graphics\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UserInterface\GUICreator.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\GUIComponent.cpp">
+      <Filter>Entity\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\RectTransformComponent.cpp">
+      <Filter>Entity\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entities\EntityResource.cpp">
+      <Filter>Entity\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\GUI\UIScene.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\GUI\UINode.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\GUI\UIFunctionText.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\GUI\UIFunctionImage.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\GUI\UIFunctionCheckBox.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\GUI\UIFunctionButton.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\AditionalShadowDataManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\SDFShadowManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Physics\PhysicsDebugDrawer.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\ParticleSystem.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utilities\Random.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\Decal.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Graphics\ScreenPostProcessing.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Debugging\Logger.h">
+      <Filter>Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utilities\Array.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utilities\templates.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utilities\types.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Geometry.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Image.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Multicore\CriticalSection.h">
+      <Filter>Multicore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CthughaEngine\CthughaApp.h">
+      <Filter>CthughaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="CthughaAppEntry.h">
+      <Filter>CthughaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MainLoop\Initialization.h">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ResourceCache\ResCache.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ResourceCache\XmlResource.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ResourceCache\ZipFile.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CthughaEngine\interfaces.h">
+      <Filter>CthughaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utilities\String.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Material.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Mesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MainLoop\Process.h">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MainLoop\ProcessManager.h">
+      <Filter>MainLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\Entity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\EntityComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\EntityFactory.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\TransformComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CthughaEngine\BaseGameLogic.h">
+      <Filter>CthughaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\BitMapFont.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UserInterface\HumanView.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\TextHelper.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UserInterface\UserInterface.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Scene.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\SceneNodes.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utilities\Queue.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\RenderComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\RenderComponentInterface.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Light.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EventManager\EventManager.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EventManager\EventManagerImpl.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EventManager\Events.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\MovementController.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\ShadowMap.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\QueryQueue.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\VoxelManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="CthughaStd.h" />
+    <ClInclude Include="..\Physics\Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Physics\PhysicsEventListener.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\PhysicsComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Physics\MeshColliderResource.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\D3DX11Renderer.h">
+      <Filter>Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UserInterface\GUICreator.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\GUIComponent.h">
+      <Filter>Entity\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\GUIComponentInterface.h">
+      <Filter>Entity\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\RectTransformComponent.h">
+      <Filter>Entity\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Entities\EntityResource.h">
+      <Filter>Entity\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\GUI\UIScene.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\GUI\UINode.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\GUI\UIFunctionText.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\GUI\UIFunctionImage.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\GUI\UIFunctionCheckBox.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\GUI\UIFunctionButton.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\AditionalShadowDataManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\SDFShadowManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Physics\PhysicsDebugDrawer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\ParticleSystem.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utilities\Random.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\Decal.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\ScreenPostProcessing.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

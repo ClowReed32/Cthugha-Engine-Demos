@@ -1,0 +1,10 @@
+<Entity type="Entity" resource="Entities\StaticObjects\Rocks\Rock_02_Entity.ent">
+	
+    <MeshRenderComponent Static="true">
+		<MeshResource Path="Art\StaticObjects\Rocks\Rock_02.dae" />
+		<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+		<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Shader.shd" Material = "Art\StaticObjects\Materials\Rock_02_Material.mat"/>
+		<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\Rock_02_Material.mat"/>
+	</MeshRenderComponent>
+
+</Entity>

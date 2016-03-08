@@ -1,0 +1,15 @@
+<Entity type="Entity" resource="Entities\PlayerEntity.xml">
+	
+	<TransformComponent>
+		<Scale x="1" y="1" z="1" />
+		<Rotation x="0" y="180" z="0" />
+		<Position x="2.0" y="0.5" z="4.35" />
+	</TransformComponent>
+	
+    <PhysicsComponent>
+        <Shape Type = "Capsule" GhostObject="true">
+			<CapsuleProperties Radius="0.3" Height="0.5" />
+		</Shape>
+    </PhysicsComponent>
+
+</Entity>

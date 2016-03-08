@@ -1,0 +1,188 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		RADIANCE INJECTION SHADER  										   	   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+[Compute shader]
+
+//#include "Shaders\Common.shdl"
+
+#define COMPUTE_SHADER_TILE_GROUP_DIM 16
+#define COMPUTE_SHADER_TILE_GROUP_SIZE (COMPUTE_SHADER_TILE_GROUP_DIM*COMPUTE_SHADER_TILE_GROUP_DIM)
+
+#define COMPUTE_SHADER_GROUP_DIM_X 16
+#define COMPUTE_SHADER_GROUP_DIM_Y 8
+#define COMPUTE_SHADER_GROUP_DIM_Z 1
+
+// Uniform GI Voxel Cascades ///////////////////////
+int iCascadeResolution;
+int iCascadeIndex;
+int iNumCascades;
+
+float fMinVoxelDiameter;
+float fMinVoxelDiameterInv;
+float4x4 mWorldToVoxelTex[6];
+
+float g_CellSize;
+float3 g_SnappedGridPosition;
+/////////////////////////////////////////////////
+
+// GBuffer //////////////////////////////////////////////////////////////////
+
+Texture3D<uint> GI_GBuffer;
+
+/////////////////////////////////////////////////////////////////////////////
+
+// Radiance ////////////////////////////////////////////////////////////////
+
+Texture3D<float4> GI_Radiance;
+
+////////////////////////////////////////////////////////////////////////////
+
+// Radiance Output /////////////////////////////////////////////////////////
+
+RWTexture3D<float4> GI_OutputRadiance;
+
+////////////////////////////////////////////////////////////////////////////
+
+// Sample States ///////////////////////////////////////////////////////////
+
+SamplerState VoxelFilter;
+
+////////////////////////////////////////////////////////////////////////////
+
+// Auxiliar Function Voxel Cone Tracing /////////////////////////////////////////////////////////////////////////////////////
+
+float4 convRGBA8Tofloat4(uint val)
+{
+	return float4( float((val&0x000000FF)), float((val&0x0000FF00)>>8U), float((val&0x00FF0000)>>16U), float((val&0xFF000000)>>24U) );
+}
+
+float4 voxelFetch(float3 pos, float3 dir, float lod, int cascade)
+{
+	float zCoords = (1.0f/iNumCascades)*(cascade + pos.z);
+	
+	float4 sampleX =
+		dir.x > 0.0
+		? GI_Radiance.SampleLevel(VoxelFilter, float3(pos.x, 0.125f*pos.y, zCoords), lod)
+		: GI_Radiance.SampleLevel(VoxelFilter, float3(pos.x, 0.125f + 0.125f*pos.y, zCoords), lod);
+	
+	float4 sampleY =
+		dir.y > 0.0
+		? GI_Radiance.SampleLevel(VoxelFilter, float3(pos.x, 0.25f + 0.125f*pos.y, zCoords), lod)
+		: GI_Radiance.SampleLevel(VoxelFilter, float3(pos.x, 0.375f + 0.125f*pos.y, zCoords), lod);
+	
+	float4 sampleZ =
+		dir.z > 0.0
+		? GI_Radiance.SampleLevel(VoxelFilter, float3(pos.x, 0.5f + 0.125f*pos.y, zCoords), lod)
+		: GI_Radiance.SampleLevel(VoxelFilter, float3(pos.x, 0.625f + 0.125f*pos.y, zCoords), lod);
+	
+	float3 sampleWeights = abs(dir);
+	float invSampleMag = 1.0f / (sampleWeights.x + sampleWeights.y + sampleWeights.z + 0.0001f);
+	sampleWeights *= invSampleMag;
+	
+	float4 filtered = 
+		sampleX * sampleWeights.x
+		+ sampleY * sampleWeights.y
+		+ sampleZ * sampleWeights.z;
+	
+	return filtered;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// coneRatio is the cone diameter to height ratio (2.0 for 90-degree cone)
+float4 voxelTraceCone(float3 origin, float3 dir, float coneRatio, float maxDist)
+{
+	//Origin world to voxel texture coordinates
+	float4 origin_voxelspace = mul(float4(origin, 1.0f), mWorldToVoxelTex[iCascadeIndex]);
+	origin_voxelspace.xyz *= 1.0 / origin_voxelspace.w;
+	//Scale distance to voxel texture coordinates
+	float fMaxDist = maxDist * mWorldToVoxelTex[iCascadeIndex][0][0];
+	
+	float4 accum = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	// the starting sample diameter
+	float minDiameter = fMinVoxelDiameter;
+	
+	// push out the starting point to avoid self-intersection
+	float startDist = 2.0f*minDiameter;
+	
+	float dist = startDist;
+
+	while (dist <= fMaxDist && accum.a < 1.0)
+	{
+		// ensure the sample diameter is no smaller than the min
+		// desired diameter for this cone (ensuring we always
+		// step at least minDiameter each iteration, even for tiny
+		// cones - otherwise lots of overlapped samples)
+		float sampleDiameter = max(minDiameter, coneRatio * dist);		
+		float3 samplePos = origin_voxelspace.xyz + dir * dist;
+		
+		// convert diameter to LOD
+		// for example:
+		// log2(1/256 * 256) = 0
+		// log2(1/128 * 256) = 1
+		// log2(1/64 * 256) = 2
+		float sampleLOD = log2(sampleDiameter * fMinVoxelDiameterInv);		
+		
+		float4 sampleValue = voxelFetch(samplePos, -dir, sampleLOD, iCascadeIndex);
+		
+		float sampleWeight = (1.0f - accum.a);
+		accum += sampleValue * sampleWeight;
+		
+		dist += sampleDiameter;
+	}
+	
+	return accum;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+[numthreads(COMPUTE_SHADER_GROUP_DIM_X, COMPUTE_SHADER_GROUP_DIM_Y, COMPUTE_SHADER_GROUP_DIM_Z)]
+void main(uint3 groupId : SV_GroupID, uint3 dispatchThreadId : SV_DispatchThreadID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	uint3 voxelGridPos = uint3(dispatchThreadId.x, dispatchThreadId.y, dispatchThreadId.z);
+	
+	float4 vColorOcclusion = convRGBA8Tofloat4(GI_GBuffer.Load(int4(voxelGridPos.x, voxelGridPos.y, iCascadeIndex*iCascadeResolution + voxelGridPos.z, 0)))*0.003921f;
+	float fOcclusion = vColorOcclusion.a;
+	
+	if(fOcclusion > 0.0f)
+	{
+		//Obtain data from GBuffer
+		
+		float4 vNormalEmission = convRGBA8Tofloat4(GI_GBuffer.Load(int4(voxelGridPos.x, iCascadeResolution + voxelGridPos.y, iCascadeIndex*iCascadeResolution + voxelGridPos.z, 0)))*0.003921f;
+		
+		float3 vVertexNormal_worldspace = normalize(2.0f*(vNormalEmission.xyz) - 1.0f);
+				
+		int halfCells = iCascadeResolution/2;
+	 
+		float3 vPosition_worldspace = voxelGridPos - float3(halfCells, halfCells, halfCells);
+		vPosition_worldspace *= g_CellSize;
+		vPosition_worldspace += g_SnappedGridPosition;
+		
+		//Obtain tangent and binormal;
+		float3 vertexTangent_worldspace = normalize(cross(vVertexNormal_worldspace.xyz, (abs(dot(vVertexNormal_worldspace.xyz, float3(0.0f, 0.0f, 1.0f))) == 1) ? float3(1.0f, 0.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f)));
+		float3 vertexBinormal_worldspace = normalize(cross(vVertexNormal_worldspace, vertexTangent_worldspace));
+		
+		float4 vRadiance = GI_Radiance.Load(int4(voxelGridPos.x, 6*iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z, 0));
+		
+		float4 vOnceBounceRadiance = float4(0.0f, 0.0f, 0.0f, 1.0f);
+		
+		float iblConeRatio = 1.0f;
+		float iblMaxDist = 5.0f;
+		
+		// this sample gets full weight (dot(normal, normal) == 1)
+		vOnceBounceRadiance.rgb += voxelTraceCone(vPosition_worldspace.xyz, normalize(vVertexNormal_worldspace), iblConeRatio, iblMaxDist);
+		// these samples get partial weight
+		vOnceBounceRadiance.rgb += 0.707f * voxelTraceCone(vPosition_worldspace.xyz, normalize(vVertexNormal_worldspace + vertexTangent_worldspace), iblConeRatio, iblMaxDist).rgb;
+		vOnceBounceRadiance.rgb += 0.707f * voxelTraceCone(vPosition_worldspace.xyz, normalize(vVertexNormal_worldspace - vertexTangent_worldspace), iblConeRatio, iblMaxDist).rgb;
+		vOnceBounceRadiance.rgb += 0.707f * voxelTraceCone(vPosition_worldspace.xyz, normalize(vVertexNormal_worldspace + vertexBinormal_worldspace), iblConeRatio, iblMaxDist).rgb;
+		vOnceBounceRadiance.rgb += 0.707f * voxelTraceCone(vPosition_worldspace.xyz, normalize(vVertexNormal_worldspace - vertexBinormal_worldspace), iblConeRatio, iblMaxDist).rgb;
+		
+		vOnceBounceRadiance.rgb = vColorOcclusion.rgb*vOnceBounceRadiance.rgb;
+		
+		GI_OutputRadiance[int3(voxelGridPos.x, voxelGridPos.y, voxelGridPos.z)] = vRadiance + vOnceBounceRadiance;
+	}
+}

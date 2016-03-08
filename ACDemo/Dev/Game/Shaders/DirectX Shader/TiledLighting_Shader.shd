@@ -1,0 +1,227 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		DEFERRED SHADER				   										   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+[Compute shader]
+
+//#include "Shaders\Common.shdl"
+#include "Shaders\PhysicalLighting.shdl"
+
+#define COMPUTE_SHADER_TILE_GROUP_DIM 16
+#define COMPUTE_SHADER_TILE_GROUP_SIZE (COMPUTE_SHADER_TILE_GROUP_DIM*COMPUTE_SHADER_TILE_GROUP_DIM)
+
+RWStructuredBuffer<uint> sbLightIndices;
+
+float2 vLightingBufferDimensions;
+uint uNum_Groups_X;
+
+// GBuffer //////////////////////////////////////////////////////////////////
+
+Texture2D OpaqueDepthTarget;
+Texture2D TranslucentDepthTarget;
+
+/////////////////////////////////////////////////////////////////////////////
+
+// Camera Properties ////////////////////////////////////////////////////////
+
+float2 vCameraNearFar;
+float4x4 mProjection;
+
+/////////////////////////////////////////////////////////////////////////////
+
+// Group Shared Variable ////////////////////////////////////////////////////
+
+groupshared uint sMinZ;
+groupshared uint sMaxZ;
+
+// PointLight list for the tile
+groupshared uint sTileNumPointLights;
+
+// DirectionLight list for the tile
+groupshared uint sTileNumDirectionalLights;
+
+// List of pixels that require per-sample shading
+// We encode two 16-bit x/y coordinates in one uint to save shared memory space
+groupshared uint sPerSamplePixels[COMPUTE_SHADER_TILE_GROUP_SIZE];
+groupshared uint sNumPerSamplePixels;
+
+/////////////////////////////////////////////////////////////////////////////
+
+[numthreads(COMPUTE_SHADER_TILE_GROUP_DIM, COMPUTE_SHADER_TILE_GROUP_DIM, 1)]
+void main(uint3 groupId : SV_GroupID, uint3 dispatchThreadId : SV_DispatchThreadID, uint3 groupThreadId : SV_GroupThreadID)
+{
+    // NOTE: This is currently necessary rather than just using SV_GroupIndex to work
+    // around a compiler bug on Fermi.
+    uint groupIndex = groupThreadId.y * COMPUTE_SHADER_TILE_GROUP_DIM + groupThreadId.x;
+    uint2 globalCoords = dispatchThreadId.xy;
+	
+	// Read GBuffer 	
+	float fOpaqueZdepth = OpaqueDepthTarget.Load( uint3(globalCoords, 0) ).x;
+	float fTranslucentZdepth = TranslucentDepthTarget.Load( uint3(globalCoords, 0) ).x;
+	
+	// Obtain view space position coordinates ///////////////////////////////////////
+	float2 screenPixelOffset = float2(2.0f, -2.0f) / vLightingBufferDimensions;
+	float2 positionScreen = (float2(globalCoords.xy) + 0.5f) * screenPixelOffset.xy + float2(-1.0f, 1.0f);
+			
+	float4 viewRay = float4(positionScreen.x/mProjection._11, positionScreen.y/mProjection._22, 1.0f, -mProjection._33/mProjection._43);
+	viewRay /= viewRay.w;
+	viewRay.xyz = normalize(viewRay.xyz);
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	float fOpaqueViewZ = viewRay.z*fOpaqueZdepth;
+	float fTranslucentViewZ = viewRay.z*fTranslucentZdepth;
+	
+	bool validPixelOpaque = fOpaqueViewZ >= vCameraNearFar.x &&
+             fOpaqueViewZ <  vCameraNearFar.y;
+			 
+	bool validPixelTranslucent = fTranslucentViewZ >= vCameraNearFar.x &&
+             fTranslucentViewZ <  vCameraNearFar.y;
+	
+	fOpaqueViewZ = !validPixelOpaque ? fTranslucentViewZ : fOpaqueViewZ;
+	
+	// Work out Z bounds for our samples
+    float minZSample = vCameraNearFar.y;
+    float maxZSample = vCameraNearFar.x;
+    {
+        // Avoid shading skybox/background or otherwise invalid pixels
+        bool validPixel = 
+             validPixelOpaque || validPixelTranslucent;
+			 
+        [flatten] 
+		if (validPixel) 
+		{
+			minZSample = min(minZSample, fTranslucentViewZ);
+            maxZSample = max(maxZSample, fOpaqueViewZ);
+        }
+    }
+    
+    // Initialize shared memory light list and Z bounds
+    if (groupIndex == 0) 
+	{
+        sTileNumPointLights = 0;
+		sTileNumDirectionalLights = 0;
+        sNumPerSamplePixels = 0;
+        sMinZ = 0x7F7FFFFF;      // Max float
+        sMaxZ = 0;
+    }
+
+    GroupMemoryBarrierWithGroupSync();
+	
+    // NOTE: Can do a parallel reduction here but now that we have MSAA and store sample frequency pixels
+    // in shaded memory the increased shared memory pressure actually *reduces* the overall speed of the kernel.
+    // Since even in the best case the speed benefit of the parallel reduction is modest on current architectures
+    // with typical tile sizes, we have reverted to simple atomics for now.
+    // Only scatter pixels with actual valid samples in them
+    if (maxZSample >= minZSample) 
+	{
+        InterlockedMin(sMinZ, asuint(minZSample));
+        InterlockedMax(sMaxZ, asuint(maxZSample));
+    }
+
+    GroupMemoryBarrierWithGroupSync();
+
+    float minTileZ = asfloat(sMinZ);
+    float maxTileZ = asfloat(sMaxZ);
+    
+    // NOTE: This is all uniform per-tile (i.e. no need to do it per-thread) but fairly inexpensive
+    // We could just precompute the frusta planes for each tile and dump them into a constant buffer...
+    // They don't change unless the projection matrix changes since we're doing it in view space.
+    // Then we only need to compute the near/far ones here tightened to our actual geometry.
+    // The overhead of group synchronization/LDS or global memory lookup is probably as much as this
+    // little bit of math anyways, but worth testing.
+
+    // Work out scale/bias from [0, 1]
+    float2 tileScale = float2(vLightingBufferDimensions.xy) * rcp(float(2 * COMPUTE_SHADER_TILE_GROUP_DIM));
+    float2 tileBias = tileScale - float2(groupId.xy);
+
+    // Now work out composite projection matrix
+    // Relevant matrix columns for this tile frusta
+    float4 c1 = float4(mProjection._11 * tileScale.x, 0.0f, tileBias.x, 0.0f);
+    float4 c2 = float4(0.0f, -mProjection._22 * tileScale.y, tileBias.y, 0.0f);
+    float4 c4 = float4(0.0f, 0.0f, 1.0f, 0.0f);
+
+    // Derive frustum planes
+    float4 frustumPlanes[6];
+    // Sides
+    frustumPlanes[0] = c4 - c1;
+    frustumPlanes[1] = c4 + c1;
+    frustumPlanes[2] = c4 - c2;
+    frustumPlanes[3] = c4 + c2;
+    // Near/far
+    frustumPlanes[4] = float4(0.0f, 0.0f,  1.0f, -minTileZ);
+    frustumPlanes[5] = float4(0.0f, 0.0f, -1.0f,  maxTileZ);
+    
+    // Normalize frustum planes (near/far already normalized)
+    [unroll] 
+	for (uint i = 0; i < 4; ++i) 
+	{
+        frustumPlanes[i] *= rcp(length(frustumPlanes[i].xyz));
+    }
+    
+    // Cull lights for this tile
+	
+	uint uFixedOffset = (MAX_DIRECTIONAL_LIGHT + MAX_LIGHTS)*(groupId.y*uNum_Groups_X + groupId.x);
+	
+	// Point Lights
+    for (uint lightIndex = groupIndex; lightIndex < iNumPointLights; lightIndex += COMPUTE_SHADER_TILE_GROUP_SIZE) 
+	{
+        PointSpotLight light = sbPointLights[lightIndex];
+                
+        // Cull: point light sphere vs tile frustum
+        bool inFrustum = true;
+		
+        [unroll] 
+		for (uint i = 0; i < 6; ++i) 
+		{
+            float d = dot(frustumPlanes[i], float4(light.vViewPosition, 1.0f));
+            inFrustum = inFrustum && (d >= -light.fRadius);
+        }
+
+        [branch] 
+		if (inFrustum) 
+		{
+            // Append light to list
+            // Compaction might be better if we expect a lot of lights
+            uint listIndex;
+            InterlockedAdd(sTileNumPointLights, 1, listIndex);
+            sbLightIndices[uFixedOffset + listIndex + 1] = lightIndex;
+        }
+    }
+	
+	// Directional Lights
+	for (uint lightIndex = groupIndex; lightIndex < iNumDirectionalLights; lightIndex += COMPUTE_SHADER_TILE_GROUP_SIZE) 
+	{
+        DirectionalLight light = cbDirectionalLights[lightIndex];
+                
+        // Cull: point light sphere vs tile frustum
+        bool inFrustum = true;
+		
+        [unroll] 
+		for (uint i = 0; i < 6; ++i) 
+		{
+            float d0 = dot(frustumPlanes[i], float4(light.vViewInitPosition, 1.0f));
+			float d1 = dot(frustumPlanes[i], float4(light.vViewInitPosition + light.vViewLightDirection*light.fLength, 1.0f));
+            inFrustum = inFrustum && ((d0 >= -light.fMaxRadius) || (d1 >= -light.fMaxRadius));
+        }
+
+        [branch] 
+		if (inFrustum) 
+		{
+            // Append light to list
+            // Compaction might be better if we expect a lot of lights
+            uint listIndex;
+            InterlockedAdd(sTileNumDirectionalLights, 1, listIndex);
+            sbLightIndices[uFixedOffset + MAX_LIGHTS + listIndex + 2] = lightIndex;
+        }
+    }
+
+    GroupMemoryBarrierWithGroupSync();
+    
+	if(groupIndex == 0)
+	{
+		sbLightIndices[uFixedOffset] = sTileNumPointLights;
+		sbLightIndices[uFixedOffset + MAX_LIGHTS + 1] = sTileNumDirectionalLights;
+	}	
+}

@@ -1,0 +1,13 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "vColor_Emission" Type = "VEC4" Value = "1.0 1.0 1.0 1.0" />
+	</Constants>
+	
+</Material>

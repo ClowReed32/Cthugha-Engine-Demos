@@ -1,0 +1,602 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		SIMPLE LIGHTINGSHADER	(NO LIGHTING, ONLY COLOR TEXTURE)			   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+#define N_BRUTE_SAMPLES 10
+#define N_FINE_SAMPLES 5
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+	float3 ViewRay				 	 : TexCoord1;
+};
+
+[Vertex shader]
+
+//Uniform Matrix
+float4x4 InverseView;
+float4x4 InverseProjection;
+
+float4 vCameraPosition;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	float4 positionWS = mul(float4(In.vertexPosition_modelspace, 1.0f), mul(InverseProjection, InverseView));
+	positionWS /= positionWS.w;
+	
+	output.ViewRay = positionWS - vCameraPosition;
+	
+	return output;
+ }
+
+[Fragment shader]
+
+#define PI 3.14159265359f
+
+//Target Textures
+Texture2D depthTarget;
+Texture2D normalTarget;
+Texture2D baseTarget;
+Texture2D MREC_Target;
+Texture2D indirectDiffuseTarget;
+
+//Sampler
+SamplerState TargetSample;
+SamplerState LinearSample;
+
+//General Light constants
+float4 lightIntensitive[3];
+float4 lightColor[10];
+int4 lightType[3];
+int4 lightGenerateShadow[3];
+
+//Directional Light constants
+float4 lightDirection[10];
+
+//Point Light constants
+float4 positionLight[10];
+float4 lightRadius[3];
+
+//Spot Light constant
+float4 thetaAngle[3];
+float4 phiAngle[3];
+
+//Num Lights in Packet
+int numLights;
+
+//Camera constant
+float4 vCameraPosition;
+
+//Matrix
+float4x4 View;
+float4x4 Projection;
+
+ // Returns a random number based on a float3 and an int.
+float fract(float x)
+{
+	return x - floor(x);
+}
+ 
+float random(float3 seed, int i)
+{
+	float4 seed4 = float4(seed,i);
+	float dot_product = dot(seed4, float4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	Especial function for applicate Attenuation to depth. Only for Sun directional Light
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	SDF SHADOW FUNCTIONS AND BUFFERS
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define SDF_MAX_CLUSTERS 20
+#define SDF_MAX_ELEMENTS 50
+
+struct SDFObjectElement
+{
+	float4 vcMinObb, vcMaxObb, vcMinWrapAabb, vcMaxWrapAabb, vSDFCoord, vSDFDim;
+	float4x4 mToVoxelSpace, mInverseWorldSpace;
+};
+
+struct SDFCluster
+{
+    float4 vcMin, vcMax;
+    int iNumObjects;
+    int aiObjectIndex[19];
+};
+
+struct SDFClusterPack
+{
+    float4 vcMin, vcMax;
+    int4 vData[5];
+};
+
+struct Ray 
+{
+    float3 origin;
+    float3 direction;
+    float4 inv_direction;
+    int sign[3];
+};
+
+Ray makeRay(float3 origin, float3 direction) 
+{
+    float3 inv_direction = 1.0f / direction;
+	Ray ray;
+	
+	ray.origin = origin;
+	ray.direction = direction;
+	ray.inv_direction.xyz = inv_direction;
+	ray.sign[0] = inv_direction.x < 0;
+	ray.sign[1] = inv_direction.y < 0;
+	ray.sign[2] = inv_direction.z < 0;
+	
+    return ray;
+}
+
+float Clamp01WithoutIf(float a)
+{
+	float max = (a + abs(a))*0.5f;
+	float min = (max + 1 - abs(1 - max))*0.5f;
+	
+	return min;
+}
+
+SDFCluster ToSDFCluster(SDFClusterPack vPack)
+{	
+	SDFCluster cluster;
+	
+	cluster.vcMin = vPack.vcMin;
+	cluster.vcMax = vPack.vcMax;
+	cluster.iNumObjects = vPack.vData[0].x;
+	cluster.aiObjectIndex[0] = vPack.vData[0].y; 
+	cluster.aiObjectIndex[1] = vPack.vData[0].z; 
+	cluster.aiObjectIndex[2] = vPack.vData[0].w;	
+	cluster.aiObjectIndex[3] = vPack.vData[1].x; 
+	cluster.aiObjectIndex[4] = vPack.vData[1].y; 
+	cluster.aiObjectIndex[5] = vPack.vData[1].z;	
+	cluster.aiObjectIndex[6] = vPack.vData[1].w; 
+	cluster.aiObjectIndex[7] = vPack.vData[2].x; 
+	cluster.aiObjectIndex[8] = vPack.vData[2].y;
+	cluster.aiObjectIndex[9] = vPack.vData[2].z; 
+	cluster.aiObjectIndex[10] = vPack.vData[2].w; 
+	cluster.aiObjectIndex[11] = vPack.vData[3].x;
+	cluster.aiObjectIndex[12] = vPack.vData[3].y; 
+	cluster.aiObjectIndex[13] = vPack.vData[3].z; 
+	cluster.aiObjectIndex[14] = vPack.vData[3].w;
+	cluster.aiObjectIndex[15] = vPack.vData[4].x; 
+	cluster.aiObjectIndex[16] = vPack.vData[4].y; 
+	cluster.aiObjectIndex[17] = vPack.vData[4].z;
+	cluster.aiObjectIndex[18] = vPack.vData[4].w;
+	
+	return cluster;
+}
+
+// Buffers //////////////////
+SDFObjectElement bfSceneObject[SDF_MAX_ELEMENTS];
+SDFClusterPack bfSceneCluster[SDF_MAX_CLUSTERS];
+int iNumCluster;
+/////////////////////////////
+
+// Textures /////////////////
+Texture3D DistanceField;
+SamplerState voxelFilter;
+/////////////////////////////
+
+// Aabb - Ray Intersection Functions //////////////////////////////////////////////////////////////////////////////////
+float AabbRayIntersectionDirectional(Ray ray, float4 aabb[2], out float tmin, out float tmax)
+{
+	float tymin, tymax, tzmin, tzmax;
+    tmin = (aabb[ray.sign[0]].x - ray.origin.x) * ray.inv_direction.x;
+    tmax = (aabb[1-ray.sign[0]].x - ray.origin.x) * ray.inv_direction.x;
+    tymin = (aabb[ray.sign[1]].y - ray.origin.y) * ray.inv_direction.y;
+    tymax = (aabb[1-ray.sign[1]].y - ray.origin.y) * ray.inv_direction.y;
+    tzmin = (aabb[ray.sign[2]].z - ray.origin.z) * ray.inv_direction.z;
+    tzmax = (aabb[1-ray.sign[2]].z - ray.origin.z) * ray.inv_direction.z;
+    tmin = max(max(tmin, tymin), tzmin);
+    tmax = min(min(tmax, tymax), tzmax);
+	
+	if (tmin > tmax || tmax < 0)
+		return 1.0f;
+	
+	tmin = max(tmin, 0.0f); 
+	
+	return 0.0f;
+}
+
+float AabbRayIntersectionPoint(Ray ray, float fDelta, float4 aabb[2], out float tmin, out float tmax)
+{
+	float tymin, tymax, tzmin, tzmax;
+    tmin = (aabb[ray.sign[0]].x - ray.origin.x) * ray.inv_direction.x;
+    tmax = (aabb[1-ray.sign[0]].x - ray.origin.x) * ray.inv_direction.x;
+    tymin = (aabb[ray.sign[1]].y - ray.origin.y) * ray.inv_direction.y;
+    tymax = (aabb[1-ray.sign[1]].y - ray.origin.y) * ray.inv_direction.y;
+    tzmin = (aabb[ray.sign[2]].z - ray.origin.z) * ray.inv_direction.z;
+    tzmax = (aabb[1-ray.sign[2]].z - ray.origin.z) * ray.inv_direction.z;
+    tmin = max(max(tmin, tymin), tzmin);
+    tmax = min(min(tmax, tymax), tzmax);
+	
+	if (tmin > tmax || tmax < 0 || tmax > fDelta)
+		return 1.0f;
+	
+	tmin = max(tmin, 0.0f); 
+	tmax = min(tmax, fDelta);
+	
+	return 0.0f;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Shadow Function //////////////////////////////////////////////////////////////////////////////////////////////////////
+float CalculateSDFShadowDirectional(float3 vPosition_worldspace, float3 vRayDir)
+{
+	float k = 15.0f;
+	float shadow = 1.0f;
+	float mint = 0.0f, maxt = 0.0f;
+	
+	Ray ray_worldspace = makeRay(vPosition_worldspace, vRayDir);
+	
+	for(int j = 0; j < iNumCluster; j++)
+	{
+		SDFCluster cluster = ToSDFCluster(bfSceneCluster[j]);
+		float4 vClusterAabb[2];
+		vClusterAabb[0] = cluster.vcMin;
+		vClusterAabb[1] = cluster.vcMax;
+		
+		if(AabbRayIntersectionDirectional(ray_worldspace, vClusterAabb, mint, maxt) == 0.0f)
+		{
+			for(int i = 0; i < cluster.iNumObjects; i++)
+			{
+				SDFObjectElement object = bfSceneObject[cluster.aiObjectIndex[i]];
+				float4 vAabb[2];
+				
+				vAabb[0] = object.vcMinWrapAabb;
+				vAabb[1] = object.vcMaxWrapAabb;
+			
+				if(AabbRayIntersectionDirectional(ray_worldspace, vAabb, mint, maxt) == 0.0f)
+				{
+					float4x4 mInverseWorldSpace = object.mInverseWorldSpace;
+					float4 vObb[2];
+					
+					vObb[0] = object.vcMinObb;
+					vObb[1] = object.vcMaxObb;
+					float3 vPosition_modelspace = mul(float4(vPosition_worldspace, 1.0f), mInverseWorldSpace).xyz;
+					float3 vRayDir_modelspace = normalize(mul(float4(vRayDir, 0.0f), mInverseWorldSpace).xyz);
+
+					Ray ray_modelspace = makeRay(vPosition_modelspace, vRayDir_modelspace);
+					
+					if(AabbRayIntersectionDirectional(ray_modelspace, vObb, mint, maxt) == 0.0f)
+					{
+						float4x4 mToVoxelGrid = object.mToVoxelSpace;
+						
+						float3 vPosition_voxelspace = object.vSDFDim.xyz*mul(float4(vPosition_modelspace, 1.0f), mToVoxelGrid).xyz + object.vSDFCoord.xyz;
+						float3 vRayDir_voxelspace = object.vSDFDim.xyz*mul(float4(vRayDir_modelspace, 0.0f), mToVoxelGrid).xyz;	
+						
+						float tcenter = (mint + maxt)*0.5f;
+						mint = tcenter + (mint - tcenter)*0.9f;
+						maxt = tcenter + (maxt - tcenter)*0.9f;
+						
+						for( float t=mint; t < maxt; )
+						{
+							float3 vcHit_voxelspace = vPosition_voxelspace + vRayDir_voxelspace*t;														
+							float h = DistanceField.SampleLevel(voxelFilter, vcHit_voxelspace, 0.0f).x;
+							
+							if( h<0.001 )
+							{
+								shadow = 0.0f;
+								break;
+							}
+										
+							shadow = min( shadow, k*h/t );
+							t += h;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return shadow + 0.3;
+}
+
+float CalculateSDFShadowPoint(float3 vPosition_worldspace, float3 vRayDir, float3 vLightPos)
+{
+	float k = 15.0f;
+	float shadow = 1.0f;
+	float mint = 0.0f, maxt = 0.0f;
+	
+	Ray ray_worldspace = makeRay(vPosition_worldspace, vRayDir);
+	float fLightDelta_worldspace = (vLightPos.x - vPosition_worldspace.x) / vRayDir.x;
+	
+	for(int j = 0; j < iNumCluster; j++)
+	{
+		SDFCluster cluster = ToSDFCluster(bfSceneCluster[j]);
+		float4 vClusterAabb[2];
+		vClusterAabb[0] = cluster.vcMin;
+		vClusterAabb[1] = cluster.vcMax;
+		
+		if(AabbRayIntersectionPoint(ray_worldspace, fLightDelta_worldspace, vClusterAabb, mint, maxt) == 0.0f)
+		{
+			for(int i = 0; i < cluster.iNumObjects; i++)
+			{
+				SDFObjectElement object = bfSceneObject[cluster.aiObjectIndex[i]];
+				float4 vAabb[2];
+				
+				vAabb[0] = object.vcMinWrapAabb;
+				vAabb[1] = object.vcMaxWrapAabb;
+			
+				if(AabbRayIntersectionPoint(ray_worldspace, fLightDelta_worldspace, vAabb, mint, maxt) == 0.0f)
+				{
+					float4x4 mInverseWorldSpace = object.mInverseWorldSpace;
+					float4 vObb[2];
+					
+					vObb[0] = object.vcMinObb;
+					vObb[1] = object.vcMaxObb;
+					float3 vPosition_modelspace = mul(float4(vPosition_worldspace, 1.0f), mInverseWorldSpace).xyz;
+					float3 vRayDir_modelspace = normalize(mul(float4(vRayDir, 0.0f), mInverseWorldSpace).xyz);
+					float3 vLightPos_modelspace = mul(float4(vLightPos, 1.0f), mInverseWorldSpace).xyz;
+					float fLightDelta_modelspace = (vLightPos_modelspace.x - vPosition_modelspace.x) / vRayDir_modelspace.x;
+
+					Ray ray_modelspace = makeRay(vPosition_modelspace, vRayDir_modelspace);
+					
+					if(AabbRayIntersectionPoint(ray_modelspace, fLightDelta_modelspace, vObb, mint, maxt) == 0.0f)
+					{
+						float4x4 mToVoxelGrid = object.mToVoxelSpace;
+						
+						float3 vPosition_voxelspace = object.vSDFDim.xyz*mul(float4(vPosition_modelspace, 1.0f), mToVoxelGrid).xyz + object.vSDFCoord.xyz;
+						float3 vRayDir_voxelspace = object.vSDFDim.xyz*mul(float4(vRayDir_modelspace, 0.0f), mToVoxelGrid).xyz;	
+						
+						float tcenter = (mint + maxt)*0.5f;
+						mint = tcenter + (mint - tcenter)*0.9f;
+						maxt = tcenter + (maxt - tcenter)*0.9f;
+						
+						for( float t=mint; t < maxt; )
+						{
+							float3 vcHit_voxelspace = vPosition_voxelspace + vRayDir_voxelspace*t;														
+							float h = DistanceField.SampleLevel(voxelFilter, vcHit_voxelspace, 0.0f).x;
+							
+							if( h<0.001 )
+							{
+								shadow = 0.0f;
+								break;
+							}
+										
+							shadow = min( shadow, k*h/t );
+							t += h;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return shadow + 0.3;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float D_Function(float a, float fNoH)
+{
+	float a2 = a*a;
+    float NoH2 = fNoH * fNoH;
+    float denominator = NoH2 * (a2 - 1.0f) + 1.0f;
+    denominator *= denominator;
+    denominator *= PI;
+    
+	return a2 / denominator;
+}
+
+float G_Function(float a, float fNoV, float fNoL)
+{
+	float fK = a*0.5f;
+	float fG0 = fNoV / (fNoV*(1 - fK) + fK);
+	float fG1 = fNoL / (fNoL*(1 - fK) + fK);
+	return fG0*fG1;
+}
+
+float3 F_Function(float3 vSpecularColor, float fVoH)
+{
+	float fF0 = (-5.55473f*fVoH - 6.98316f)*fVoH;	
+	return (vSpecularColor + (1.0f - vSpecularColor) * pow(2.0f, (-5.55473f*fVoH - 6.98316f)*fVoH));
+}
+
+float4 directionalLightDirectIllumination(float4 diffuseColor, float3 vSpecularColor, float fRoughness2, float4 vertexNormal_worldspace, float4 vPosition_worldspace, float3 vV, float fNoV, uint lightIndex)
+{
+	//Shadow Calculate	
+	float shadowOcclusion = 1.0f;
+	
+	//if(lightGenerateShadow[lightIndex>>2][lightIndex&3] == 1)
+		//shadowOcclusion = CalculateSDFShadowDirectional(vPosition_worldspace, -lightDirection[lightIndex].xyz);
+	
+	float3 vLightDirection = -lightDirection[lightIndex].xyz;
+	
+	float3 vH = normalize(vLightDirection + vV);
+	
+	float fNoH = saturate(dot(vertexNormal_worldspace.xyz, vH));
+	float fVoH = saturate(dot(vV, vH));
+	float fNoL = saturate(dot(vLightDirection, vertexNormal_worldspace.xyz));
+	
+	float4 fSpec = float4((D_Function(fRoughness2, fNoH)*G_Function(fRoughness2, fNoV, fNoL)*F_Function(vSpecularColor, fVoH))/(4*fNoL*fNoV + 0.0001f), 1.0f);
+	
+	return shadowOcclusion*lightIntensitive[lightIndex>>2][lightIndex&3]*lightColor[lightIndex]*(diffuseColor*(1.0f - fSpec) + fSpec)*fNoL;
+}
+
+float4 pointLightDirectIllumination(float4 diffuseColor, float3 vSpecularColor, float fRoughness2, float4 vertexNormal_worldspace, float4 vPosition_worldspace, float3 vV, float fNoV, uint lightIndex)
+{	
+	//Shadow Calculate
+	float shadowOcclusion = 1.0f;
+	
+	float att;
+	float lightIntensitiveVal = lightIntensitive[lightIndex>>2][lightIndex&3];
+	float lightRadiusVal = lightRadius[lightIndex>>2][lightIndex&3];
+	
+	float3 vLightDirection = positionLight[lightIndex].xyz - vPosition_worldspace.xyz;
+	float Distance = length(vLightDirection);
+	
+	if(shadowOcclusion <= 0.0f || Distance > lightRadiusVal)
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	vLightDirection /= Distance;
+	
+	//if(lightGenerateShadow[lightIndex>>2][lightIndex&3] == 1)
+		//shadowOcclusion = CalculateSDFShadowPoint(vPosition_worldspace.xyz, Difference.xyz, positionLight[lightIndex].xyz);
+	
+	float3 vH = normalize(vLightDirection + vV);
+	
+	float fNoH = saturate(dot(vertexNormal_worldspace.xyz, vH));
+	float fVoH = saturate(dot(vV, vH));
+	float fNoL = saturate(dot(vLightDirection, vertexNormal_worldspace.xyz));
+	
+	float4 fSpec = float4((D_Function(fRoughness2, fNoH)*G_Function(fRoughness2, fNoV, fNoL)*F_Function(vSpecularColor, fVoH))/(4*fNoL*fNoV + 0.0001f), 1.0f);
+	
+	float att1 = 1 - pow(Distance/(lightRadiusVal + 0.0001), 4);
+	att = saturate(att1*att1)/(Distance*Distance + 1);
+	
+	return att*shadowOcclusion*lightIntensitiveVal*lightColor[lightIndex]*(diffuseColor*(1.0f - fSpec) + fSpec)*fNoL;
+}
+
+float4 spotLightDirectIllumination(float4 diffuseColor, float3 vSpecularColor, float fRoughness2, float4 vertexNormal_worldspace, float4 vPosition_worldspace, float3 vV, float fNoV, uint lightIndex)
+{
+	//Shadow Calculate
+	float shadowOcclusion = 1.0f;
+	
+	float att;
+	float lightIntensitiveVal = lightIntensitive[lightIndex>>2][lightIndex&3];
+	float lightRadiusVal = lightRadius[lightIndex>>2][lightIndex&3];
+	
+	float3 vLightDirection = positionLight[lightIndex].xyz - vPosition_worldspace.xyz;
+	float Distance = length(vLightDirection);
+	
+	if(shadowOcclusion <= 0.0f || Distance > lightRadiusVal)
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);	
+	
+	vLightDirection /= Distance;
+	
+	//Obtain specular light exponent from normal w
+	float exponent = 0.5f*vertexNormal_worldspace.w + 0.5f;
+	float kS = diffuseColor.w;
+	
+	float cos_cur_angle = dot(-lightDirection[lightIndex].xyz, vLightDirection);
+	
+	float cos_thetaAngle = cos(thetaAngle[lightIndex>>2][lightIndex&3]*0.5f);
+	float cos_phiAngle = cos(phiAngle[lightIndex>>2][lightIndex&3]*0.5f);
+	float cos_inner_minus_outer_angle = cos_thetaAngle - cos_phiAngle;
+	
+	if (cos_cur_angle > cos_thetaAngle) 
+	{
+		float3 vH = normalize(vLightDirection + vV);
+	
+		float fNoH = saturate(dot(vertexNormal_worldspace.xyz, vH));
+		float fVoH = saturate(dot(vV, vH));
+		float fNoL = saturate(dot(vLightDirection, vertexNormal_worldspace.xyz));
+		
+		float4 fSpec = float4((D_Function(fRoughness2, fNoH)*G_Function(fRoughness2, fNoV, fNoL)*F_Function(vSpecularColor, fVoH))/(4*fNoL*fNoV + 0.0001f), 1.0f);
+		
+		float att1 = 1 - pow(Distance/(lightRadiusVal + 0.0001), 4);
+		att = saturate(att1*att1)/(Distance*Distance + 1);
+		
+		return att*shadowOcclusion*lightIntensitiveVal*lightColor[lightIndex]*(diffuseColor*(1.0f - fSpec) + fSpec)*fNoL;
+	}
+	else if( cos_cur_angle > cos_phiAngle )
+	{
+		float falloff = (cos_cur_angle - cos_phiAngle) / 
+		cos_inner_minus_outer_angle;
+		
+		float3 vH = normalize(vLightDirection + vV);
+	
+		float fNoH = saturate(dot(vertexNormal_worldspace.xyz, vH));
+		float fVoH = saturate(dot(vV, vH));
+		float fNoL = saturate(dot(vLightDirection, vertexNormal_worldspace.xyz));
+		
+		float4 fSpec = float4((D_Function(fRoughness2, fNoH)*G_Function(fRoughness2, fNoV, fNoL)*F_Function(vSpecularColor, fVoH))/(4*fNoL*fNoV + 0.0001f), 1.0f);
+		
+		float att1 = 1 - pow(Distance/(lightRadiusVal + 0.0001), 4);
+		att = saturate(att1*att1)/(Distance*Distance + 1);
+		
+		return falloff*att*shadowOcclusion*lightIntensitiveVal*lightColor[lightIndex]*(diffuseColor*(1.0f - fSpec) + fSpec)*fNoL;
+	}
+	
+	return float4(0.0f, 0.0f, 0.0f, 0.0f);	
+}
+
+float4 main(PsIn In) : SV_Target
+{
+	float4 color;
+
+	float4 baseColor = baseTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f );
+	float4 vertexNormal_worldspace = normalize(normalTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f ));
+	//float4 indirectDiffuse = indirectDiffuseTarget.SampleLevel( LinearSample, In.vertexUV, 0.0f );
+	float depth = depthTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f ).x;
+	float4 vMREC = MREC_Target.SampleLevel( TargetSample, In.vertexUV, 0.0f );
+	
+	if(vMREC.z > 0.0f)
+	{
+		float fEmissive = 2.0f*vMREC.z; // Duplicate emissive range for hdr
+		return fEmissive*baseColor;
+	}
+	
+	baseColor /= PI;
+	float4 vRealAlbedo = baseColor - baseColor * vMREC.x/*metallic*/;
+	
+	// 0.03 default specular value for dielectric.
+    float3 vRealSpecularColor = lerp(0.03f, baseColor.xyz, vMREC.x/*metallic*/);
+	
+	//Obtain world space position coordinates	
+	float3 viewRay = normalize(In.ViewRay.xyz);
+	float4 vPosition_worldspace = float4(vCameraPosition.xyz + viewRay*depth, 1.0f);
+	
+	//Auxiliar operation
+	float3 vV = normalize(vCameraPosition.xyz - vPosition_worldspace.xyz);
+	float fNoV = saturate(dot(vV, vertexNormal_worldspace.xyz));
+	float a = vMREC.y*vMREC.y;
+	
+	float4 directIllumination = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	for(uint i=0; i<numLights; i++)
+	{
+		if(numLights != 0)
+		{
+			uint lightTypeVal = (uint)lightType[i>>2][i&3];
+			
+			if(lightTypeVal == 0)
+			{
+				directIllumination += directionalLightDirectIllumination(vRealAlbedo, vRealSpecularColor, a/*Roughness2*/, vertexNormal_worldspace, vPosition_worldspace, vV, fNoV, i);
+			}
+			if(lightTypeVal == 1)
+			{
+				directIllumination += pointLightDirectIllumination(vRealAlbedo, vRealSpecularColor, a/*Roughness2*/, vertexNormal_worldspace, vPosition_worldspace, vV, fNoV, i);
+			}
+			if(lightTypeVal == 2)
+			{
+				directIllumination += spotLightDirectIllumination(vRealAlbedo, vRealSpecularColor, a/*Roughness2*/, vertexNormal_worldspace, vPosition_worldspace, vV, fNoV, i);
+			}
+		}
+	}
+	
+	//directIllumination += baseColor*indirectDiffuse;
+	
+	color = directIllumination;
+	color.a = 1.0f;
+	
+	return color;
+}

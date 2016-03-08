@@ -1,0 +1,27 @@
+﻿Build started 20/02/2015 2:01:42.
+     1>Project "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\tinyxml_lib.vcxproj" on node 2 (Build target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.tlog\".
+       InitializeBuildStatus:
+         Creating "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _LIB /D _VC80_UPGRADE=0x0600 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\\" /Fd"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.pdb" /Gd /TP /analyze- /errorReport:prompt tinystr.cpp tinyxml.cpp tinyxmlerror.cpp tinyxmlparser.cpp
+         tinystr.cpp
+         tinyxml.cpp
+         tinyxmlerror.cpp
+         tinyxmlparser.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.lib" /NOLOGO "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinystr.obj"
+         "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.obj"
+         "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxmlerror.obj"
+         "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxmlparser.obj"
+         tinyxml_lib.vcxproj -> C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.lib
+       FinalizeBuildStatus:
+         Deleting file "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.tlog\unsuccessfulbuild".
+         Touching "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\Releasetinyxml\tinyxml.tlog\tinyxml.lastbuildstate".
+     1>Done Building Project "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\Evolutione\Evolutione v0.02\Dev\source\CthughaEngine\3rdParty\tinyxml_2_6_2\tinyxml_lib.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.81

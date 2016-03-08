@@ -1,0 +1,1655 @@
+<Level>
+	<MapData>
+		<MapContents>
+			<StaticObjects>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Border_Collision">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>						
+						<PhysicsComponent>
+							<Shape Type="TriangleMesh" GhostObject="false">
+								<TriangleMeshProperties MeshColliderSource="Art\StaticObjects\Collision\Border_Collision.phyc" />
+							</Shape>
+							<Density>Infinite</Density>
+							<PhysicsMaterial>Normal</PhysicsMaterial>
+						</PhysicsComponent>						
+					</Components>
+				</StaticObject>			
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sand_Clock_Sand">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sand_Clock_Sand.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Sand_Shader.shd" Material = "Art\StaticObjects\Materials\Sand_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sand_Clock_Body">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sand_Clock_Body.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Glass_Shader.shd" Material = "Art\StaticObjects\Materials\Glass_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sand_Clock_Ornamentation">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sand_Clock_Ornamentation.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sand_Clock_Pedestal">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sand_Clock_Pedestal.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Stone_Smooth_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Stone_Smooth_Shader.shd" Material = "Art\StaticObjects\Materials\Stone_Smooth_Material.mat"/>
+						</MeshRenderComponent>						
+						<PhysicsComponent>
+							<Shape Type = "Capsule" GhostObject="false">
+								<CapsuleProperties Radius="0.6" Height="7.0" />
+							</Shape>
+						</PhysicsComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_SkyLight_Shadow_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="2.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_SkyLight_Shadow.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "true" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\SimpleMaterialShader.shd" Material = "Art\StaticObjects\Materials\TestSphereMaterial.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_SkyLight_Shadow_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="90" z="0" />
+							<Position x="0.0" y="2.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_SkyLight_Shadow.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "true" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\SimpleMaterialShader.shd" Material = "Art\StaticObjects\Materials\TestSphereMaterial.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_SkyLight_Shadow_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="180" z="0" />
+							<Position x="0.0" y="2.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_SkyLight_Shadow.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "true" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\SimpleMaterialShader.shd" Material = "Art\StaticObjects\Materials\TestSphereMaterial.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_SkyLight_Shadow_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="270" z="0" />
+							<Position x="0.0" y="2.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_SkyLight_Shadow.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "true" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\SimpleMaterialShader.shd" Material = "Art\StaticObjects\Materials\TestSphereMaterial.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_2_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_2.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sky_Border_Dome">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sky_Border_Dome.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Stone_Smooth_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Stone_Smooth_Shader.shd" Material = "Art\StaticObjects\Materials\Stone_Smooth_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Sky_Dome">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Sky_Dome.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Sky_Dome_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Sky_Dome_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Sky_Dome_Shader.shd" Material = "Art\StaticObjects\Materials\Sky_Dome_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+			
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_0.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader = "Shaders\MaterialShaders\GI\Rock_Marble_Polished_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Rock_Marble_Polished_Material_GI.mat" />
+							<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Marble_Polished_Shader.shd" Material = "Art\StaticObjects\Materials\Rock_Marble_Polished_Material.mat"/>
+						</MeshRenderComponent>
+						<PhysicsComponent>
+							<Shape Type="Box" GhostObject="false">
+								<BoxProperties Width="200.0" Height="0.2" Depth="200.0" Offset="0.0 -0.1 0.0"/>
+							</Shape>
+							<Density>Infinite</Density>
+							<PhysicsMaterial>Normal</PhysicsMaterial>
+						</PhysicsComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_1.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Stone_Smooth_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Stone_Smooth_Shader.shd" Material = "Art\StaticObjects\Materials\Stone_Smooth_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_2.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Stone_Smooth_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Stone_Smooth_Shader.shd" Material = "Art\StaticObjects\Materials\Stone_Smooth_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_3.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="-90.0f" z="0" />
+							<Position x="-6.656" y="0.0" z="-2.055" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_1.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="90.0f" z="0" />
+							<Position x="4.019" y="0.0" z="-2.055" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_2.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.226" y="0.0" z="-7.224" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_3.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="-45.0f" z="0" />
+							<Position x="-5.226" y="0.0" z="-5.534" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_5.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="45.0f" z="0" />
+							<Position x="2.571" y="0.0" z="-5.534" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_6.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="-135.0f" z="0" />
+							<Position x="-5.226" y="0.0" z="1.879" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_7.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.1" z="1.0" />
+							<Rotation x="0" y="135.0f" z="0" />
+							<Position x="2.583" y="0.0" z="1.879" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_8.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<!--StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Test_Subsurface_Marble_Block">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.25" y="1.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Test_Subsurface_Marble_Block.dae" />
+							<RenderProperties CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Marble_Polished_Subsurface_Shader.shd" Material = "Art\StaticObjects\Materials\Rock_Marble_Polished_Subsurface_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject-->
+				
+				<!-- Test Spheres ---------------------------------------------------------------------------------------------------------->
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="RedSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.8" y="0.8" z="0.8" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="4.0" y="1.1" z="4.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\SimpleMaterialShader.shd" Material = "Art\StaticObjects\Materials\Green_Simple_Material.mat"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Green_Simple_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="GreenSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.8" y="0.8" z="0.8" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="4.0" y="1.1" z="-4.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\SimpleMaterialShader.shd" Material = "Art\StaticObjects\Materials\Red_Simple_Material.mat"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Red_Simple_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="PointLightSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.1" y="0.1" z="0.1" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="0.0" y="3.0" z="6.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Emissive_Shader.shd" Material = "Art\StaticObjects\Materials\Emission_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="SilverSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.5" y="0.5" z="0.5" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-2.0" y="1.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="BrickSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.5" y="0.5" z="0.5" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="2.0" y="1.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+			</StaticObjects>
+			
+			<Entities>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="45.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="90.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="135.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="180.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="225.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="270.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_3.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="315.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="45.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="90.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="135.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="180.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="225.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="270.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.ent" Collides="true" ID="1" Name="Temple_Sky_Dome_Ornamentation_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="315.0f" z="0" />
+							<Position x="0" y="0.0" z="0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+			
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-9.2388" y="0.0" z="-3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.82683" y="0.0" z="-9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.82683" y="0.0" z="-9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="9.2388" y="0.0" z="-3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="9.2388" y="0.0" z="3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.82683" y="0.0" z="9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.82683" y="0.0" z="9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-9.2388" y="0.0" z="3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-7.39104" y="0.0" z="-3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.23358" y="0.0" z="-1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.06147" y="0.0" z="-7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.33939" y="0.0" z="-3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.06147" y="0.0" z="-7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="1.33939" y="0.0" z="-3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="7.39104" y="0.0" z="-3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.23358" y="0.0" z="-1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_9">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="7.39104" y="0.0" z="3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_10">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.23358" y="0.0" z="1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_11">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.06147" y="0.0" z="7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_12">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="1.33939" y="0.0" z="3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_13">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.06147" y="0.0" z="7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_14">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.33939" y="0.0" z="3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_15">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-7.39104" y="0.0" z="3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_16">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.23358" y="0.0" z="1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="22.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="67.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="112.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="157.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="202.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="247.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="292.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Arcs.ent" Collides="true" ID="1" Name="Temple_Arcs_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="337.5f" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<!-- WALL ROCKS ------------------------------------------------------------------------------------------------------------>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.6" y="1.6" z="1.6" />
+							<Rotation x="0" y="-75.0f" z="0" />
+							<Position x="10.312" y="1.286" z="-4.901" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_01">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="7.849" y="1.041" z="-6.015" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_02">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.7" y="1.7" z="1.7" />
+							<Rotation x="-302.295" y="69.219" z="-45.625" />
+							<Position x="6.186" y="1.027" z="-8.037" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_03">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.4" y="1.4" z="1.4" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="4.981" y="0.831" z="-9.266" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_04">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.1" y="1.1" z="1.1" />
+							<Rotation x="160.548" y="-74.466" z="145.924" />
+							<Position x="3.122" y="1.329" z="-10.167" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_05">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.3" y="1.3" z="1.3" />
+							<Rotation x="0" y="-5.705" z="-177.324" />
+							<Position x="1.89" y="1.885" z="-10.542" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_06">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="-8.735" y="0.0f" z="0" />
+							<Position x="0" y="1.36" z="-10.084" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_07">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.3" y="1.3" z="1.3" />
+							<Rotation x="0" y="0.0f" z="-33.733" />
+							<Position x="-2.076" y="1.615" z="-10.52" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_08">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.7" y="1.7" z="1.7" />
+							<Rotation x="0" y="104.279" z="0" />
+							<Position x="-3.228" y="0.0" z="-10.416" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_09">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="-40" z="0" />
+							<Position x="-3.791" y="1.75" z="-9.957" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_10">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.7" y="1.7" z="1.7" />
+							<Rotation x="14.041" y="0.132" z="-14.691" />
+							<Position x="-6.162" y="1.027" z="-8.056" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_11">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.3" y="1.3" z="1.3" />
+							<Rotation x="-20.194" y="32.591" z="-157.606" />
+							<Position x="-7.237" y="1.885" z="-6.874" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_12">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.2" y="1.2" z="1.2" />
+							<Rotation x="178.064" y="0.352" z="171.142" />
+							<Position x="-8.566" y="1.329" z="-5.13" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_13">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.2" y="1.2" z="1.2" />
+							<Rotation x="-14.186" y="34.123" z="21.54" />
+							<Position x="-9.74" y="1.36" z="-2.61" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_14">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.3" y="1.3" z="1.3" />
+							<Rotation x="-64.242" y="-53.446" z="-68.813" />
+							<Position x="-10.698" y="1.615" z="-0.718" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_15">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.7" y="1.7" z="1.7" />
+							<Rotation x="0.0" y="29.279" z="0.0" />
+							<Position x="-10.635" y="1.232" z="0.949" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_02_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_16">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="-3.246" y="-10.928" z="52.136" />
+							<Position x="-9.993" y="0.768" z="2.742" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_17">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.092" y="1.092" z="1.092" />
+							<Rotation x="0.0" y="-75" z="0.0" />
+							<Position x="-8.462" y="1.077" z="5.631" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_18">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.068" y="1.068" z="1.068" />
+							<Rotation x="-5.158" y="-16.305" z="3.949" />
+							<Position x="-8.221" y="1.034" z="7.104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_19">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.068" y="1.068" z="1.068" />
+							<Rotation x="168.404" y="207.85" z="-199.985" />
+							<Position x="-6.393" y="1.61" z="8.196" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_20">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.2" y="1.2" z="1.2" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="-5.492" y="1.991" z="8.597" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_21">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.4" y="1.4" z="1.4" />
+							<Rotation x="0.0" y="-75" z="0.0" />
+							<Position x="10.072" y="0.105" z="-1.876" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_22">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.7" y="1.7" z="1.7" />
+							<Rotation x="-31.942" y="-38.24" z="-17.085" />
+							<Position x="10.6" y="1.55" z="-1.045" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_23">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.286" y="1.286" z="1.286" />
+							<Rotation x="0.0" y="-75" z="0.0" />
+							<Position x="10.443" y="1.277" z="0.954" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_24">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.6" y="1.6" z="1.6" />
+							<Rotation x="0.0" y="75" z="0.0" />
+							<Position x="10.253" y="1.572" z="2.408" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_25">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.7" y="1.7" z="1.7" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="9.177" y="0.5" z="5.998" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_01_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_26">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.3" y="1.3" z="1.3" />
+							<Rotation x="-11.999" y="-0.31" z="-1.046" />
+							<Position x="7.868" y="1.374" z="7.163" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_27">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.6" y="1.6" z="1.6" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="6.895" y="1.286" z="8.395" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_02_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_28">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.4" y="1.4" z="1.4" />
+							<Rotation x="2.019" y="-10.414" z="45.644" />
+							<Position x="4.489" y="0.105" z="9.502" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_29">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.068" y="1.068" z="1.068" />
+							<Rotation x="168.404" y="207.85" z="-199.985" />
+							<Position x="-2.931" y="1.61" z="10.396" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_30">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.068" y="1.068" z="1.068" />
+							<Rotation x="55.493" y="123.08" z="-46.675" />
+							<Position x="-1.547" y="1.61" z="9.505" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_31">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.6" y="1.6" z="1.6" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="-0.08" y="1.572" z="10.636" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_00_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_32">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.068" y="1.068" z="1.068" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="1.782" y="1.277" z="10.334" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Rock_03_Entity.ent" Collides="true" ID="1" Name="Rock_Wall_33">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="2.869" y="1.456" z="10.05" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_00_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="-7.649" y="0.0" z="-5.777" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_02_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="-53" z="0.0" />
+							<Position x="-4.353" y="0.0" z="-8.615" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_00_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0.0" />
+							<Position x="-0.665" y="0.0" z="-9.641" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_01_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="-22" />
+							<Position x="1.789" y="0.0" z="-9.365" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_01_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0" />
+							<Position x="7.957" y="0.0" z="5.615" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_00_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0" />
+							<Position x="-2.44" y="0.357" z="9.351" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_01_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0" />
+							<Position x="-4.572" y="-0.357" z="8.439" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Rocks\Medium_Rock_00_Entity.ent" Collides="true" ID="1" Name="Medium_Rock_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0" />
+							<Position x="-9.339" y="0.258" z="1.762" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+			<!-- WALL CRYSTALS ------------------------------------------------------------------------------------------------------------>
+			
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_00_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_00">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0" />
+							<Position x="0.022" y="0.0" z="-8.903" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_01_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_01">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0" z="0" />
+							<Position x="1.433" y="1.592" z="-9.076" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_01_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_02">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="17.547" y="40.419" z="12.851" />
+							<Position x="5.402" y="0.327" z="-7.575" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_01_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_03">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="16.501" y="16.738" z="-11.817" />
+							<Position x="6.802" y="0.327" z="-6.566" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_01_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_04">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.766" y="0.766" z="0.766" />
+							<Rotation x="-81.695" y="48.434" z="82.905" />
+							<Position x="7.855" y="2.07" z="5.29" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_01_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_05">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.766" y="0.766" z="0.766" />
+							<Rotation x="-34.997" y="55.155" z="37.108" />
+							<Position x="7.155" y="0.204" z="5.928" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_06">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="8.934" y="0.392" z="-1.116" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_07">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="16.183" y="-3.767" z="-6.795" />
+							<Position x="8.934" y="0.758" z="-0.833" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_08">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="10.351" y="-6.864" z="18.189" />
+							<Position x="8.934" y="0.326" z="1.57" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_09">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="-7.248" y="6.356" z="7.306" />
+							<Position x="8.934" y="0.761" z="1.582" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_10">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.8" y="0.8" z="0.8" />
+							<Rotation x="-15.388" y="18.793" z="4.354" />
+							<Position x="8.934" y="1.102" z="1.543" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_11">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.912" y="0.912" z="0.766" />
+							<Rotation x="-3.425" y="45.717" z="-7.834" />
+							<Position x="1.013" y="1.153" z="9.204" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_12">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.666" y="0.666" z="0.666" />
+							<Rotation x="-1.274" y="57.589" z="-11.804" />
+							<Position x="0.924" y="1.627" z="9.204" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_02_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_13">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="-34.503" y="41.199" z="24.064" />
+							<Position x="5.247" y="0.268" z="8.257" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_14">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0.0" y="0.0" z="0.0" />
+							<Position x="-5.643" y="0.677" z="-6.792" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_15">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.54" y="0.54" z="0.54" />
+							<Rotation x="20.685" y="-36.466" z="4.826" />
+							<Position x="-8.978" y="0.258" z="-0.598" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_16">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.732" y="0.732" z="0.732" />
+							<Rotation x="-7.544" y="-63.214" z="-16.691" />
+							<Position x="-8.978" y="1.626" z="1.522" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_17">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.732" y="0.732" z="0.732" />
+							<Rotation x="4.176" y="-53.108" z="0.932" />
+							<Position x="-8.769" y="0.482" z="2.807" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_18">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.732" y="0.732" z="0.732" />
+							<Rotation x="-11.795" y="-30.274" z="-10.959" />
+							<Position x="-6.777" y="0.477" z="5.91" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_19">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.732" y="0.732" z="0.732" />
+							<Rotation x="-156.376" y="-73.09" z="-125.533" />
+							<Position x="-4.886" y="0.477" z="7.372" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Crystals\Crystal_03_Entity.ent" Collides="true" ID="1" Name="Crystal_Wall_20">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.035" y="1.035" z="1.035" />
+							<Rotation x="-172.257" y="-58.191" z="-144.988" />
+							<Position x="0.99" y="0.727" z="9.035" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+			</Entities>
+			
+			<Lights>	
+
+				<Light type="POINT_LIGHT" resource="" Collides="false" ID="4" Name="PointLight_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="3.0" z="6.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="POINT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="15.0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="11.0" />
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="DIRECTIONAL_LIGHT" resource="" Collides="false" ID="4" Name="DirectionalLight_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="-5.05" y="8.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="true">
+							<LightType type="DIRECTIONAL_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="50.0" GenerateShadow="true" GenerateVolumetricShadow="false" Direction="0.0 -1.0 0.0 0.0" MaxRadius="1.68" MaxLength="9.0f"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="DIRECTIONAL_LIGHT" resource="" Collides="false" ID="4" Name="DirectionalLight_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="5.05" y="8.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="true">
+							<LightType type="DIRECTIONAL_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="50.0" GenerateShadow="true" GenerateVolumetricShadow="false" Direction="0.0 -1.0 0.0 0.0" MaxRadius="1.68" MaxLength="9.0f"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="DIRECTIONAL_LIGHT" resource="" Collides="false" ID="4" Name="DirectionalLight_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="8.0" z="-5.05" />
+						</TransformComponent>
+						<LightRenderComponent Static="true">
+							<LightType type="DIRECTIONAL_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="50.0" GenerateShadow="true" GenerateVolumetricShadow="false" Direction="0.0 -1.0 0.0 0.0" MaxRadius="1.68" MaxLength="9.0f"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="DIRECTIONAL_LIGHT" resource="" Collides="false" ID="4" Name="DirectionalLight_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="8.0" z="5.05" />
+						</TransformComponent>
+						<LightRenderComponent Static="true">
+							<LightType type="DIRECTIONAL_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="50.0" GenerateShadow="true" GenerateVolumetricShadow="false" Direction="0.0 -1.0 0.0 0.0" MaxRadius="1.68" MaxLength="9.0f"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>				
+
+			</Lights>
+		</MapContents>
+	</MapData>
+</Level>

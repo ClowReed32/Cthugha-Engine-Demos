@@ -1,0 +1,114 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		TEMPORAL BLUR SHADER	                                			   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+};
+
+[Vertex shader]
+ 
+ PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	return output;
+}
+
+[Fragment shader]
+
+//Target Textures
+Texture2D depthRT;
+Texture2D ssaoRT;
+Texture2D prevDepthRT;
+Texture2D prevSsaoRT;
+SamplerState PostProcessingSampler;
+
+float4x4 InverseProjection;
+float4x4 Projection;
+float4x4 InverseView;
+float4x4 PrevFrameView;
+
+float fFrameTime;
+
+float3 GetViewPosition(float2 uvCoord, float depth)
+{
+	//Obtain view space position coordinates	
+	uvCoord.y = 1.0f - uvCoord.y;
+	uvCoord = 2.0f*uvCoord - 1.0f;
+	float4 ViewDirection = mul(float4(uvCoord, 1.0f, 1.0f), InverseProjection);
+	ViewDirection /= ViewDirection.w;
+	
+	ViewDirection = normalize(ViewDirection);
+	return ViewDirection.xyz * depth;
+}
+
+float2 GetScreenCoord(float3 pos)
+{
+	float4 point_projectSpace = mul(float4(pos, 1.0f), Projection);
+	float2 point_screenSpace = point_projectSpace.xy / point_projectSpace.w;
+	
+	point_screenSpace = point_screenSpace*0.5 + 0.5;
+	
+	point_screenSpace.y = 1.0f - point_screenSpace.y;
+	
+	return point_screenSpace;
+}
+
+float main(PsIn In) : SV_Target
+{
+	// Get current frame depth and AO
+	float fAO = ssaoRT.SampleLevel(PostProcessingSampler, In.vertexUV, 0).x;
+	float fMainDepth = depthRT.SampleLevel(PostProcessingSampler, In.vertexUV, 0).x;
+
+	//////////////////
+	// Convert to view space position
+	float3 vPos = GetViewPosition(In.vertexUV, fMainDepth);
+
+	/////////////////////////
+	// Convert the current view position to the view position it 
+	// would represent the last frame and get the screen coords
+	vPos = mul(mul(float4(vPos, 1.0f), InverseView), PrevFrameView).xyz;
+
+	float2 vTemporalCoords = GetScreenCoord(vPos);
+		   
+	//////////////
+	// Get the AO from the last frame
+	float fPrevFrameAO = prevSsaoRT.SampleLevel(PostProcessingSampler, vTemporalCoords.xy, 0).x;
+	float fPrevFrameDepth = prevDepthRT.SampleLevel(PostProcessingSampler, vTemporalCoords.xy, 0).x;
+
+	/////////////////
+	// Get to view space position of temporal coords
+	float3 vTemporalPos = GetViewPosition(vTemporalCoords.xy, fPrevFrameDepth);
+		   
+	///////
+	// Get weight based on distance to last frame position (removes ghosting artifact)
+	float fWeight = distance(vTemporalPos, vPos) * 9.0;
+
+	////////////////////////////////
+	// And weight based on how different the amount of AO is (removes trailing artifact)
+	// Only works if both fAO and fPrevFrameAO is blurred
+	fWeight += abs(fPrevFrameAO - fAO ) * 5.0;
+
+	////////////////
+	// Clamp to make sure atleast 1.0 / FPS of a frame is blended
+	fWeight = clamp(fWeight, fFrameTime, 1.0);       
+	fAO = lerp(fPrevFrameAO , fAO , fWeight);
+	
+	return fAO;
+}

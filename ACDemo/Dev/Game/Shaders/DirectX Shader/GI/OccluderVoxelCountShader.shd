@@ -1,0 +1,39 @@
+[Compute shader]
+
+RWBuffer<uint> argBuffer;
+AppendStructuredBuffer < uint3 > perInstancePosition:register(u0); 
+Texture3D<uint> voxelGrids;
+
+int cascade;
+int cascadeResolution;
+
+//Pixel Transform Function///////////////////////////////////////////////////////////////////////////////////////////////////////////
+float4 convRGBA8Tofloat4(uint val)
+{
+	return float4( float((val&0x000000FF)), float((val&0x0000FF00)>>8U), float((val&0x00FF0000)>>16U), float((val&0xFF000000)>>24U) );
+}
+
+[numthreads(16, 8, 1)]
+void main( uint3 DTid : SV_DispatchThreadID )
+{
+    if ( DTid.x + DTid.y + DTid.z == 0)
+    {
+        argBuffer[0] = 36;
+        argBuffer[1] = 0;
+        argBuffer[2] = 0;
+        argBuffer[3] = 0;
+        argBuffer[4] = 0;
+    }
+    GroupMemoryBarrier();
+ 
+    uint3 voxelPos = uint3(DTid.x, DTid.y, cascadeResolution*cascade + DTid.z);
+	float4 voxelValue = convRGBA8Tofloat4(voxelGrids.Load(uint4(voxelPos, 0))) * 0.003921f;
+ 
+    if (voxelValue.a > 0.0f)
+    {
+        uint drawIndex;
+        InterlockedAdd(argBuffer[1], 1, drawIndex);
+ 
+        perInstancePosition.Append(uint3(DTid.x, DTid.y, DTid.z));
+    }
+}

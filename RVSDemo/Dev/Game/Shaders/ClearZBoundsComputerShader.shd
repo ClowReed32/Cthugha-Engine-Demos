@@ -1,0 +1,30 @@
+[Compute shader]
+
+/**********************************************************************
+	Reset Frustum Partitions
+***********************************************************************/
+
+#extension GL_ARB_compute_shader: enable
+#extension GL_ARB_shader_storage_buffer_object: enable
+
+layout (local_size_x = 4, local_size_y = 1, local_size_z = 1) in;
+
+struct FrustumPartition
+{
+	float fBeginPartiton;
+	float fEndPartition;
+	vec2 unused;
+	vec4 scale;
+	vec4 bias;
+};
+
+layout(std430, binding = 9) buffer blockBuffer
+{
+	FrustumPartition frustumPartitionBuffer[];
+};
+
+void main()
+{
+	frustumPartitionBuffer[gl_GlobalInvocationID.x].fBeginPartiton = 0x7F7FFFFF;
+	frustumPartitionBuffer[gl_GlobalInvocationID.x].fEndPartition = 0.0f;
+}

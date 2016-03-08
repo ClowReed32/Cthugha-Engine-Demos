@@ -1,0 +1,42 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		SCATTERING SOLVER SHADER											   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+[Compute shader]
+
+Texture3D<float4> VolumeLightingData;
+RWTexture3D<float4> AccumulateVolumeLightingData;
+
+// Voxel Grid Data //////////////////////////////
+float3 vGridDimension;
+/////////////////////////////////////////////////
+
+float fGridVoxelTam;
+
+[numthreads(16, 8, 1)]
+
+void main( uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex )
+{	
+	if(DTid.x < vGridDimension.x && DTid.y < vGridDimension.y)
+	{
+		uint zSpace = (uint)vGridDimension.z;
+		
+		uint3 vVoxelPosition = uint3(DTid.x, DTid.y, 0);
+		float4 vVolumeData = VolumeLightingData.Load(uint4(vVoxelPosition, 0));
+		float4 vAccumulator = float4(saturate(exp(-vVolumeData.a))*vVolumeData.rgb, vVolumeData.a);
+		AccumulateVolumeLightingData[vVoxelPosition] = float4(vAccumulator.rgb, 1.0f - exp(-vAccumulator.a));
+		
+		//Accumulate volume data
+		[allow_uav_condition]
+		for(uint i=1; i < zSpace; i++)
+		{
+			vVoxelPosition = uint3(DTid.x, DTid.y, i);
+			vVolumeData = VolumeLightingData.Load(uint4(vVoxelPosition, 0));
+			vAccumulator += float4(saturate(exp(-vAccumulator.a))*vVolumeData.rgb, vVolumeData.a);
+			
+			AccumulateVolumeLightingData[vVoxelPosition] = float4(vAccumulator.rgb, 1.0f - exp(-vAccumulator.a));
+		}
+	}
+}

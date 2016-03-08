@@ -1,0 +1,12 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Stone_Smooth_Textures\T_Stone_Smooth_D.dds" />
+	</Textures>
+	
+	<Constants>
+	</Constants>
+	
+</Material>

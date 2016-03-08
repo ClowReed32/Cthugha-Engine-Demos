@@ -1,0 +1,624 @@
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+	float3 vertexNormal_modelspace	 : Normal;
+	float2 vertexUV_modelspace		 : TexCoord;
+	float3 vertexTangent_modelspace	 : Tangent;
+	float3 vertexBinormal_modelspace : Binormal;
+};
+
+// Output data
+struct GsIn 
+{
+	float3 vertexNormal_worldspace   : Normal;
+	float4 vertexPosition_unitcube   : SV_Position;
+	float3 vertexPosition_worldspace : TexCoord0;
+	float2 vertexUV					 : TexCoord1;
+	float3 vertexTangent_worldspace	 : Tangent;
+	float3 vertexBinormal_worldspace : Binormal;
+};
+
+struct PsIn
+{
+	float3 gs_VertexNormal_worldspace	: Normal;
+	float4 gs_VertexPosition_unitspace	: SV_Position;
+	float3 gs_VertexPosition_worldspace	: TexCoord0;
+	float2 gs_VertexUV					: TexCoord1;
+	float4 gs_VertexPosition_voxelspace : TexCoord2;
+	float3 gs_VertexTangent_worldspace	: Tangent;
+	float3 gs_VertexBinormal_worldspace : Binormal;
+};
+
+[Vertex shader]
+
+float4x4 worldToUnitCube;
+float4x4 World;
+
+GsIn main(VsIn In)
+{
+	GsIn output;
+	
+	output.vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World).xyz;
+
+	output.vertexPosition_unitcube = mul(float4(output.vertexPosition_worldspace, 1.0f), worldToUnitCube);
+	output.vertexUV.x = In.vertexUV_modelspace.x;
+	output.vertexUV.y = 1.0f - In.vertexUV_modelspace.y;
+	
+	output.vertexNormal_worldspace = mul(float4(In.vertexNormal_modelspace, 0.0f), World).xyz;
+	output.vertexTangent_worldspace = mul(float4(In.vertexTangent_modelspace, 0.0f), World).xyz;
+	output.vertexBinormal_worldspace = mul(float4(In.vertexBinormal_modelspace, 0.0f), World).xyz;
+	
+	return output;
+}
+
+[Geometry shader]
+
+[maxvertexcount(3)]
+void main(triangle GsIn input [3], inout TriangleStream <PsIn> outputStream)
+{
+	PsIn output;
+
+    // Calculate swizzle matrix based on eye space normal's dominant direction.
+    float3 unitSpaceV1 = normalize(input[1].vertexPosition_unitcube.xyz - input[0].vertexPosition_unitcube.xyz);
+	float3 unitSpaceV2 = normalize(input[2].vertexPosition_unitcube.xyz - input[0].vertexPosition_unitcube.xyz);
+	float3 unitSpaceNormal = abs(cross(unitSpaceV1, unitSpaceV2));
+	float dominantAxis = max(unitSpaceNormal.x, max(unitSpaceNormal.y, unitSpaceNormal.z));
+	float4x4 swizzleMatrix;
+	
+	if (dominantAxis == unitSpaceNormal.x)
+    {
+		swizzleMatrix = float4x4(float4(0.0, 0.0, 1.0, 0.0f),
+								 float4(0.0, 1.0, 0.0, 0.0f),
+								 float4(-1.0, 0.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, 0.0, 1.0f));
+    }
+	else if (dominantAxis == unitSpaceNormal.y)
+    {
+		swizzleMatrix = float4x4(float4(1.0, 0.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, -1.0, 0.0f),
+								 float4(0.0, 1.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, 0.0, 1.0f));
+    }
+	else if (dominantAxis == unitSpaceNormal.z)
+    {
+		swizzleMatrix = float4x4(float4(1.0, 0.0, 0.0, 0.0f),
+								 float4(0.0, 1.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, 1.0, 0.0f),
+								 float4(0.0, 0.0, 0.0, 1.0f));
+    }
+	
+	float4x4 gridProjectionMatrix = float4x4(float4(1.0f, 0.0f, 0.0f, 0.0f),
+											 float4(0.0f, 1.0f, 0.0f, 0.0f),
+											 float4(0.0f, 0.0f, 0.5f, 0.0f),
+											 float4(0.0f, 0.0f, 0.5f, 1.0f));
+	
+	// Calculate screen coordinates for triangle.
+	float4 screenPos[3];
+	screenPos[0] = mul( mul( float4( input[0].vertexPosition_unitcube.xyz, 1.0 ), swizzleMatrix ), gridProjectionMatrix);
+	screenPos[1] = mul( mul( float4( input[1].vertexPosition_unitcube.xyz, 1.0 ), swizzleMatrix ), gridProjectionMatrix);
+	screenPos[2] = mul( mul( float4( input[2].vertexPosition_unitcube.xyz, 1.0 ), swizzleMatrix ), gridProjectionMatrix);
+    screenPos[0] /= screenPos[0].w;
+    screenPos[1] /= screenPos[1].w;
+    screenPos[2] /= screenPos[2].w;
+    
+    // Output triangle.
+	output.gs_VertexPosition_worldspace = input[0].vertexPosition_worldspace;
+	output.gs_VertexNormal_worldspace = input[0].vertexNormal_worldspace;
+	output.gs_VertexPosition_unitspace = screenPos[0];
+	output.gs_VertexUV = input[0].vertexUV;
+	output.gs_VertexPosition_voxelspace = input[0].vertexPosition_unitcube;
+	output.gs_VertexTangent_worldspace = input[0].vertexTangent_worldspace;
+	output.gs_VertexBinormal_worldspace = input[0].vertexBinormal_worldspace;	
+	outputStream.Append(output);
+
+	output.gs_VertexPosition_worldspace = input[1].vertexPosition_worldspace;
+	output.gs_VertexNormal_worldspace = input[1].vertexNormal_worldspace;
+	output.gs_VertexPosition_unitspace = screenPos[1];
+	output.gs_VertexUV = input[1].vertexUV;
+	output.gs_VertexPosition_voxelspace = input[1].vertexPosition_unitcube;
+	output.gs_VertexTangent_worldspace = input[1].vertexTangent_worldspace;
+	output.gs_VertexBinormal_worldspace = input[1].vertexBinormal_worldspace;	
+	outputStream.Append(output);
+
+	output.gs_VertexPosition_worldspace = input[2].vertexPosition_worldspace;
+	output.gs_VertexNormal_worldspace = input[2].vertexNormal_worldspace;
+	output.gs_VertexPosition_unitspace = screenPos[2];
+	output.gs_VertexUV = input[2].vertexUV;
+	output.gs_VertexPosition_voxelspace = input[2].vertexPosition_unitcube;
+	output.gs_VertexTangent_worldspace = input[2].vertexTangent_worldspace;
+	output.gs_VertexBinormal_worldspace = input[2].vertexBinormal_worldspace;	
+	outputStream.Append(output);
+
+	outputStream.RestartStrip();
+}
+
+[Fragment shader]
+
+#define MAX_NUM_AVG_ITERATIONS 100
+
+RWTexture3D<float4> voxelColor[6];
+RWTexture3D<uint> uVoxelGrid;
+
+//Light Uniform//////////////////////////////////
+//General Light constants
+float4 lightIntensitive[3];
+float4 lightColor[10];
+int4 lightType[3];
+
+//Directional Light constants
+float4 lightDirection[10];
+float4x4 lightViewMat[10];
+
+//Point Light constants
+float4 positionLight[10];
+float4 lightRange[3];
+float4 attenuationCoeficient[10];
+
+//Spot Light constant
+float4 thetaAngle[3];
+float4 phiAngle[3];
+
+//Num Lights in Packet
+int numLights;
+
+//Camera constant
+float4 cameraPosition;
+
+//Shadow constant
+Texture2D atlasShadowSampler;
+
+float4 uvCordShadow[30];
+float4 shadowMapTam[15];
+float4x4 projLightMat[10];
+
+float inverseAtlasSize;
+
+//////////////////////////////////////////////////
+
+//Textures////////////////////////////////
+Texture2D ColorTexture;
+Texture2D NormalTexture;
+Texture2D SpecularTexture;
+//////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState BaseFilter;
+SamplerState TargetSample;
+//////////////////////////////////////////
+
+//Material////////////////////////////////
+float4 DiffuseColor;
+
+float Exponent;
+float4 kE;
+float kS;
+
+int bColorTexture;
+int bSpecularTexture;
+int bNormalTexture;
+////////////////////////////////////////////
+
+//ShadowMap Functions//////////////////////////////////////////////////////////
+float4x4 cubeMapping(float3 dir, uint index, out int cubeFace)
+{
+	//dir must be normalized
+	float3 normalizedDir = normalize(dir);
+	
+	float maxCoord = max(abs(normalizedDir.x), max(abs(normalizedDir.y), abs(normalizedDir.z)));
+	
+	if(maxCoord == abs(normalizedDir.x))
+	{
+		if(normalizedDir.x > 0)
+		{
+			cubeFace = 0;
+			
+			float posX = -dot(positionLight[index].xyz, float3(0.0f, 0.0f, -1.0f));
+			float posY = -dot(positionLight[index].xyz, float3(0.0f, 1.0f, 0.0f));
+			float posZ = -dot(positionLight[index].xyz, float3(1.0f, 0.0f, 0.0f));
+			
+			return float4x4(0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+						   -1.0f, 0.0f, 0.0f, 0.0f,
+							posX, posY, posZ, 1.0f);
+		}				
+		else
+		{
+			cubeFace = 1;
+			
+			float posX = -dot(positionLight[index].xyz, float3(0.0f, 0.0f,  1.0f));
+			float posY = -dot(positionLight[index].xyz, float3(0.0f, 1.0f, 0.0f));
+			float posZ = -dot(positionLight[index].xyz, float3(-1.0f, 0.0f, 0.0f));
+			
+			return float4x4(0.0f, 0.0f, -1.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							1.0f, 0.0f, 0.0f, 0.0f,
+							posX, posY, posZ, 1.0f);
+		}
+	}
+	else if(maxCoord == abs(normalizedDir.y))
+	{
+		if(normalizedDir.y < 0)
+		{
+			cubeFace = 3;
+			
+			float posX = -dot(positionLight[index].xyz, float3(1.0f, 0.0f, 0.0f));
+			float posY = -dot(positionLight[index].xyz, float3(0.0f, 0.0f, 1.0f));
+			float posZ = -dot(positionLight[index].xyz, float3(0.0f,-1.0f, 0.0f));
+			
+			return float4x4(1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 0.0f,-1.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							posX, posY, posZ, 1.0f);
+		}
+		else
+		{
+			cubeFace = 2;
+			
+			float posX = -dot(positionLight[index].xyz, float3(1.0f, 0.0f, 0.0f));
+			float posY = -dot(positionLight[index].xyz, float3(0.0f, 0.0f,-1.0f));
+			float posZ = -dot(positionLight[index].xyz, float3(0.0f, 1.0f, 0.0f));
+			
+			return float4x4(1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f,-1.0f, 0.0f, 0.0f,
+							posX, posY, posZ, 1.0f);
+		}
+	}
+	else
+	{
+		if(normalizedDir.z > 0)
+		{
+			cubeFace = 4;
+			
+			float posX = -dot(positionLight[index].xyz, float3(1.0f, 0.0f, 0.0f));
+			float posY = -dot(positionLight[index].xyz, float3(0.0f, 1.0f, 0.0f));
+			float posZ = -dot(positionLight[index].xyz, float3(0.0f, 0.0f, 1.0f));
+			
+			return float4x4(1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							posX, posY, posZ, 1.0f);
+		}
+		else
+		{	
+			cubeFace = 5;
+			
+			float posX = -dot(positionLight[index].xyz, float3(-1.0f, 0.0f, 0.0f));
+			float posY = -dot(positionLight[index].xyz, float3(0.0f, 1.0f, 0.0f));
+			float posZ = -dot(positionLight[index].xyz, float3(0.0f, 0.0f, -1.0f));
+			
+			return float4x4(-1.0f, 0.0f, 0.0f, 0.0f,
+							 0.0f, 1.0f, 0.0f, 0.0f,
+							 0.0f, 0.0f,-1.0f, 0.0f,
+							 posX, posY, posZ, 1.0f);
+		}
+	}
+}
+
+float ShadowMapCalculate(float4 vPosition_worldspace, uint index)
+{
+	float visibility = 1.0f;
+	
+	//Calculate viewLightMatrix
+	int cubeFace = 0;
+	float4x4 LightViewMatrix = cubeMapping(vPosition_worldspace.xyz - positionLight[index].xyz, index, cubeFace);
+	
+	float shadowMapTamVal = shadowMapTam[(6*index + cubeFace)>>2][(6*index + cubeFace)&3];
+	float2 uvCordShadowVal = float2(uvCordShadow[(6*index + cubeFace)>>1][((6*index + cubeFace)&1)*2], uvCordShadow[(6*index + cubeFace)>>1][((6*index + cubeFace)&1)*2 + 1]); 
+	
+	float2 AtlasCoord;
+	float3 ShadowCoord;
+	
+	if(shadowMapTamVal > 0)
+	{	
+		float4x4 worldtolight =  mul(LightViewMatrix, projLightMat[index]);
+		float4 vPosition_lightspace =  mul(vPosition_worldspace, worldtolight);
+		vPosition_lightspace = vPosition_lightspace / vPosition_lightspace.w;
+		ShadowCoord.xy = vPosition_lightspace.xy*0.5f + 0.5f;
+		ShadowCoord.y = 1.0f - ShadowCoord.y;
+		ShadowCoord.z = vPosition_lightspace.z;
+		
+		float bias = 0.00005f;//*tan(acos(dot(-vLightDir.xyz, vertexNormal_worldspace.xyz)));
+		//bias = clamp(bias, 0.0f,0.01f);
+		
+		AtlasCoord = uvCordShadowVal + (shadowMapTamVal*inverseAtlasSize)*ShadowCoord.xy;
+		
+		float shadow = atlasShadowSampler.SampleLevel( TargetSample, AtlasCoord, 0 ).x;
+			
+		if ( shadow  <  ShadowCoord.z - bias)
+		{
+			visibility = 0.0f;
+		}
+	}
+	
+	return visibility;
+}
+
+float DirectionalShadowMapCalculate(float4 vPosition_worldspace, uint index)
+{
+	float visibility = 1.0f;
+	
+	int cubeFace = 0;
+	
+	float shadowMapTamVal = shadowMapTam[(6*index + cubeFace)>>2][(6*index + cubeFace)&3];
+	float2 uvCordShadowVal = float2(uvCordShadow[(6*index + cubeFace)>>1][(6*index + cubeFace)&2], uvCordShadow[(6*index + cubeFace)>>1][(6*index + cubeFace)&2 + 1]); 
+	
+	if(shadowMapTamVal > 0)
+	{	
+		float4x4 worldtolight =  mul(lightViewMat[index], projLightMat[index]);
+		float4 vPosition_lightspace =  mul(vPosition_worldspace, worldtolight);
+		vPosition_lightspace = vPosition_lightspace / vPosition_lightspace.w;
+		float3 ShadowCoord;
+		ShadowCoord.xy = vPosition_lightspace.xy*0.5f + 0.5f;
+		ShadowCoord.y = 1.0f - ShadowCoord.y;
+		ShadowCoord.z = vPosition_lightspace.z;
+		
+		float bias = 0.0023f;//*tan(acos(dot(-vLightDir.xyz, vertexNormal_worldspace.xyz)));
+		//bias = clamp(bias, 0.0f,0.01f);
+		
+		float2 AtlasCoord = uvCordShadowVal + (shadowMapTamVal*inverseAtlasSize)*ShadowCoord.xy;
+		
+		float shadow = atlasShadowSampler.SampleLevel( TargetSample, AtlasCoord, 0 ).x;
+			
+		if ( shadow  <  ShadowCoord.z - bias)
+		{
+			visibility = 0.0f;
+		}
+	}
+	
+	return visibility;
+}
+
+float SpotShadowMapCalculate(float4 vPosition_worldspace, uint index)
+{
+	float visibility = 1.0f;
+	
+	int cubeFace = 0;
+	
+	float shadowMapTamVal = shadowMapTam[(6*index + cubeFace)>>2][(6*index + cubeFace)&3];
+	float2 uvCordShadowVal = float2(uvCordShadow[(6*index + cubeFace)>>1][(6*index + cubeFace)&2], uvCordShadow[(6*index + cubeFace)>>1][(6*index + cubeFace)&2 + 1]); 
+	
+	if(shadowMapTamVal > 0)
+	{	
+		float4x4 worldtolight =  mul(lightViewMat[index], projLightMat[index]);
+		float4 vPosition_lightspace =  mul(vPosition_worldspace, worldtolight);
+		vPosition_lightspace = vPosition_lightspace / vPosition_lightspace.w;
+		float3 ShadowCoord;
+		ShadowCoord.xy = vPosition_lightspace.xy*0.5f + 0.5f;
+		ShadowCoord.y = 1.0f - ShadowCoord.y;
+		ShadowCoord.z = vPosition_lightspace.z;
+		
+		float bias = 0.0023f;//*tan(acos(dot(-vLightDir.xyz, vertexNormal_worldspace.xyz)));
+		//bias = clamp(bias, 0.0f,0.01f);
+		
+		float2 AtlasCoord = uvCordShadowVal + (shadowMapTamVal*inverseAtlasSize)*ShadowCoord.xy;
+		
+		float shadow = atlasShadowSampler.SampleLevel( TargetSample, AtlasCoord, 0 ).x;
+			
+		if ( shadow  <  ShadowCoord.z - bias)
+		{
+			visibility = 0.0f;
+		}
+	}
+	
+	return visibility;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//Pixel Transform Function///////////////////////////////////////////////////////////////////////////////////////////////////////////
+float4 convRGBA8Tofloat4(uint val)
+{
+	return float4( float((val&0x000000FF)), float((val&0x0000FF00)>>8U), float((val&0x00FF0000)>>16U), float((val&0xFF000000)>>24U) );
+}
+
+uint convfloat4ToRGBA8(float4 val)
+{
+	return (uint(val.w)&0x000000FF)<<24U | (uint(val.z)&0x000000FF)<<16U | (uint(val.y)&0x000000FF)<<8U | (uint(val.x)&0x000000FF);
+}
+
+uint float3ToUintXYZ10(uint3 val) {
+    return (uint(val.z) & 0x000003FF)   << 20U
+            |(uint(val.y) & 0x000003FF) << 10U 
+            |(uint(val.x) & 0x000003FF);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Average Storage Voxelization Function///////////////////////////////////////////////////////////////////
+void imageAtomicRGBA8Avg(RWTexture3D<uint> voxelGrid, int3 coords, float4 newVal) 
+{
+	newVal *= 255.0; // Optimise following calculations
+	//newVal.a = 1.0f;
+    uint newValU = convfloat4ToRGBA8(newVal);
+    uint lastValU = 0; 
+    uint currValU;
+    float4 currVal;
+    uint numIterations = 0;
+	
+    // Loop as long as destination value gets changed by other threads
+	InterlockedMax(voxelGrid[coords], newValU, currValU);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Light Function/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+float4 directionalLightDirectIllumination(float4 diffuseColor, float4 vertexNormal_worldspace, float4 vPosition_worldspace, uint lightIndex)
+{
+	//Shadow Calculate
+	float shadowOcclusion = DirectionalShadowMapCalculate(vPosition_worldspace, lightIndex);
+	
+	float4 diff = float4(1.0f, 1.0f, 1.0f, 1.0f)*max(0.0f, dot(-lightDirection[lightIndex].xyz, vertexNormal_worldspace.xyz));
+		
+	return shadowOcclusion*lightIntensitive[lightIndex>>2][lightIndex&3]*lightColor[lightIndex]*(diffuseColor*diff );
+}
+
+float4 pointLightDirectIllumination(float4 diffuseColor, float4 vertexNormal_worldspace, float4 vPosition_worldspace, uint lightIndex)
+{	
+	//Shadow Calculate
+	float shadowOcclusion = ShadowMapCalculate(vPosition_worldspace, lightIndex);
+	
+	float lightIntensitiveVal = lightIntensitive[lightIndex>>2][lightIndex&3];
+	float lightRangeVal = lightRange[lightIndex>>2][lightIndex&3];
+	
+	if(shadowOcclusion <= 0.0f)
+		return float4(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	float4 Difference = positionLight[lightIndex] - vPosition_worldspace;
+	float Distance = length(Difference);
+	float att;
+	Difference = normalize(Difference);
+	
+	float4 diff = float4(1.0f, 1.0f, 1.0f, 1.0f)*saturate(dot(Difference, vertexNormal_worldspace));
+	
+	if(Distance < lightIntensitiveVal*lightRangeVal)
+		att = 1.0f/(attenuationCoeficient[lightIndex].x + (attenuationCoeficient[lightIndex].y/lightRangeVal)*Distance + (attenuationCoeficient[lightIndex].z/(lightRangeVal*lightRangeVal))*Distance*Distance);
+	else
+		att = 0.0f;
+	
+	return shadowOcclusion*att*lightColor[lightIndex]*lightIntensitiveVal*(diffuseColor*diff);
+	
+	//return shadowOcclusion*float4(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+float4 spotLightDirectIllumination(float4 diffuseColor, float4 vertexNormal_worldspace, float4 vPosition_worldspace, uint lightIndex)
+{
+	float shadowOcclusion = DirectionalShadowMapCalculate(vPosition_worldspace, lightIndex);
+	
+	if(shadowOcclusion <= 0.0f)
+		return float4(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	float lightIntensitiveVal = lightIntensitive[lightIndex>>2][lightIndex&3];
+	float lightRangeVal = lightRange[lightIndex>>2][lightIndex&3];
+	
+	float4 Difference = positionLight[lightIndex] - vPosition_worldspace;
+	float Distance = length(Difference);
+	float att;
+	Difference = normalize(Difference);
+	
+	float cos_cur_angle = dot(-lightDirection[lightIndex], Difference);
+	
+	float cos_thetaAngle = cos(thetaAngle[lightIndex>>2][lightIndex&3]*0.5f);
+	float cos_phiAngle = cos(phiAngle[lightIndex>>2][lightIndex&3]*0.5f);
+	float cos_inner_minus_outer_angle = cos_thetaAngle - cos_phiAngle;
+	
+	if (cos_cur_angle > cos_thetaAngle) 
+	{
+		float4 diff = float4(1.0f, 1.0f, 1.0f, 1.0f)*saturate(dot(Difference, vertexNormal_worldspace));
+			
+		if(Distance < lightIntensitiveVal*lightRangeVal)
+			att = 1.0f/(attenuationCoeficient[lightIndex].x + (attenuationCoeficient[lightIndex].y/lightRangeVal)*Distance + (attenuationCoeficient[lightIndex].z/(lightRangeVal*lightRangeVal))*Distance*Distance);
+		else
+			att = 0.0f;
+		
+		return shadowOcclusion*att*lightColor[lightIndex]*lightIntensitiveVal*(diffuseColor*diff);
+	}
+	else if( cos_cur_angle > cos_phiAngle )
+	{
+		float falloff = (cos_cur_angle - cos_phiAngle) / 
+		cos_inner_minus_outer_angle;
+		
+		float4 diff = float4(1.0f, 1.0f, 1.0f, 1.0f)*saturate(dot(Difference, vertexNormal_worldspace));
+			
+		if(Distance < lightIntensitiveVal*lightRangeVal)
+			att = 1.0f/(attenuationCoeficient[lightIndex].x + (attenuationCoeficient[lightIndex].y/lightRangeVal)*Distance + (attenuationCoeficient[lightIndex].z/(lightRangeVal*lightRangeVal))*Distance*Distance);
+		else
+			att = 0.0f;
+		
+		return shadowOcclusion*falloff*att*lightColor[lightIndex]*lightIntensitiveVal*(diffuseColor*diff);
+	}
+	
+	return float4(0.0f, 0.0f, 0.0f, 0.0f);	
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void main(PsIn Input)
+{
+	float4 color;
+	float3 normal;
+	float specularConstant;
+	
+	if(bColorTexture == 1)
+	{
+		color = ColorTexture.Sample(BaseFilter, Input.gs_VertexUV);
+	}
+	else
+	{
+		color = DiffuseColor;
+	}
+	
+	if(bNormalTexture == 1)
+	{
+		float3 bumpNormal = normalize(2.0f*(NormalTexture.Sample(BaseFilter, Input.gs_VertexUV).rgb - 0.5f));
+		
+		float3 tangent_worldSpace = normalize(Input.gs_VertexTangent_worldspace);
+		float3 normal_worldSpace = normalize(Input.gs_VertexNormal_worldspace);
+		float3 binormal_worldSpace = normalize(Input.gs_VertexBinormal_worldspace);
+		float3x3 matInverse = transpose(float3x3(tangent_worldSpace, binormal_worldSpace, normal_worldSpace));
+		bumpNormal = mul(bumpNormal, matInverse);
+		
+		normal = -bumpNormal;
+	}
+	else
+	{
+		normal = normalize(Input.gs_VertexNormal_worldspace);
+	}
+	
+	if(bSpecularTexture == 1)
+	{
+		specularConstant = SpecularTexture.Sample(BaseFilter, Input.gs_VertexUV).x;
+	}
+	else
+	{
+		specularConstant = kS;
+	}
+	
+	float4 outColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	if(kE.r + kE.g + kE.b <= 0.0f)
+	{
+	// direct lighting	
+		for(int i=0; i<numLights; i++)
+		{
+			uint lightTypeVal = (uint)lightType[i>>2][i&3];
+		
+			if(lightTypeVal == 0)
+			{
+				outColor += directionalLightDirectIllumination(color, float4(normal, 0.0f), float4(Input.gs_VertexPosition_worldspace, 1.0f), i);
+			}
+			if(lightTypeVal == 1)
+			{
+				outColor += pointLightDirectIllumination(color, float4(normal, 0.0f), float4(Input.gs_VertexPosition_worldspace, 1.0f), i);
+			}
+			if(lightTypeVal == 2)
+			{
+				outColor += spotLightDirectIllumination(color, float4(normal, 0.0f), float4(Input.gs_VertexPosition_worldspace, 1.0f), i);
+			}
+		}
+	}
+	else
+	{
+		outColor = color * kE.a;
+	}
+	
+	outColor.w = 1.0f;
+	
+// store voxel	
+	float4 storagePos = Input.gs_VertexPosition_voxelspace;
+	storagePos.xyz *= 1.0 / storagePos.w;
+	
+	int3 dimensions;
+	voxelColor[0].GetDimensions(dimensions.x, dimensions.y, dimensions.z);
+	int3 voxelPos = int3(dimensions * (storagePos.xyz * 0.5f + 0.5f));
+
+	// compress outColor range to encode limited HDR
+	outColor.xyz *= 0.5f;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	imageAtomicRGBA8Avg(uVoxelGrid, voxelPos, outColor*saturate(dot(Input.gs_VertexNormal_worldspace, float3(1.0f, 0.0f, 0.0f))));
+	imageAtomicRGBA8Avg(uVoxelGrid, int3(voxelPos.x, voxelPos.y, dimensions.x + voxelPos.z), outColor*saturate(dot(Input.gs_VertexNormal_worldspace, float3(-1.0f, 0.0f, 0.0f))));
+	imageAtomicRGBA8Avg(uVoxelGrid, int3(voxelPos.x, voxelPos.y, 2*dimensions.x + voxelPos.z), outColor*saturate(dot(Input.gs_VertexNormal_worldspace, float3(0.0f, 1.0f, 0.0f))));
+	imageAtomicRGBA8Avg(uVoxelGrid, int3(voxelPos.x, voxelPos.y, 3*dimensions.x + voxelPos.z), outColor*saturate(dot(Input.gs_VertexNormal_worldspace, float3(0.0f, -1.0f, 0.0f))));
+	imageAtomicRGBA8Avg(uVoxelGrid, int3(voxelPos.x, voxelPos.y, 4*dimensions.x + voxelPos.z), outColor*saturate(dot(Input.gs_VertexNormal_worldspace, float3(0.0f, 0.0f, 1.0f))));
+	imageAtomicRGBA8Avg(uVoxelGrid, int3(voxelPos.x, voxelPos.y, 5*dimensions.x + voxelPos.z), outColor*saturate(dot(Input.gs_VertexNormal_worldspace, float3(0.0f, 0.0f, -1.0f))));
+}

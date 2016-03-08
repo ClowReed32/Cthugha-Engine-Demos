@@ -1,0 +1,14 @@
+<Material>
+
+	<Properties BlendMode = "TRANSLUCENT" Wrap = "WRAP" />		
+	
+	<Textures>
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "vGlassColorAndOpacity" Type = "VEC4" Value = "0.0005 0.001 0.000848 0.3" />
+		<Constant Name = "fRoughness" Type = "FLOAT" Value = "0.36" />
+		<Constant Name = "fSpecular" Type = "FLOAT" Value = "10.0" />
+	</Constants>
+	
+</Material>

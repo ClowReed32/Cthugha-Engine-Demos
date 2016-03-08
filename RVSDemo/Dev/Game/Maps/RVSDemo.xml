@@ -1,0 +1,339 @@
+<Level>
+	<MapData>
+		<MapContents>
+			<StaticObjects>
+			
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_0.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader = "Shaders\MaterialShaders\GI\Rock_Marble_Polished_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Rock_Marble_Polished_Material_GI.mat" />
+							<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Marble_Polished_Shader.shd" Material = "Art\StaticObjects\Materials\Rock_Marble_Polished_Material.mat"/>
+						</MeshRenderComponent>
+						<PhysicsComponent>
+							<Shape Type="Box" GhostObject="false">
+								<BoxProperties Width="200.0" Height="0.2" Depth="200.0" Offset="0.0 -0.1 0.0"/>
+							</Shape>
+							<Density>Infinite</Density>
+							<PhysicsMaterial>Normal</PhysicsMaterial>
+						</PhysicsComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_1.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Stone_Smooth_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Stone_Smooth_Shader.shd" Material = "Art\StaticObjects\Materials\Stone_Smooth_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_2.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\Stone_Smooth_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Stone_Smooth_Material_GI.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Stone_Smooth_Shader.shd" Material = "Art\StaticObjects\Materials\Stone_Smooth_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_3.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Stanford_Dragon_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.25" y="0.25" z="0.25" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="2.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Dragon_Red_Material.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Dragon_Shader.shd" Material = "Art\StaticObjects\Materials\Dragon_Red_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Stanford_Dragon_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.125" y="0.125" z="0.125" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="1.0" z="7.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Dragon_Green_Material.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Dragon_Shader.shd" Material = "Art\StaticObjects\Materials\Dragon_Green_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Stanford_Dragon_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.125" y="0.125" z="0.125" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="1.0" z="-7.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Dragon_Blue_Material.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Dragon_Shader.shd" Material = "Art\StaticObjects\Materials\Dragon_Blue_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Stanford_Dragon_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.125" y="0.125" z="0.125" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="7.0" y="1.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Dragon_Yellow_Material.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Dragon_Shader.shd" Material = "Art\StaticObjects\Materials\Dragon_Yellow_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Stanford_Dragon_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.125" y="0.125" z="0.125" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="-7.0" y="1.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader="Shaders\MaterialShaders\GI\SimpleMaterialShader_GI.shd" Material = "Art\StaticObjects\Materials\Dragon_White_Material.mat"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Dragon_Shader.shd" Material = "Art\StaticObjects\Materials\Dragon_White_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="-90.0f" z="0" />
+							<Position x="-6.656" y="0.0" z="-2.055" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_1.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="90.0f" z="0" />
+							<Position x="4.019" y="0.0" z="-2.055" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_2.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.226" y="0.0" z="-7.224" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_3.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="-45.0f" z="0" />
+							<Position x="-5.226" y="0.0" z="-5.534" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_5.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="45.0f" z="0" />
+							<Position x="2.571" y="0.0" z="-5.534" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_6.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.2" z="1.0" />
+							<Rotation x="0" y="-135.0f" z="0" />
+							<Position x="-5.226" y="0.0" z="1.879" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_7.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="Decal" resource="" Collides="true" ID="1" Name="Magic_Symbol_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="0.1" z="1.0" />
+							<Rotation x="0" y="135.0f" z="0" />
+							<Position x="2.583" y="0.0" z="1.879" />
+						</TransformComponent>
+						<DecalRenderComponent Static="true">
+							<Material ShaderResource="Shaders\MaterialShaders\Decals\Decal_Symbol_Shader.shd" MaterialResource="Art\StaticObjects\Materials\Decal_Symbol_Material_8.mat"/>
+							<DecalMask MaskId="0"/>
+						</DecalRenderComponent>
+					</Components>
+				</StaticObject>
+				
+			</StaticObjects>
+			
+			<Entities>
+				
+				
+				
+			</Entities>
+			
+			<Lights>	
+				
+				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="SPOT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="35.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="60" phiAngle="80"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="-7.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="SPOT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="7.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="SPOT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="6.0" z="-7.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="SPOT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="6.0" z="7.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="SPOT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+			</Lights>
+		</MapContents>
+	</MapData>
+</Level>

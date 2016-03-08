@@ -1,0 +1,13 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "fEmission" Type = "FLOAT" Value = "0.6" />
+		<Constant Name = "vAlbedoColor" Type = "VEC4" Value = "0.5 1.0 0.749 1.0" />
+	</Constants>
+	
+</Material>

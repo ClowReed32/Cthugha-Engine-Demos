@@ -1,0 +1,105 @@
+[Compute shader]
+
+/**********************************************************************
+	Reduce Bounds from depth Buffer
+***********************************************************************/
+
+#extension GL_ARB_compute_shader: enable
+#extension GL_ARB_shader_storage_buffer_object: enable
+
+#define REDUCE_ZBOUNDS_BLOCK_DIM 16
+#define REDUCE_ZBOUNDS_BLOCK_SIZE (REDUCE_ZBOUNDS_BLOCK_DIM*REDUCE_ZBOUNDS_BLOCK_DIM)
+#define PARTITIONS 4
+
+layout (local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+
+struct FrustumPartitionUint
+{
+	uint beginPartiton;
+	uint endPartition;
+	uvec2 unused;
+	uvec4 scale;
+	uvec4 bias;
+};
+
+//Shader Uniform////////////////////////////////////////////////////////
+uniform vec2 cameraNearFar;
+uniform int reduceTileDim;
+uniform mat4 Projection;
+uniform vec2 screenDim;
+uniform sampler2D depthBuffer;
+/////////////////////////////////////////////////////////////////////////
+
+//Frustum Partition Buffer//////////////////////////////////////////////
+layout(std430, binding = 9) buffer blockBuffer
+{
+	FrustumPartitionUint frustumPartitionBufferUint[];
+};
+
+//Shared memory for intermediate calculus////////////////////////////////
+shared float sMinZ[REDUCE_ZBOUNDS_BLOCK_SIZE];
+shared float sMaxZ[REDUCE_ZBOUNDS_BLOCK_SIZE];
+
+float ViewFragmentPositionFromDepthBuffer(ivec2 globalCoords)
+{
+	float depthZ = texelFetch(depthBuffer, globalCoords, 0).x;
+	float vertexPositionZ_viewSpace = Projection[3][2]/(depthZ + Projection[2][2]);
+	
+	return vertexPositionZ_viewSpace;
+}
+
+void main()
+{
+	uint workGroupIndex = gl_LocalInvocationID.z*gl_WorkGroupSize.x*gl_WorkGroupSize.y + gl_LocalInvocationID.y*gl_WorkGroupSize.x + gl_LocalInvocationID.x;
+	
+    // Initialize stack copy of reduction data for this thread
+    float minZ = cameraNearFar.y;
+    float maxZ = cameraNearFar.x;
+	
+	float vertexPositionZ_viewSpace;
+	
+    // Loop over tile and reduce into local memory
+    {
+        uvec2 tileStart = gl_WorkGroupID.xy * reduceTileDim.xx + gl_LocalInvocationID.xy;
+        for (uint tileY = 0; tileY < reduceTileDim; tileY += REDUCE_ZBOUNDS_BLOCK_DIM) 
+		{
+            for (uint tileX = 0; tileX < reduceTileDim; tileX += REDUCE_ZBOUNDS_BLOCK_DIM) 
+			{
+                uvec2 globalCoords = tileStart + uvec2(tileX, tileY);
+                vertexPositionZ_viewSpace = ViewFragmentPositionFromDepthBuffer(ivec2(globalCoords));
+				
+                if (vertexPositionZ_viewSpace >= cameraNearFar.x && vertexPositionZ_viewSpace < cameraNearFar.y) 
+				{
+                    minZ = min(minZ, vertexPositionZ_viewSpace);
+                    maxZ = max(maxZ, vertexPositionZ_viewSpace);
+                }
+            }
+        }
+    }
+    
+    // Copy result to shared memory for reduction
+    sMinZ[workGroupIndex] = minZ;
+    sMaxZ[workGroupIndex] = maxZ;
+
+    groupMemoryBarrier();
+
+    // Reduce our local memory data set to one element
+    // TODO: Switch to local atomics for last few iterations
+    for (uint offset = (REDUCE_ZBOUNDS_BLOCK_SIZE >> 1); offset > 0; offset >>= 1) 
+	{
+        if (workGroupIndex < offset) 
+		{
+            sMinZ[workGroupIndex] = min(sMinZ[workGroupIndex], sMinZ[offset + workGroupIndex]);
+            sMaxZ[workGroupIndex] = max(sMaxZ[workGroupIndex], sMaxZ[offset + workGroupIndex]);
+        }
+		groupMemoryBarrier();
+    }
+	
+    // Now write out the result from this pass to the partition data
+    // We'll fill in the intermediate intervals in a subsequent pass
+    if (workGroupIndex == 0) 
+	{
+        atomicMin(frustumPartitionBufferUint[0].beginPartiton, floatBitsToUint(sMinZ[0]));
+        atomicMax(frustumPartitionBufferUint[PARTITIONS - 1].endPartition, floatBitsToUint(sMaxZ[0]));
+    }
+}

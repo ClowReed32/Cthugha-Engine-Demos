@@ -1,0 +1,353 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		29A86B5F0FACD30D00182ADF /* Alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B4F0FACD30D00182ADF /* Alloc.c */; };
+		29A86B600FACD30D00182ADF /* Alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B500FACD30D00182ADF /* Alloc.h */; };
+		29A86B610FACD30D00182ADF /* LzFind.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B510FACD30D00182ADF /* LzFind.c */; };
+		29A86B620FACD30D00182ADF /* LzFind.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B520FACD30D00182ADF /* LzFind.h */; };
+		29A86B650FACD30D00182ADF /* LzHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B550FACD30D00182ADF /* LzHash.h */; };
+		29A86B660FACD30D00182ADF /* LzmaDec.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B560FACD30D00182ADF /* LzmaDec.c */; };
+		29A86B670FACD30D00182ADF /* LzmaDec.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B570FACD30D00182ADF /* LzmaDec.h */; };
+		29A86B680FACD30D00182ADF /* LzmaEnc.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B580FACD30D00182ADF /* LzmaEnc.c */; };
+		29A86B690FACD30D00182ADF /* LzmaEnc.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B590FACD30D00182ADF /* LzmaEnc.h */; };
+		29A86B6A0FACD30D00182ADF /* LzmaLib.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B5A0FACD30D00182ADF /* LzmaLib.c */; };
+		29A86B6B0FACD30D00182ADF /* LzmaLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B5B0FACD30D00182ADF /* LzmaLib.h */; };
+		29A86B6E0FACD30D00182ADF /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 29A86B5E0FACD30D00182ADF /* Types.h */; };
+		FAFFBF001491F87A00EA4E4C /* Alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B4F0FACD30D00182ADF /* Alloc.c */; };
+		FAFFBF011491F87A00EA4E4C /* LzFind.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B510FACD30D00182ADF /* LzFind.c */; };
+		FAFFBF021491F87A00EA4E4C /* LzmaDec.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B560FACD30D00182ADF /* LzmaDec.c */; };
+		FAFFBF031491F87A00EA4E4C /* LzmaEnc.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B580FACD30D00182ADF /* LzmaEnc.c */; };
+		FAFFBF041491F87A00EA4E4C /* LzmaLib.c in Sources */ = {isa = PBXBuildFile; fileRef = 29A86B5A0FACD30D00182ADF /* LzmaLib.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		29A86B4F0FACD30D00182ADF /* Alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Alloc.c; path = ../Alloc.c; sourceTree = SOURCE_ROOT; };
+		29A86B500FACD30D00182ADF /* Alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alloc.h; path = ../Alloc.h; sourceTree = SOURCE_ROOT; };
+		29A86B510FACD30D00182ADF /* LzFind.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LzFind.c; path = ../LzFind.c; sourceTree = SOURCE_ROOT; };
+		29A86B520FACD30D00182ADF /* LzFind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LzFind.h; path = ../LzFind.h; sourceTree = SOURCE_ROOT; };
+		29A86B550FACD30D00182ADF /* LzHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LzHash.h; path = ../LzHash.h; sourceTree = SOURCE_ROOT; };
+		29A86B560FACD30D00182ADF /* LzmaDec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LzmaDec.c; path = ../LzmaDec.c; sourceTree = SOURCE_ROOT; };
+		29A86B570FACD30D00182ADF /* LzmaDec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LzmaDec.h; path = ../LzmaDec.h; sourceTree = SOURCE_ROOT; };
+		29A86B580FACD30D00182ADF /* LzmaEnc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LzmaEnc.c; path = ../LzmaEnc.c; sourceTree = SOURCE_ROOT; };
+		29A86B590FACD30D00182ADF /* LzmaEnc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LzmaEnc.h; path = ../LzmaEnc.h; sourceTree = SOURCE_ROOT; };
+		29A86B5A0FACD30D00182ADF /* LzmaLib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LzmaLib.c; path = ../LzmaLib.c; sourceTree = "<group>"; };
+		29A86B5B0FACD30D00182ADF /* LzmaLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LzmaLib.h; path = ../LzmaLib.h; sourceTree = "<group>"; };
+		29A86B5E0FACD30D00182ADF /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Types.h; path = ../Types.h; sourceTree = SOURCE_ROOT; };
+		D2AAC046055464E500DB518D /* libLZMA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLZMA.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAFFBEF71491F7ED00EA4E4C /* libLZMAMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLZMAMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289987405E68DCB004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAFFBEF41491F7ED00EA4E4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* LZMA */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6A0FF2B0290797F04C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = LZMA;
+			sourceTree = "<group>";
+			usesTabs = 1;
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				29A86B4F0FACD30D00182ADF /* Alloc.c */,
+				29A86B500FACD30D00182ADF /* Alloc.h */,
+				29A86B510FACD30D00182ADF /* LzFind.c */,
+				29A86B520FACD30D00182ADF /* LzFind.h */,
+				29A86B550FACD30D00182ADF /* LzHash.h */,
+				29A86B560FACD30D00182ADF /* LzmaDec.c */,
+				29A86B570FACD30D00182ADF /* LzmaDec.h */,
+				29A86B580FACD30D00182ADF /* LzmaEnc.c */,
+				29A86B590FACD30D00182ADF /* LzmaEnc.h */,
+				29A86B5A0FACD30D00182ADF /* LzmaLib.c */,
+				29A86B5B0FACD30D00182ADF /* LzmaLib.h */,
+				29A86B5E0FACD30D00182ADF /* Types.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC046055464E500DB518D /* libLZMA.a */,
+				FAFFBEF71491F7ED00EA4E4C /* libLZMAMac.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC043055464E500DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29A86B600FACD30D00182ADF /* Alloc.h in Headers */,
+				29A86B620FACD30D00182ADF /* LzFind.h in Headers */,
+				29A86B650FACD30D00182ADF /* LzHash.h in Headers */,
+				29A86B670FACD30D00182ADF /* LzmaDec.h in Headers */,
+				29A86B690FACD30D00182ADF /* LzmaEnc.h in Headers */,
+				29A86B6B0FACD30D00182ADF /* LzmaLib.h in Headers */,
+				29A86B6E0FACD30D00182ADF /* Types.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAFFBEF51491F7ED00EA4E4C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC045055464E500DB518D /* LZMA */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "LZMA" */;
+			buildPhases = (
+				D2AAC043055464E500DB518D /* Headers */,
+				D2AAC044055464E500DB518D /* Sources */,
+				D289987405E68DCB004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LZMA;
+			productName = LZMA;
+			productReference = D2AAC046055464E500DB518D /* libLZMA.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		FAFFBEF61491F7ED00EA4E4C /* LZMAMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAFFBEFA1491F7ED00EA4E4C /* Build configuration list for PBXNativeTarget "LZMAMac" */;
+			buildPhases = (
+				FAFFBEF31491F7ED00EA4E4C /* Sources */,
+				FAFFBEF41491F7ED00EA4E4C /* Frameworks */,
+				FAFFBEF51491F7ED00EA4E4C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LZMAMac;
+			productName = LZMAMac;
+			productReference = FAFFBEF71491F7ED00EA4E4C /* libLZMAMac.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "LZMA" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* LZMA */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC045055464E500DB518D /* LZMA */,
+				FAFFBEF61491F7ED00EA4E4C /* LZMAMac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC044055464E500DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29A86B5F0FACD30D00182ADF /* Alloc.c in Sources */,
+				29A86B610FACD30D00182ADF /* LzFind.c in Sources */,
+				29A86B660FACD30D00182ADF /* LzmaDec.c in Sources */,
+				29A86B680FACD30D00182ADF /* LzmaEnc.c in Sources */,
+				29A86B6A0FACD30D00182ADF /* LzmaLib.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAFFBEF31491F7ED00EA4E4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAFFBF001491F87A00EA4E4C /* Alloc.c in Sources */,
+				FAFFBF011491F87A00EA4E4C /* LzFind.c in Sources */,
+				FAFFBF021491F87A00EA4E4C /* LzmaDec.c in Sources */,
+				FAFFBF031491F87A00EA4E4C /* LzmaEnc.c in Sources */,
+				FAFFBF041491F87A00EA4E4C /* LzmaLib.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91EC08733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				PRODUCT_NAME = LZMA;
+			};
+			name = Debug;
+		};
+		1DEB91ED08733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				PRODUCT_NAME = LZMA;
+			};
+			name = Release;
+		};
+		1DEB91F008733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_THREADSAFE_STATICS = NO;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1DEB91F108733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_THREADSAFE_STATICS = NO;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FAFFBEF81491F7ED00EA4E4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FAFFBEF91491F7ED00EA4E4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "LZMA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91EC08733DB70010E9CD /* Debug */,
+				1DEB91ED08733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "LZMA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91F008733DB70010E9CD /* Debug */,
+				1DEB91F108733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAFFBEFA1491F7ED00EA4E4C /* Build configuration list for PBXNativeTarget "LZMAMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAFFBEF81491F7ED00EA4E4C /* Debug */,
+				FAFFBEF91491F7ED00EA4E4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

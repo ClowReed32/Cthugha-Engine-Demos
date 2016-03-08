@@ -1,0 +1,227 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		VOXEL CONE TRACING SHADER							   				   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+	float3 ViewRay				 	 : TexCoord1;
+};
+
+[Vertex shader]
+
+//Uniform Matrix
+float4x4 InverseView;
+float4x4 InverseProjection;
+
+float4 cameraPosition;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	float4 positionWS = mul(float4(In.vertexPosition_modelspace, 1.0f), mul(InverseProjection, InverseView));
+	positionWS /= positionWS.w;
+	
+	output.ViewRay = positionWS - cameraPosition;
+	
+	return output;
+}
+
+[Fragment shader]
+
+struct PsOut 
+{
+	float4 indirectDiffuse : SV_Target0;
+	float4 indirectSpecular : SV_Target1;
+};
+
+//Camera constant
+float4 cameraPosition;
+
+//Target Textures////////////////////////
+Texture2D depthTarget;
+Texture2D normalTarget;
+/////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState TargetSample;
+SamplerState VoxelFilter;
+//////////////////////////////////////////
+
+//Voxel Textures////////////////////////////
+float minVoxelDiameter;
+float minVoxelDiameterInv;
+float4x4 worldToVoxelTex;
+
+int ActiveVoxel;
+
+Texture3D voxelGrids[6];
+////////////////////////////////////////////
+
+//Auxiliar Function Voxel Cone Tracing/////////////////////////////////////////////////////////////////////////////////////
+
+float4 voxelFetch(float3 pos, float3 dir, float lod)
+{
+	float offset = 0.0f;
+
+	float4 sampleX =
+		dir.x > 0.0
+		? voxelGrids[0].SampleLevel(VoxelFilter, pos, lod)
+		: voxelGrids[1].SampleLevel(VoxelFilter, pos, lod);
+	
+	float4 sampleY =
+		dir.y > 0.0
+		? voxelGrids[2].SampleLevel(VoxelFilter, pos, lod)
+		: voxelGrids[3].SampleLevel(VoxelFilter, pos, lod);
+	
+	float4 sampleZ =
+		dir.z > 0.0
+		? voxelGrids[4].SampleLevel(VoxelFilter, pos, lod)
+		: voxelGrids[5].SampleLevel(VoxelFilter, pos, lod);
+	
+	float3 sampleWeights = abs(dir);
+	float invSampleMag = 1.0f / (sampleWeights.x + sampleWeights.y + sampleWeights.z + 0.0001f);
+	sampleWeights *= invSampleMag;
+	
+	float4 filtered = 
+		sampleX * sampleWeights.x
+		+ sampleY * sampleWeights.y
+		+ sampleZ * sampleWeights.z;
+	
+	return filtered;
+}
+
+// origin, dir, and maxDist are in texture space
+// dir should be normalized
+// coneRatio is the cone diameter to height ratio (2.0 for 90-degree cone)
+float4 voxelTraceCone(float3 origin, float3 dir, float coneRatio, float maxDist)
+{
+	float3 samplePos = origin;
+	float4 accum = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	float ambientOcclusion = 0.0f;
+	float maxOcclusionDist = 0.05f;
+
+	// the starting sample diameter
+	float minDiameter = minVoxelDiameter;
+
+	// push out the starting point to avoid self-intersection
+	float startDist = minDiameter;
+	
+	float dist = startDist;
+	while (dist <= maxDist && accum.w < 1.0)
+	{
+		// ensure the sample diameter is no smaller than the min
+		// desired diameter for this cone (ensuring we always
+		// step at least minDiameter each iteration, even for tiny
+		// cones - otherwise lots of overlapped samples)
+		float sampleDiameter = max(minDiameter, coneRatio * dist);
+		
+		// convert diameter to LOD
+		// for example:
+		// log2(1/256 * 256) = 0
+		// log2(1/128 * 256) = 1
+		// log2(1/64 * 256) = 2
+		float sampleLOD = log2(sampleDiameter * minVoxelDiameterInv);
+		
+		float3 samplePos = origin + dir * dist;
+		
+		float4 sampleValue = voxelFetch(samplePos, -dir, sampleLOD);
+		
+		float sampleWeight = (1.0f - accum.w);
+		accum += sampleValue * sampleWeight;
+		
+		if(dist <= maxOcclusionDist)
+		{
+			ambientOcclusion += 1.0f - sampleWeight;
+		}
+		
+		dist += sampleDiameter;
+	}
+	
+	// decompress color range to decode limited HDR
+	accum.xyz *= 2.0f;
+	accum.w = 1.0f - ambientOcclusion;
+	
+	return accum;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+PsOut main(PsIn In)
+{
+	PsOut output;
+
+	float3 vertexNormal_worldspace = normalTarget.Sample( TargetSample, In.vertexUV ).xyz;
+	float depth = depthTarget.Sample( TargetSample, In.vertexUV ).x;
+	
+	//Obtain world space position coordinates	
+	float3 viewRay = normalize(In.ViewRay.xyz);
+	float4 vertexPosition_worldspace = float4(cameraPosition.xyz + viewRay*depth, 1.0f);
+	
+	//Obtain tangent and binormal;
+	float3 vertexTangent_worldspace = normalize(cross(vertexNormal_worldspace.xyz, (abs(dot(vertexNormal_worldspace.xyz, float3(0.0f, 0.0f, 1.0f))) == 1) ? float3(1.0f, 0.0f, 0.0f) : float3(0.0f, 0.0f, 1.0f)));
+	float3 vertexBinormal_worldspace = normalize(cross(vertexNormal_worldspace, vertexTangent_worldspace));
+
+	output.indirectDiffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	output.indirectSpecular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	//Voxel Cone Tracing/////////////////////////////////////////////////////////////////////////////////////
+	
+	if(ActiveVoxel == 1)
+	{		
+		// position of fragment in voxel texture space
+		float4 voxelPos = mul(vertexPosition_worldspace, worldToVoxelTex);
+		voxelPos.xyz *= 1.0 / voxelPos.w;
+		
+		//Diffuse Light
+		float iblConeRatio = 1.0f;
+		float iblMaxDist = 0.5f;
+		// this sample gets full weight (dot(normal, normal) == 1)
+		output.indirectDiffuse += voxelTraceCone(voxelPos.xyz, normalize(vertexNormal_worldspace), iblConeRatio, iblMaxDist);
+		// these samples get partial weight
+		output.indirectDiffuse += 0.707f * voxelTraceCone(voxelPos.xyz, normalize(vertexNormal_worldspace + vertexTangent_worldspace), iblConeRatio, iblMaxDist);
+		output.indirectDiffuse += 0.707f * voxelTraceCone(voxelPos.xyz, normalize(vertexNormal_worldspace - vertexTangent_worldspace), iblConeRatio, iblMaxDist);
+		output.indirectDiffuse += 0.707f * voxelTraceCone(voxelPos.xyz, normalize(vertexNormal_worldspace + vertexBinormal_worldspace), iblConeRatio, iblMaxDist);
+		output.indirectDiffuse += 0.707f * voxelTraceCone(voxelPos.xyz, normalize(vertexNormal_worldspace - vertexBinormal_worldspace), iblConeRatio, iblMaxDist);
+		
+		output.indirectDiffuse.w = output.indirectDiffuse.w*0.25f;
+		
+		//Specular Light
+		/*output.indirectSpecular.xyz = float3(0.0f, 0.0f, 0.0f);
+		{
+			if(output.color.w > 0.0f)
+			{
+				float3 eyeToFragment = normalize(vertexPosition_worldspace.xyz - cameraPosition.xyz);
+				float3 reflectionDir = reflect(eyeToFragment, vertexNormal_worldspace);
+				
+				float3 reflectTraceOrigin = voxelPos.xyz;
+				float coneRatio = 0.2f;
+				float maxDist = 0.5f;
+				output.indirectSpecular.xyz = voxelTraceCone(reflectTraceOrigin, reflectionDir, coneRatio, maxDist).xyz;
+			}
+		}*/
+	
+		//output.indirectSpecular.w = 1.0f;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	return output;
+}

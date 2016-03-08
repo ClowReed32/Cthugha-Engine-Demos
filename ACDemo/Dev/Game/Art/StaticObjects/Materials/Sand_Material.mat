@@ -1,0 +1,15 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_MacroVariation" File = "Art\StaticObjects\Textures\Shared_Textures\T_MacroVariation.dds" />
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Sand_Textures\T_Sand_D.dds" />
+		<Texture Name = "t_NormalMap" File = "Art\StaticObjects\Textures\Sand_Textures\T_Sand_N.dds" />
+	</Textures>
+	
+	<Constants>
+
+	</Constants>
+	
+</Material>

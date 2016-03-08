@@ -1,0 +1,80 @@
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+	uint InstanceId : SV_InstanceID;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexDepth_projectspace  : SV_Position;
+	float4 color					 : Color;
+};
+
+[Vertex shader]
+
+float4x4 View;
+float4x4 Projection;
+
+int NBCELLS;
+float g_CellSize;
+float3 g_SnappedGridPosition;
+
+Texture3D<float4> voxelGrids;
+StructuredBuffer < uint3 > voxelParameters: register(t0);
+float voxelDim;
+
+int cascadeFace;
+int cascade;
+int cascadeResolution;
+
+//Pixel Transform Function///////////////////////////////////////////////////////////////////////////////////////////////////////////
+float4 convRGBA8Tofloat4(uint val)
+{
+	return float4( float((val&0x000000FF)), float((val&0x0000FF00)>>8U), float((val&0x00FF0000)>>16U), float((val&0xFF000000)>>24U) );
+}
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	uint3 voxelGridPos = voxelParameters[In.InstanceId];
+ 
+    int halfCells = NBCELLS/2;
+ 
+    float3 voxelPosFloat = voxelGridPos;
+ 
+    float3 offset = voxelGridPos - float3(halfCells, halfCells, halfCells);
+    offset *= g_CellSize;
+    offset += g_SnappedGridPosition;
+ 
+    float4 vertexPosition_worldspace = float4(In.vertexPosition_modelspace*g_CellSize + offset, 1.0f);	
+	
+	float4 vertexPosition_viewSpace = mul(vertexPosition_worldspace, View);
+	float4 worldViewProjPosition = mul(vertexPosition_viewSpace, Projection);
+	output.vertexDepth_projectspace = worldViewProjPosition;
+	
+	//float4 voxelColor = convRGBA8Tofloat4(voxelGrids.Load(int4(voxelGridPos.x, voxelGridPos.y, cascade*cascadeResolution + voxelGridPos.z, 0)))*0.003921f;
+	
+	float4 voxelColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	uint uMipLevel = 0;
+	uint uOffsetLevel = pow(2, uMipLevel);
+	
+	voxelColor = voxelGrids.Load(int4(voxelGridPos.x / uOffsetLevel, (cascadeResolution*6 + voxelGridPos.y) / uOffsetLevel, (cascade*cascadeResolution + voxelGridPos.z) / uOffsetLevel, uMipLevel));
+	
+	voxelColor.rgb /= 6.0f;
+	voxelColor.a = 1.0f;
+	
+	output.color = voxelColor;
+	
+	return output;
+ }
+
+[Fragment shader]
+ 
+float4 main(PsIn In) : SV_Target0
+{	
+	return In.color;
+}

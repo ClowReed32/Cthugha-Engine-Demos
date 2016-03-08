@@ -1,0 +1,13 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Decals\Decal_Simbols_D.dds" />
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "vSymbolOffset" Type = "VEC2" Value = "0.0 0.5" />
+	</Constants>
+	
+</Material>

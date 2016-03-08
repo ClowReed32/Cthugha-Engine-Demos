@@ -1,0 +1,68 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		HORIZONTAL BILATERAL GAUSSIAN BLUR SHADER	                           //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+};
+
+[Vertex shader]
+ 
+ PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	return output;
+}
+
+[Fragment shader]
+
+//Target Textures
+Texture2D ssaoRT;
+Texture2D depthTexture;
+SamplerState PostProcessingSampler;
+
+float2 screenResolution;
+
+float main(PsIn In) : SV_Target
+{
+	float gaussianSsao = 0.0f;
+	float weightSum = 0.0f;
+	
+	float2 offset = float2(1.0f/screenResolution.x, 1.0f/screenResolution.y);
+	
+	float GaussianWeight[5] = { 0.06136, 0.24477, 0.38774, 0.24477, 0.06136 };
+	float GaussianOffset[5] = { -2.0f*offset.x, -offset.x, 0.0f, offset.x, 2.0f*offset.x };
+	
+	float vDepth = depthTexture.SampleLevel( PostProcessingSampler, In.vertexUV, 0).x;
+	
+	for (int i = 0; i < 5; ++i)
+    {
+		float vBoundaryDepth = depthTexture.SampleLevel( PostProcessingSampler, float2(In.vertexUV.x + GaussianOffset[i], In.vertexUV.y), 0).x;
+		
+		if( abs(vBoundaryDepth - vDepth) < 0.02f)
+		{
+			gaussianSsao += GaussianWeight[i]*ssaoRT.Sample( PostProcessingSampler, float2(In.vertexUV.x + GaussianOffset[i], In.vertexUV.y), 0 ).x;
+			weightSum += GaussianWeight[i];
+		}
+	}
+	
+	gaussianSsao *= 1.0f/weightSum;
+	
+	return gaussianSsao;
+}

@@ -1,0 +1,13 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_NormalMap" File = "Art\StaticObjects\Textures\Metal_Silver_Textures\T_Metal_Silver_N.dds" />
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "vCrystalColorAndEmission" Type = "VEC4" Value = "0.5 1.0 0.749 1.0" />
+	</Constants>
+	
+</Material>

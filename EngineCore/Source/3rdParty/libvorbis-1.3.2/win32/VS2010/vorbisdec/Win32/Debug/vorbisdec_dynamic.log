@@ -1,0 +1,33 @@
+﻿Build started 03/09/2013 18:07:48.
+     1>Project "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\vorbisdec\vorbisdec_dynamic.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Win32\Debug\vorbisdec.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\..\include /I..\..\..\..\libogg\include /I"..\..\..\..\libogg-1.3.0\include" /I..\..\..\..\ogg\include /I..\..\..\..\..\..\..\core\ogg\libogg\include /ZI /nologo /W4 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug\\" /Fd"Win32\Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\..\examples\decoder_example.c
+         decoder_example.c
+     1>c:\users\clow reed\documents\visual studio 2010\projects\cthughaengine\dev\source\gcc4\3rdparty\libvorbis-1.3.2\examples\decoder_example.c(79): warning C4127: la expresión condicional es constante
+     1>c:\users\clow reed\documents\visual studio 2010\projects\cthughaengine\dev\source\gcc4\3rdparty\libvorbis-1.3.2\examples\decoder_example.c(219): warning C4127: la expresión condicional es constante
+     1>c:\users\clow reed\documents\visual studio 2010\projects\cthughaengine\dev\source\gcc4\3rdparty\libvorbis-1.3.2\examples\decoder_example.c(251): warning C4244: 'inicializando' : conversión de 'double' a 'int'; posible pérdida de datos
+     1>c:\users\clow reed\documents\visual studio 2010\projects\cthughaengine\dev\source\gcc4\3rdparty\libvorbis-1.3.2\examples\decoder_example.c(264): warning C4244: '=' : conversión de 'int' a 'ogg_int16_t'; posible pérdida de datos
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Win32\Debug\vorbisdec.exe.embed.manifest.res" Win32\Debug\vorbisdec_manifest.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\..\..\libogg\win32\VS2010\Win32\Debug /LIBPATH:..\Win32\Debug /LIBPATH:"..\..\..\..\libogg-1.3.0\win32\VS2010\Win32\Debug" /LIBPATH:..\..\..\..\ogg\win32\VS2010\Win32\Debug /LIBPATH:..\..\..\..\..\..\..\core\ogg\libogg\win32\VS2010\Win32\Debug libogg.lib libvorbis.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Win32\Debug\vorbisdec.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.lib" /MACHINE:X86 Win32\Debug\vorbisdec.exe.embed.manifest.res
+         Win32\Debug\decoder_example.obj
+         "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\libvorbis.lib"
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Win32\Debug\vorbisdec.exe.embed.manifest" /manifest Win32\Debug\vorbisdec.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Win32\Debug\vorbisdec.exe.embed.manifest.res" Win32\Debug\vorbisdec_manifest.rc 
+       LinkEmbedManifest:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\..\..\libogg\win32\VS2010\Win32\Debug /LIBPATH:..\Win32\Debug /LIBPATH:"..\..\..\..\libogg-1.3.0\win32\VS2010\Win32\Debug" /LIBPATH:..\..\..\..\ogg\win32\VS2010\Win32\Debug /LIBPATH:..\..\..\..\..\..\..\core\ogg\libogg\win32\VS2010\Win32\Debug libogg.lib libvorbis.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Win32\Debug\vorbisdec.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.lib" /MACHINE:X86 Win32\Debug\vorbisdec.exe.embed.manifest.res
+         Win32\Debug\decoder_example.obj
+         "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\libvorbis.lib"
+         vorbisdec_dynamic.vcxproj -> C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\Win32\Debug\vorbisdec.exe
+       FinalizeBuildStatus:
+         Deleting file "Win32\Debug\vorbisdec.unsuccessfulbuild".
+         Touching "Win32\Debug\vorbisdec.lastbuildstate".
+     1>Done Building Project "C:\Users\Clow Reed\Documents\Visual Studio 2010\Projects\CthughaEngine\Dev\Source\GCC4\3rdParty\libvorbis-1.3.2\win32\VS2010\vorbisdec\vorbisdec_dynamic.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.56

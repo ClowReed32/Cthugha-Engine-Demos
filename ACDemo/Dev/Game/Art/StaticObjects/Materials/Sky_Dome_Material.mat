@@ -1,0 +1,16 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_MacroVariation" File = "Art\StaticObjects\Textures\Shared_Textures\T_MacroVariation.dds" />
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Stone_Smooth_Textures\T_Stone_Smooth_D.dds" />
+		<Texture Name = "t_NormalMap" File = "Art\StaticObjects\Textures\Stone_Smooth_Textures\T_Stone_Smooth_N.dds" />
+		<Texture Name = "t_RoughnessMap" File = "Art\StaticObjects\Textures\Stone_Smooth_Textures\T_Stone_Smooth_M.dds" />
+		<Texture Name = "t_SkyMap" File = "Art\StaticObjects\Textures\Sky_Dome_Textures\Sky_Dome_Texture.dds" />
+	</Textures>
+	
+	<Constants>
+	</Constants>
+	
+</Material>

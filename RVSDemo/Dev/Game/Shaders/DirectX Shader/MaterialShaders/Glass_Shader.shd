@@ -1,0 +1,162 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		BRICK_CLAY_BEVELED_SHADER								   			   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+	float3 vertexNormal_modelspace	 : Normal;
+	float2 vertexUV_modelspace		 : TexCoord;
+	float3 vertexTangent_modelspace	 : Tangent;
+	float3 vertexBinormal_modelspace : Binormal;
+};
+
+// Output data
+struct PsIn 
+{
+	float3 vertexNormal_viewspace   : Normal;
+	float4 vertexDepth_projectspace  : SV_Position;
+	float4 vertexPosition_viewSpace  : TexCoord0;
+	float4 vertexPosition_projectspace : TexCoord1;
+	float2 vertexUV					 : TexCoord2;
+	float3 vertexTangent_worldspace  : Tangent;
+	float3 vertexBinormal_worldspace : Binormal;
+};
+
+[Vertex shader]
+
+float4x4 World;
+float4x4 View;
+float4x4 Projection;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	float4 vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World);
+	output.vertexPosition_viewSpace = mul(vertexPosition_worldspace, View);
+	float4 worldViewProjPosition = mul(output.vertexPosition_viewSpace, Projection);
+	output.vertexDepth_projectspace = worldViewProjPosition;
+	
+	output.vertexPosition_projectspace = worldViewProjPosition/worldViewProjPosition.w;
+	output.vertexNormal_viewspace = mul(mul(float4(In.vertexNormal_modelspace, 0.0f), World), View).xyz;
+	output.vertexUV.x = In.vertexUV_modelspace.x;
+	output.vertexUV.y = 1.0f - In.vertexUV_modelspace.y;
+	output.vertexTangent_worldspace = normalize(mul(float4(In.vertexTangent_modelspace, 0.0f), World).xyz);
+	output.vertexBinormal_worldspace = normalize(mul(float4(In.vertexBinormal_modelspace, 0.0f), World).xyz);
+	
+	return output;
+ }
+
+[Fragment shader]
+
+#include "Shaders\PhysicalLighting.shdl"
+
+//Textures////////////////////////////////
+
+//////////////////////////////////////////
+
+//Sampler States//////////////////////////
+
+//////////////////////////////////////////
+
+//Material////////////////////////////////
+float4 vGlassColorAndOpacity;
+float fRoughness;
+float fSpecular;
+////////////////////////////////////////////
+
+//Light Indices
+StructuredBuffer<uint> sbLightIndices;
+
+float2 vNum_Tiles;
+float2 vScreenDimensions;
+
+float4 main(PsIn In) : SV_Target
+{
+	float4 output = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	// Material Properties for illumination ///////////////////////////////////////////////////////////
+	
+	float4 vAlbedo = vGlassColorAndOpacity;
+	float4 vMREC = float4(0.0f, fRoughness, 0.0f, 1.0f);
+	
+	// Lighting /////////////////////////////////////////////////////////////////////////////////////////
+	
+	float4 vDirectLighting = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	// Obtain my tile //
+	uint2 vTilePosition = (float2(0.5f,-0.5f)*In.vertexPosition_projectspace.xy + 0.5f) * vNum_Tiles;
+	
+	uint uFixedOffset = (MAX_DIRECTIONAL_LIGHT + MAX_LIGHTS)*(vTilePosition.y*vNum_Tiles.x + vTilePosition.x);
+	
+    uint numPointLights = sbLightIndices[uFixedOffset];
+	uint numDirectionalLights = sbLightIndices[uFixedOffset + MAX_LIGHTS + 1];
+	
+	//[branch] 
+	if (numPointLights > 0 || numDirectionalLights > 0) 
+	{
+        float4 vBaseColor = vAlbedo/PI;
+		float4 vRealAlbedo = vBaseColor - vBaseColor * vMREC.x/*metallic*/;
+			
+		// 0.03 default specular value for dielectric.
+		float3 vRealSpecularColor = lerp(fSpecular, vBaseColor.xyz, vMREC.x/*metallic*/);
+			
+		float4 vPosition_viewspace = float4(In.vertexPosition_viewSpace.xyz, 1.0f);
+		float4 vVertexNormal_viewspace = float4(normalize(In.vertexNormal_viewspace), 0.0f);
+		
+		float fZdepth = length(vPosition_viewspace);
+		
+		//Auxiliar operation
+		float3 vV = normalize(- vPosition_viewspace.xyz);
+		float fNoV = saturate(dot(vV, vVertexNormal_viewspace.xyz));
+		float a = vMREC.y*vMREC.y;			
+			
+		// Point Lights
+        for (uint tileLightIndex = 0; tileLightIndex < numPointLights; ++tileLightIndex) 
+		{
+			uint uLightIndex = sbLightIndices[uFixedOffset + tileLightIndex + 1];
+            PointSpotLight light = sbPointLights[uLightIndex];
+			vDirectLighting += PointLightBRDFFunction(vRealAlbedo, 
+													  vRealSpecularColor, 
+													  a/*Roughness2*/, 
+													  vVertexNormal_viewspace, 
+													  vPosition_viewspace, 
+													  fZdepth, 
+													  vV, 
+													  fNoV, 
+													  light, 
+													  uLightIndex, 
+													  false, 
+													  float3(0.0f, 0.0f, 0.0f), 
+													  0);
+        }
+			
+		// Directional Lights
+		for (uint tileLightIndex = 0; tileLightIndex < numDirectionalLights; ++tileLightIndex) 
+		{
+			uint uLightIndex = sbLightIndices[uFixedOffset + MAX_LIGHTS + tileLightIndex + 2];
+            DirectionalLight light = cbDirectionalLights[uLightIndex];
+			vDirectLighting += DirectionalLightBRDFFunction(vRealAlbedo, 
+															vRealSpecularColor, 
+															a/*Roughness2*/, 
+															vVertexNormal_viewspace, 
+															vPosition_viewspace, 
+															fZdepth, 
+															vV, 
+															fNoV, 
+															light, 
+															uLightIndex,
+															false, 
+															float3(0.0f, 0.0f, 0.0f), 
+															0);
+        }  			
+    }
+		
+	output = float4(vDirectLighting.rgb, vAlbedo.a);
+	
+	return output;
+}

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Clow Reed</author>
+      <authoring_tool>OpenCOLLADA2014</authoring_tool>
+      <comments>
+			ColladaMaya export options: 
+			bakeTransforms=1;relativePaths=0;copyTextures=0;exportTriangles=1;exportCgfxFileReferences=0;
+			isSampling=0;curveConstrainSampling=0;removeStaticCurves=1;exportPolygonMeshes=1;exportLights=0;
+			exportCameras=0;exportJointsAndSkin=1;exportAnimations=1;exportInvisibleNodes=0;exportDefaultCameras=0;
+			exportTexCoords=1;exportNormals=1;exportNormalsPerVertex=1;exportVertexColors=0;exportVertexColorsPerVertex=0;
+			exportTexTangents=1;exportTangents=0;exportReferencedMaterials=0;exportMaterialsOnly=0;
+			exportXRefs=1;dereferenceXRefs=1;exportCameraAsLookat=0;cameraXFov=0;cameraYFov=1;doublePrecision=0
+		</comments>
+      <source_data>file:///C:/Users/Clow%20Reed/Documents/maya/projects/default/untitled</source_data>
+    </contributor>
+    <created>2015-10-26T12:13:41</created>
+    <modified>2015-10-26T12:13:41</modified>
+    <unit name="centimeter" meter="0.01"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_materials>
+    <material id="lambert1" name="lambert1">
+      <instance_effect url="#lambert1-fx"/>
+    </material>
+    <material id="TestFloorMaterial" name="TestFloorMaterial">
+      <instance_effect url="#TestFloorMaterial-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="TestFloorMaterial-fx">
+      <profile_COMMON>
+        <newparam sid="TestFloorTexture-surface">
+          <surface type="2D">
+            <init_from>TestFloorTexture</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="TestFloorTexture-sampler">
+          <sampler2D>
+            <source>TestFloorTexture-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="TestFloorTexture-sampler" texcoord="TEX0">
+                <extra>
+                  <technique profile="OpenCOLLADAMaya">
+                    <blend_mode>NONE</blend_mode>
+                    <coverageU>1</coverageU>
+                    <coverageV>1</coverageV>
+                    <fast>0</fast>
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <noiseU>0</noiseU>
+                    <noiseV>0</noiseV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <rotateFrame>0</rotateFrame>
+                    <rotateUV>0</rotateUV>
+                    <stagger>0</stagger>
+                    <translateFrameU>0</translateFrameU>
+                    <translateFrameV>0</translateFrameV>
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <specular>
+              <color>0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float>0.3</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <reflectivity>
+              <float>0.5</float>
+            </reflectivity>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="lambert1-fx">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color>0.4 0.4 0.4 1</color>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_images>
+    <image id="TestFloorTexture" name="TestFloorTexture">
+      <init_from>file:///C:/Users/Clow%20Reed/Documents/Unreal%20Projects/MyProject/Content/Exports/T_Brick_Clay_Beveled_D.TGA</init_from>
+      <extra>
+        <technique profile="OpenCOLLADAMaya">
+          <dgnode_type>kFile</dgnode_type>
+          <image_sequence>0</image_sequence>
+          <originalMayaNodeId>TestFloorTexture</originalMayaNodeId>
+        </technique>
+      </extra>
+    </image>
+  </library_images>
+  <library_geometries>
+    <geometry id="TestFloorShape" name="TestFloorShape">
+      <mesh>
+        <source id="TestFloorShape-positions" name="TestFloorShape-positions">
+          <float_array id="TestFloorShape-positions-array" count="48">9.238797 0 -3.826829 7.071071 0 -7.071064 3.826839 0 -9.238793 0 0 -10 -3.82683 0 -9.238798 -7.071065 0 -7.071071 -9.238794 0 -3.826838 -10 0 0 -9.238796 0 3.826831 -7.07107 0 7.071065 -3.826836 0 9.238793 0 0 9.999999 3.826833 0 9.238794 7.071067 0 7.071068 9.238795 0 3.826834 10 0 0</float_array>
+          <technique_common>
+            <accessor source="#TestFloorShape-positions-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="TestFloorShape-normals" name="TestFloorShape-normals">
+          <float_array id="TestFloorShape-normals-array" count="48">0 1 0 0 1 0 0 1 0 0 1 0 0 0.9999999 0 0 1 0 0 0.9999999 0 0 1 0 0 1 0 0 0.9999999 0 0 1 0 0 0.9999999 0 0 1 0 0 1 0 0 1 0 0 1 0</float_array>
+          <technique_common>
+            <accessor source="#TestFloorShape-normals-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="TestFloorShape-map1" name="TestFloorShape-map1">
+          <float_array id="TestFloorShape-map1-array" count="32">3.763683 1.85186 2.997916 2.997913 1.851863 3.763682 0.5000018 4.032585 -0.8518599 3.763683 -1.997913 2.997916 -2.763682 1.851863 -3.032584 0.5000013 -2.763683 -0.8518605 -1.997915 -1.997914 -0.8518621 -2.763682 0.4999995 -3.032584 1.851861 -2.763682 2.997914 -1.997915 3.763682 -0.8518617 4.032584 0.5</float_array>
+          <technique_common>
+            <accessor source="#TestFloorShape-map1-array" count="16" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="TestFloorShape-textangents">
+          <float_array id="TestFloorShape-textangents-array" count="48">1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0</float_array>
+          <technique_common>
+            <accessor source="#TestFloorShape-textangents-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="TestFloorShape-texbinormals">
+          <float_array id="TestFloorShape-texbinormals-array" count="48">0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1</float_array>
+          <technique_common>
+            <accessor source="#TestFloorShape-texbinormals-array" count="16" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="TestFloorShape-vertices" name="TestFloorShape-vertices">
+          <input semantic="POSITION" source="#TestFloorShape-positions"/>
+          <input semantic="NORMAL" source="#TestFloorShape-normals"/>
+        </vertices>
+        <triangles material="blinn1SG" count="14">
+          <input semantic="VERTEX" source="#TestFloorShape-vertices" offset="0"/>
+          <input semantic="TEXCOORD" source="#TestFloorShape-map1" offset="1" set="0"/>
+          <input semantic="TEXTANGENT" source="#TestFloorShape-textangents" offset="2" set="0"/>
+          <input semantic="TEXBINORMAL" source="#TestFloorShape-texbinormals" offset="2" set="0"/>
+          <p>0 0 0 1 1 1 15 15 15 1 1 1 2 2 2 15 15 15 2 2 2 3 3 3 15 15 15 3 3 3 4 4 4 15 15 15 4 4 4 5 5 5 15 15 15 5 5 5 6 6 6 15 15 15 6 6 6 7 7 7 15 15 15 7 7 7 8 8 8 15 15 15 8 8 8 9 9 9 15 15 15 9 9 9 10 10 10 15 15 15 10 10 10 11 11 11 15 15 15 11 11 11 12 12 12 15 15 15 12 12 12 13 13 13 15 15 15 13 13 13 14 14 14 15 15 15</p>
+        </triangles>
+      </mesh>
+      <extra>
+        <technique profile="OpenCOLLADAMaya">
+          <originalMayaNodeId>TestFloorShape</originalMayaNodeId>
+          <double_sided>1</double_sided>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="VisualSceneNode" name="untitled">
+      <node id="TestFloor" name="TestFloor" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#TestFloorShape">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="blinn1SG" target="#TestFloorMaterial">
+                <bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra>
+          <technique profile="OpenCOLLADAMaya">
+            <originalMayaNodeId>TestFloor</originalMayaNodeId>
+          </technique>
+        </extra>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#VisualSceneNode"/>
+  </scene>
+</COLLADA>

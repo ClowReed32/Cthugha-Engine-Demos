@@ -1,0 +1,11 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+	</Textures>
+	
+	<Constants>
+	</Constants>
+	
+</Material>

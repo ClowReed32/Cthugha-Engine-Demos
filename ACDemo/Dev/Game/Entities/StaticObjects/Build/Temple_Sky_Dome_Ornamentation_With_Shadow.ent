@@ -1,0 +1,9 @@
+<Entity type="Entity" resource="Entities\StaticObjects\Build\Temple_Sky_Dome_Ornamentation_With_Shadow.ent">
+	
+    <MeshRenderComponent Static="true">
+		<MeshResource Path="Art\StaticObjects\Build\Temple_Sky_Dome_Ornamentation.dae" />
+		<RenderProperties ShadowGeneratedAsTwoSided = "true" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+		<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+	</MeshRenderComponent>
+
+</Entity>

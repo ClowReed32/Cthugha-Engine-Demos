@@ -1,0 +1,16 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_MacroVariation" File = "Art\StaticObjects\Textures\Shared_Textures\T_MacroVariation.dds" />
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Temple_Column_Textures\T_Temple_Column_D.dds" />
+		<Texture Name = "t_NormalMap" File = "Art\StaticObjects\Textures\Temple_Column_Textures\T_Temple_Column_N.dds" />
+		<Texture Name = "t_RoughnessMap" File = "Art\StaticObjects\Textures\Temple_Column_Textures\T_Temple_Column_M.dds" />
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "fDisplacementScale" Type = "FLOAT" Value = "0.01" />
+	</Constants>
+	
+</Material>

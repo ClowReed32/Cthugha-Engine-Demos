@@ -1,0 +1,114 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		RADIANCE INJECTION SHADER  										   	   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+[Compute shader]
+
+//#include "Shaders\Common.shdl"
+
+#define COMPUTE_SHADER_TILE_GROUP_DIM 16
+#define COMPUTE_SHADER_TILE_GROUP_SIZE (COMPUTE_SHADER_TILE_GROUP_DIM*COMPUTE_SHADER_TILE_GROUP_DIM)
+
+#define COMPUTE_SHADER_GROUP_DIM_X 16
+#define COMPUTE_SHADER_GROUP_DIM_Y 8
+#define COMPUTE_SHADER_GROUP_DIM_Z 1
+
+RWTexture3D<float4> GI_Radiance;
+
+// Uniform GI Voxel Cascades ///////////////////////
+int iCascadeResolution;
+int iCascadeIndex;
+
+float g_CellSize;
+float3 g_SnappedGridPosition;
+/////////////////////////////////////////////////
+
+// GBuffer //////////////////////////////////////////////////////////////////
+
+Texture3D<uint> GI_GBuffer;
+
+/////////////////////////////////////////////////////////////////////////////
+
+// Camera Properties ////////////////////////////////////////////////////////
+
+float4x4 mView;
+//float4x4 mInverseProjection;
+//float4x4 mInverseView;
+
+/////////////////////////////////////////////////////////////////////////////
+
+#include "Shaders\GI\GI_Radiance_Common.shdl"
+
+void StoreRadiance(uint3 voxelGridPos, float4 vColor, float3 vNormal)
+{
+	GI_Radiance[int3(voxelGridPos.x, voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor*saturate(dot(vNormal, float3(1.0f, 0.0f, 0.0f)));
+	GI_Radiance[int3(voxelGridPos.x, iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor*saturate(dot(vNormal, float3(-1.0f, 0.0f, 0.0f)));
+	GI_Radiance[int3(voxelGridPos.x, 2*iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor*saturate(dot(vNormal, float3(0.0f, 1.0f, 0.0f)));
+	GI_Radiance[int3(voxelGridPos.x, 3*iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor*saturate(dot(vNormal, float3(0.0f, -1.0f, 0.0f)));
+	GI_Radiance[int3(voxelGridPos.x, 4*iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor*saturate(dot(vNormal, float3(0.0f, 0.0f, 1.0f)));
+	GI_Radiance[int3(voxelGridPos.x, 5*iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor*saturate(dot(vNormal, float3(0.0f, 0.0f, -1.0f)));
+	GI_Radiance[int3(voxelGridPos.x, 6*iCascadeResolution + voxelGridPos.y, iCascadeResolution*iCascadeIndex + voxelGridPos.z)] = vColor;
+}
+
+[numthreads(COMPUTE_SHADER_GROUP_DIM_X, COMPUTE_SHADER_GROUP_DIM_Y, COMPUTE_SHADER_GROUP_DIM_Z)]
+void main(uint3 groupId : SV_GroupID, uint3 dispatchThreadId : SV_DispatchThreadID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	uint3 voxelGridPos = uint3(dispatchThreadId.x, dispatchThreadId.y, dispatchThreadId.z);
+	
+	float4 vColorOcclusion = convRGBA8Tofloat4(GI_GBuffer.Load(int4(voxelGridPos.x, voxelGridPos.y, iCascadeIndex*iCascadeResolution + voxelGridPos.z, 0)))*0.003921f;
+	float fOcclusion = vColorOcclusion.a;
+	
+	if(fOcclusion > 0.0f)
+	{
+		//Obtain data from GBuffer
+		
+		float4 vNormalEmission = convRGBA8Tofloat4(GI_GBuffer.Load(int4(voxelGridPos.x, iCascadeResolution + voxelGridPos.y, iCascadeIndex*iCascadeResolution + voxelGridPos.z, 0)))*0.003921f;
+		
+		float4 vRealAlbedo = float4(vColorOcclusion.rgb, 1.0f);
+		float3 vVertexNormal_worldspace = normalize(2.0f*(vNormalEmission.xyz) - 1.0f);
+		float4 vVertexNormal_viewspace = mul(float4(vVertexNormal_worldspace, 0.0f), mView);
+		float fEmission = vNormalEmission.w;
+		
+		float4 vEmissiveColor = float4(vColorOcclusion.rgb*fEmission, 1.0f);
+		
+		int halfCells = iCascadeResolution/2;
+	 
+		float3 vPosition_worldspace = voxelGridPos - float3(halfCells, halfCells, halfCells);
+		vPosition_worldspace *= g_CellSize;
+		vPosition_worldspace += g_SnappedGridPosition;		
+		float4 vPosition_viewspace = mul(float4(vPosition_worldspace, 1.0f), mView);
+		
+		float4 vDirectLighting = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		
+		// Point Lights
+        for (uint uLightIndex = 0; uLightIndex < iNumPointLights; ++uLightIndex) 
+		{
+			PointSpotLight light = sbPointLights[uLightIndex];
+			vDirectLighting += PointLightBRDFFunction(vRealAlbedo, 
+													  vVertexNormal_viewspace, 
+													  vPosition_viewspace, 
+													  light, 
+													  uLightIndex);
+        }
+			
+		// Directional Lights
+		for (uint uLightIndex = 0; uLightIndex < iNumDirectionalLights; ++uLightIndex) 
+		{
+            DirectionalLight light = cbDirectionalLights[uLightIndex];
+			vDirectLighting += DirectionalLightBRDFFunction(vRealAlbedo, 
+															vVertexNormal_viewspace, 
+															vPosition_viewspace,
+															light, 
+															uLightIndex);
+        }  			
+		
+		vDirectLighting.rgb += vEmissiveColor.rgb;
+		
+		// compress outColor range to encode limited HDR
+		//vDirectLighting.rgb *= 0.5f;
+
+		StoreRadiance(voxelGridPos, float4(vDirectLighting.rgb, 1.0f), vVertexNormal_worldspace);
+	}
+}

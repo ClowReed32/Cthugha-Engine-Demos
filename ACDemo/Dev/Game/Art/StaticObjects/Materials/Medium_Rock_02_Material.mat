@@ -1,0 +1,13 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<Texture Name = "t_DiffuseMap" File = "Art\StaticObjects\Textures\Medium_Rock_02\T_Medium_Rock_02_D.dds" />
+		<Texture Name = "t_NormalMap" File = "Art\StaticObjects\Textures\Medium_Rock_02\T_Medium_Rock_02_N.dds" />
+	</Textures>
+	
+	<Constants>
+	</Constants>
+	
+</Material>

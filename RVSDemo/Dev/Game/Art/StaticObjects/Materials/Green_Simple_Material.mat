@@ -1,0 +1,14 @@
+<Material>
+
+	<Properties BlendMode = "OPAQUE" Wrap = "WRAP" />		
+	
+	<Textures>
+		<!-- <Texture Name = "" Source = "" /> -->
+	</Textures>
+	
+	<Constants>
+		<Constant Name = "fRoughness" Type = "FLOAT" Value = "0.2" />
+		<Constant Name = "vAlbedoColor" Type = "VEC4" Value = "0.0 1.0 0.0 1.0" />
+	</Constants>
+	
+</Material>
