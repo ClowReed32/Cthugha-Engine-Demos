@@ -12,6 +12,9 @@
     <ClCompile Include="..\Entity\RVSDemoEntityFactory.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\Physics\FluidSimulator.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\DynamicPlayerController.h" />
@@ -24,6 +27,9 @@
     <ClInclude Include="..\RVSDemoView.h" />
     <ClInclude Include="..\Entity\RVSDemoEntityFactory.h">
       <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Physics\FluidSimulator.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +47,9 @@
     </Filter>
     <Filter Include="MainLoop">
       <UniqueIdentifier>{fa7f0987-fe1a-4131-baf1-8cbc0e791672}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{88055d94-2250-4802-a201-44ca5904bc7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

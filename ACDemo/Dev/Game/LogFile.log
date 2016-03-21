@@ -8450,3 +8450,356 @@ Line: 68
 [INFO] Remove Texture: 76
 [INFO] Remove Texture: 77
 [INFO] Remove Texture: 78
+[INFO] ---------------- 2016-03-14 17:05:11 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 8
+[INFO] Create new texture: 9
+[INFO] Create new texture: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new texture: 39
+[INFO] Create new texture: 40
+[INFO] Create new texture: 41
+[INFO] Create new texture: 42
+[INFO] Create new texture: 43
+[INFO] Create new texture: 44
+[INFO] Create new texture: 45
+[INFO] Create new texture: 46
+[INFO] Create new texture: 47
+[INFO] Create new texture: 48
+[INFO] Create new texture: 49
+[INFO] Create new texture: 50
+[INFO] Create new texture: 51
+[INFO] Create new texture: 52
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Depth Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Target Surface: 64
+[INFO] Create new Target Surface: 65
+[INFO] Create new Target Surface: 66
+[INFO] Create new Target Surface: 67
+[INFO] Create new Target Surface: 68
+[INFO] Create new Target Surface: 69
+[INFO] Create new Target Surface: 70
+[INFO] Create new Target Surface: 71
+[INFO] Create new Target Surface: 72
+[INFO] Create new Target Surface: 73
+[INFO] Create new Target Surface: 74
+[INFO] Create new Target Surface: 75
+[INFO] Create new Target Surface: 76
+[INFO] Create new Target Surface: 77
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 78
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] Create new Vertex Buffer: 47
+[INFO] Create new Vertex Buffer: 48
+[INFO] Create new Vertex Buffer: 49
+[INFO] Create new Vertex Buffer: 50
+[INFO] Create new Vertex Buffer: 51
+[INFO] Create new Index Buffer: 8
+[INFO] Create new Vertex Buffer: 52
+[INFO] Create new Vertex Buffer: 53
+[INFO] Create new Vertex Buffer: 54
+[INFO] Create new Vertex Buffer: 55
+[INFO] Create new Vertex Buffer: 56
+[INFO] Create new Index Buffer: 9
+[INFO] Create new Vertex Buffer: 57
+[INFO] Create new Vertex Buffer: 58
+[INFO] Create new Vertex Buffer: 59
+[INFO] Create new Vertex Buffer: 60
+[INFO] Create new Vertex Buffer: 61
+[INFO] Create new Index Buffer: 10
+[INFO] Create new Vertex Buffer: 62
+[INFO] Create new Vertex Buffer: 63
+[INFO] Create new Vertex Buffer: 64
+[INFO] Create new Vertex Buffer: 65
+[INFO] Create new Vertex Buffer: 66
+[INFO] Create new Index Buffer: 11
+[INFO] Create new Vertex Buffer: 67
+[INFO] Create new Vertex Buffer: 68
+[INFO] Create new Vertex Buffer: 69
+[INFO] Create new Vertex Buffer: 70
+[INFO] Create new Vertex Buffer: 71
+[INFO] Create new Index Buffer: 12
+[INFO] Create new Vertex Buffer: 72
+[INFO] Create new Vertex Buffer: 73
+[INFO] Create new Vertex Buffer: 74
+[INFO] Create new Vertex Buffer: 75
+[INFO] Create new Vertex Buffer: 76
+[INFO] Create new Index Buffer: 13
+[INFO] Create new Vertex Buffer: 77
+[INFO] Create new Vertex Buffer: 78
+[INFO] Create new Vertex Buffer: 79
+[INFO] Create new Vertex Buffer: 80
+[INFO] Create new Vertex Buffer: 81
+[INFO] Create new Index Buffer: 14
+[INFO] Create new Vertex Buffer: 82
+[INFO] Create new Vertex Buffer: 83
+[INFO] Create new Vertex Buffer: 84
+[INFO] Create new Vertex Buffer: 85
+[INFO] Create new Vertex Buffer: 86
+[INFO] Create new Index Buffer: 15
+[INFO] Create new Vertex Buffer: 87
+[INFO] Create new Vertex Buffer: 88
+[INFO] Create new Vertex Buffer: 89
+[INFO] Create new Vertex Buffer: 90
+[INFO] Create new Vertex Buffer: 91
+[INFO] Create new Index Buffer: 16
+[INFO] Create new Vertex Buffer: 92
+[INFO] Create new Vertex Buffer: 93
+[INFO] Create new Vertex Buffer: 94
+[INFO] Create new Vertex Buffer: 95
+[INFO] Create new Vertex Buffer: 96
+[INFO] Create new Index Buffer: 17
+[INFO] Create new Vertex Buffer: 97
+[INFO] Create new Vertex Buffer: 98
+[INFO] Create new Vertex Buffer: 99
+[INFO] Create new Vertex Buffer: 100
+[INFO] Create new Vertex Buffer: 101
+[INFO] Create new Index Buffer: 18
+[INFO] Create new Vertex Buffer: 102
+[INFO] Create new Vertex Buffer: 103
+[INFO] Create new Vertex Buffer: 104
+[INFO] Create new Vertex Buffer: 105
+[INFO] Create new Vertex Buffer: 106
+[INFO] Create new Index Buffer: 19
+[INFO] Create new Vertex Buffer: 107
+[INFO] Create new Vertex Buffer: 108
+[INFO] Create new Vertex Buffer: 109
+[INFO] Create new Vertex Buffer: 110
+[INFO] Create new Vertex Buffer: 111
+[INFO] Create new Index Buffer: 20
+[INFO] Create new Vertex Buffer: 112
+[INFO] Create new Vertex Buffer: 113
+[INFO] Create new Vertex Buffer: 114
+[INFO] Create new Vertex Buffer: 115
+[INFO] Create new Vertex Buffer: 116
+[INFO] Create new Index Buffer: 21
+[INFO] Create new Vertex Buffer: 117
+[INFO] Create new Vertex Buffer: 118
+[INFO] Create new Vertex Buffer: 119
+[INFO] Create new Vertex Buffer: 120
+[INFO] Create new Vertex Buffer: 121
+[INFO] Create new Index Buffer: 22
+[INFO] Create new Vertex Buffer: 122
+[INFO] Create new Vertex Buffer: 123
+[INFO] Create new Vertex Buffer: 124
+[INFO] Create new Vertex Buffer: 125
+[INFO] Create new Vertex Buffer: 126
+[INFO] Create new Index Buffer: 23
+[INFO] Create new Vertex Buffer: 127
+[INFO] Create new Vertex Buffer: 128
+[INFO] Create new Vertex Buffer: 129
+[INFO] Create new Vertex Buffer: 130
+[INFO] Create new Vertex Buffer: 131
+[INFO] Create new Index Buffer: 24
+[INFO] Create new Vertex Buffer: 132
+[INFO] Create new Vertex Buffer: 133
+[INFO] Create new Vertex Buffer: 134
+[INFO] Create new Vertex Buffer: 135
+[INFO] Create new Vertex Buffer: 136
+[INFO] Create new Index Buffer: 25
+[INFO] Create new Vertex Buffer: 137
+[INFO] Create new Vertex Buffer: 138
+[INFO] Create new Vertex Buffer: 139
+[INFO] Create new Vertex Buffer: 140
+[INFO] Create new Vertex Buffer: 141
+[INFO] Create new Index Buffer: 26
+[INFO] Create new Vertex Buffer: 142
+[INFO] Create new Vertex Buffer: 143
+[INFO] Create new Vertex Buffer: 144
+[INFO] Create new Vertex Buffer: 145
+[INFO] Create new Vertex Buffer: 146
+[INFO] Create new Index Buffer: 27
+[INFO] Create new Vertex Buffer: 147
+[INFO] Create new Vertex Buffer: 148
+[INFO] Create new Vertex Buffer: 149
+[INFO] Create new Vertex Buffer: 150
+[INFO] Create new Vertex Buffer: 151
+[INFO] Create new Index Buffer: 28
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] Remove Texture: 65
+[INFO] Remove Texture: 66
+[INFO] Remove Texture: 67
+[INFO] Remove Texture: 68
+[INFO] Remove Texture: 69
+[INFO] Remove Texture: 70
+[INFO] Remove Texture: 71
+[INFO] Remove Texture: 72
+[INFO] Remove Texture: 73
+[INFO] Remove Texture: 74
+[INFO] Remove Texture: 75
+[INFO] Remove Texture: 76
+[INFO] Remove Texture: 77
+[INFO] Remove Texture: 78

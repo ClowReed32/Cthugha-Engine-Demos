@@ -2,29 +2,6 @@
 	<MapData>
 		<MapContents>
 			<StaticObjects>
-			
-				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_0">
-					<Components>
-						<TransformComponent>
-							<Scale x="1.0" y="1.0" z="1.0" />
-							<Rotation x="0" y="0" z="0" />
-							<Position x="0.0" y="0.0" z="0.0" />
-						</TransformComponent>
-						<MeshRenderComponent Static="true">
-							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_0.dae" />
-							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
-							<GlobalIlluminationProperties Shader = "Shaders\MaterialShaders\GI\Rock_Marble_Polished_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Rock_Marble_Polished_Material_GI.mat" />
-							<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Marble_Polished_Shader.shd" Material = "Art\StaticObjects\Materials\Rock_Marble_Polished_Material.mat"/>
-						</MeshRenderComponent>
-						<PhysicsComponent>
-							<Shape Type="Box" GhostObject="false">
-								<BoxProperties Width="200.0" Height="0.2" Depth="200.0" Offset="0.0 -0.1 0.0"/>
-							</Shape>
-							<Density>Infinite</Density>
-							<PhysicsMaterial>Normal</PhysicsMaterial>
-						</PhysicsComponent>
-					</Components>
-				</StaticObject>
 				
 				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_1">
 					<Components>

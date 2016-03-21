@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Physics\FluidSimulator.cpp" />
     <ClCompile Include="..\RVSDemoEvents.cpp" />
     <ClCompile Include="..\RVSDemoView.cpp" />
     <ClCompile Include="..\DynamicPlayerController.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="RVSDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Physics\FluidSimulator.h" />
     <ClInclude Include="..\RVSDemoEvents.h" />
     <ClInclude Include="..\RVSDemoView.h" />
     <ClInclude Include="..\DynamicPlayerController.h" />

@@ -355,7 +355,7 @@ shared_ptr<ResHandle> ResCache::Load(Resource *r)
 	int rawSize = m_file->VGetRawResourceSize(*r);
 	if (rawSize < 0)
 	{
-		CHG_ASSERT(rawSize > 0 && "Resource size returned -1 - Resource not found");
+		CHG_ASSERT(rawSize > 0 && "Resource size returned -1 - Resource not found: ");
 		return shared_ptr<ResHandle>();
 	}
 
