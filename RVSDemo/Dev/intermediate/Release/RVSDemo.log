@@ -1,35 +1,5 @@
-﻿Build started 14/03/2016 11:53:04.
-     1>Project "C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\source\RVSDemo\Msvc\RVSDemo.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"..\..\..\intermediate\Release\\" /Fd"..\..\..\intermediate\Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\RVSDemoEvents.cpp ..\RVSDemoView.cpp ..\DynamicPlayerController.cpp ..\Entity\RVSDemoEntityFactory.cpp ..\KinematicPlayerControlled.cpp ..\MainLoop\MoveSceneObject.cpp RVSDemo.cpp
-         RVSDemoEvents.cpp
-         RVSDemoView.cpp
-         DynamicPlayerController.cpp
-         RVSDemoEntityFactory.cpp
-         KinematicPlayerControlled.cpp
-         MoveSceneObject.cpp
-         RVSDemo.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\..\bin\Release\RVSDemo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\source\RVSDemo\Msvc\..\..\..\..\..\EngineCore\lib\Release\\" SDL2main.lib SDL2.lib d3d11.lib d3dcompiler.lib d3d10.lib dxguid.lib winmm.lib comctl32.lib libjpeg.lib zlib.lib tinyxmlRelease.lib libpng.lib BulletCollision_vs2010.lib BulletDynamics_vs2010.lib LinearMath_vs2010.lib EngineCore.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libc /NODEFAULTLIB:msvcrt /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\..\bin\Release\RVSDemo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\..\bin\Release\RVSDemo.lib" /MACHINE:X86 /SAFESEH:NO ..\..\..\intermediate\Release\RVSDemoEvents.obj
-         ..\..\..\intermediate\Release\RVSDemoView.obj
-         ..\..\..\intermediate\Release\DynamicPlayerController.obj
-         ..\..\..\intermediate\Release\RVSDemoEntityFactory.obj
-         ..\..\..\intermediate\Release\KinematicPlayerControlled.obj
-         ..\..\..\intermediate\Release\MoveSceneObject.obj
-         ..\..\..\intermediate\Release\RVSDemo.obj
-         Generating code
-         Finished generating code
-     1>EngineCore.lib(jerror.o) : warning LNK4049: locally defined symbol __iob imported
-     1>SDL2main.lib(SDL_windows_main.obj) : warning LNK4049: locally defined symbol _exit imported
-     1>SDL2main.lib(SDL_windows_main.obj) : warning LNK4049: locally defined symbol _fprintf imported
-     1>SDL2main.lib(SDL_windows_main.obj) : warning LNK4049: locally defined symbol ___iob_func imported
-     1>EngineCore.lib(tinyxmlparser.obj) : warning LNK4099: PDB 'tinyxml.pdb' was not found with 'EngineCore.lib(tinyxmlparser.obj)' or at 'C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\bin\Release\tinyxml.pdb'; linking object as if no debug info
-     1>EngineCore.lib(tinyxmlerror.obj) : warning LNK4099: PDB 'tinyxml.pdb' was not found with 'EngineCore.lib(tinyxmlerror.obj)' or at 'C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\bin\Release\tinyxml.pdb'; linking object as if no debug info
-     1>EngineCore.lib(tinyxml.obj) : warning LNK4099: PDB 'tinyxml.pdb' was not found with 'EngineCore.lib(tinyxml.obj)' or at 'C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\bin\Release\tinyxml.pdb'; linking object as if no debug info
-     1>EngineCore.lib(tinystr.obj) : warning LNK4099: PDB 'tinyxml.pdb' was not found with 'EngineCore.lib(tinystr.obj)' or at 'C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\bin\Release\tinyxml.pdb'; linking object as if no debug info
-         RVSDemo.vcxproj -> C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\source\RVSDemo\Msvc\..\..\..\bin\Release\RVSDemo.exe
-     1>Done Building Project "C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\RVSDemo\Dev\source\RVSDemo\Msvc\RVSDemo.vcxproj" (Build target(s)).
+﻿Build started 21/03/2016 16:44:13.
 
 Build succeeded.
 
-Time Elapsed 00:00:29.66
+Time Elapsed 00:00:00.42

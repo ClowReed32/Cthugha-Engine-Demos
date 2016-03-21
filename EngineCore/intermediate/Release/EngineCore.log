@@ -1,9 +1,5 @@
-﻿Build started 14/03/2016 17:00:58.
-     1>Project "C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\EngineCore\Source\Msvc\EngineCore.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
-         EngineCore.vcxproj -> C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\EngineCore\Source\Msvc\..\..\lib\Release\EngineCore.lib
-     1>Done Building Project "C:\Users\Clow Reed\Documents\Visual Studio 2013\Projects\Cthugha Engine Demos\EngineCore\Source\Msvc\EngineCore.vcxproj" (Build target(s)).
+﻿Build started 21/03/2016 16:44:13.
 
 Build succeeded.
 
-Time Elapsed 00:00:01.03
+Time Elapsed 00:00:00.07
