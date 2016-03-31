@@ -1,6 +1,6 @@
 # Cthugha-Engine-Demos
 
-<img src="https://raw.githubusercontent.com/ClowReed32/Cthugha-Engine-Demos/master/Screenshot/Screenshot4.png" />
+<img src="https://raw.githubusercontent.com/ClowReed32/Cthugha-Engine-Demos/master/Screenshot/ACDemo/Screenshot4.png" />
 
 Cthugha_engine is a small engine implemented in C++ and based on 
 "Game Coding Complete" by Mike McShaffry and David Graham.
