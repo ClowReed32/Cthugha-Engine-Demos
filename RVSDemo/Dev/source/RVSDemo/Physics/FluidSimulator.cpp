@@ -171,38 +171,38 @@ void FluidSimulator::GPUGridSort()
 
 	// Then sort the rows and columns for the levels > than the block size
 	// Transpose. Sort the Columns. Transpose. Sort the Rows.
-	for (UINT level = (BITONIC_BLOCK_SIZE << 1); level <= NUM_ELEMENTS; level <<= 1)
-	{
-		SortCB constants1 = { (level / BITONIC_BLOCK_SIZE), (level & ~NUM_ELEMENTS) / BITONIC_BLOCK_SIZE, MATRIX_WIDTH, MATRIX_HEIGHT };
-		pd3dImmediateContext->UpdateSubresource(g_pSortCB, 0, NULL, &constants1, 0, 0);
+	//for (UINT level = (BITONIC_BLOCK_SIZE << 1); level <= NUM_ELEMENTS; level <<= 1)
+	//{
+	//	SortCB constants1 = { (level / BITONIC_BLOCK_SIZE), (level & ~NUM_ELEMENTS) / BITONIC_BLOCK_SIZE, MATRIX_WIDTH, MATRIX_HEIGHT };
+	//	pd3dImmediateContext->UpdateSubresource(g_pSortCB, 0, NULL, &constants1, 0, 0);
 
-		// Transpose the data from buffer 1 into buffer 2
-		ID3D11ShaderResourceView* pViewNULL = NULL;
-		UINT UAVInitialCounts = 0;
-		pd3dImmediateContext->CSSetShaderResources(0, 1, &pViewNULL);
-		pd3dImmediateContext->CSSetUnorderedAccessViews(0, 1, &tempUAV, &UAVInitialCounts);
-		pd3dImmediateContext->CSSetShaderResources(0, 1, &inSRV);
-		pd3dImmediateContext->CSSetShader(g_pSortTranspose, NULL, 0);
-		pd3dImmediateContext->Dispatch(MATRIX_WIDTH / TRANSPOSE_BLOCK_SIZE, MATRIX_HEIGHT / TRANSPOSE_BLOCK_SIZE, 1);
+	//	// Transpose the data from buffer 1 into buffer 2
+	//	ID3D11ShaderResourceView* pViewNULL = NULL;
+	//	UINT UAVInitialCounts = 0;
+	//	pd3dImmediateContext->CSSetShaderResources(0, 1, &pViewNULL);
+	//	pd3dImmediateContext->CSSetUnorderedAccessViews(0, 1, &tempUAV, &UAVInitialCounts);
+	//	pd3dImmediateContext->CSSetShaderResources(0, 1, &inSRV);
+	//	pd3dImmediateContext->CSSetShader(g_pSortTranspose, NULL, 0);
+	//	pd3dImmediateContext->Dispatch(MATRIX_WIDTH / TRANSPOSE_BLOCK_SIZE, MATRIX_HEIGHT / TRANSPOSE_BLOCK_SIZE, 1);
 
-		// Sort the transposed column data
-		pd3dImmediateContext->CSSetShader(g_pSortBitonic, NULL, 0);
-		pd3dImmediateContext->Dispatch(NUM_ELEMENTS / BITONIC_BLOCK_SIZE, 1, 1);
+	//	// Sort the transposed column data
+	//	pd3dImmediateContext->CSSetShader(g_pSortBitonic, NULL, 0);
+	//	pd3dImmediateContext->Dispatch(NUM_ELEMENTS / BITONIC_BLOCK_SIZE, 1, 1);
 
-		SortCB constants2 = { BITONIC_BLOCK_SIZE, level, MATRIX_HEIGHT, MATRIX_WIDTH };
-		pd3dImmediateContext->UpdateSubresource(g_pSortCB, 0, NULL, &constants2, 0, 0);
+	//	SortCB constants2 = { BITONIC_BLOCK_SIZE, level, MATRIX_HEIGHT, MATRIX_WIDTH };
+	//	pd3dImmediateContext->UpdateSubresource(g_pSortCB, 0, NULL, &constants2, 0, 0);
 
-		// Transpose the data from buffer 2 back into buffer 1
-		pd3dImmediateContext->CSSetShaderResources(0, 1, &pViewNULL);
-		pd3dImmediateContext->CSSetUnorderedAccessViews(0, 1, &inUAV, &UAVInitialCounts);
-		pd3dImmediateContext->CSSetShaderResources(0, 1, &tempSRV);
-		pd3dImmediateContext->CSSetShader(g_pSortTranspose, NULL, 0);
-		pd3dImmediateContext->Dispatch(MATRIX_HEIGHT / TRANSPOSE_BLOCK_SIZE, MATRIX_WIDTH / TRANSPOSE_BLOCK_SIZE, 1);
+	//	// Transpose the data from buffer 2 back into buffer 1
+	//	pd3dImmediateContext->CSSetShaderResources(0, 1, &pViewNULL);
+	//	pd3dImmediateContext->CSSetUnorderedAccessViews(0, 1, &inUAV, &UAVInitialCounts);
+	//	pd3dImmediateContext->CSSetShaderResources(0, 1, &tempSRV);
+	//	pd3dImmediateContext->CSSetShader(g_pSortTranspose, NULL, 0);
+	//	pd3dImmediateContext->Dispatch(MATRIX_HEIGHT / TRANSPOSE_BLOCK_SIZE, MATRIX_WIDTH / TRANSPOSE_BLOCK_SIZE, 1);
 
-		// Sort the row data
-		pd3dImmediateContext->CSSetShader(g_pSortBitonic, NULL, 0);
-		pd3dImmediateContext->Dispatch(NUM_ELEMENTS / BITONIC_BLOCK_SIZE, 1, 1);
-	}
+	//	// Sort the row data
+	//	pd3dImmediateContext->CSSetShader(g_pSortBitonic, NULL, 0);
+	//	pd3dImmediateContext->Dispatch(NUM_ELEMENTS / BITONIC_BLOCK_SIZE, 1, 1);
+	//}
 }
 
 void FluidSimulator::Update(unsigned long deltaMs)

@@ -1,5 +1,5 @@
 <PlayerOptions>
-  <Graphics renderer="OpenGL" width="1920" height="1080" runfullspeed="yes" windowedMode="no"/>
+  <Graphics renderer="OpenGL" width="1280" height="720" runfullspeed="yes" windowedMode="yes"/>
   <Sound sfxVolume="100" musicVolume="100"/>
   <ResCache useDevelopmentDirectories="no" /> 
   <PhysicsDebug DrawWireFrame="yes" DrawContactPoints="yes" />

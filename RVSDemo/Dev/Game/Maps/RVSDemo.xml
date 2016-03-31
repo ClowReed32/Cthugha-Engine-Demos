@@ -2,6 +2,29 @@
 	<MapData>
 		<MapContents>
 			<StaticObjects>
+			
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="0.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="true">
+							<MeshResource Path="Art\StaticObjects\Build\Temple_Center_Room_Floor_0.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<GlobalIlluminationProperties Shader = "Shaders\MaterialShaders\GI\Rock_Marble_Polished_Shader_GI.shd" Material = "Art\StaticObjects\Materials\GI\Rock_Marble_Polished_Material_GI.mat" />
+							<Shaders ShaderFill="Shaders\MaterialShaders\Rock_Marble_Polished_Shader.shd" Material = "Art\StaticObjects\Materials\Rock_Marble_Polished_Material.mat"/>
+						</MeshRenderComponent>
+						<PhysicsComponent>
+							<Shape Type="Box" GhostObject="false">
+								<BoxProperties Width="200.0" Height="0.2" Depth="200.0" Offset="0.0 -0.1 0.0"/>
+							</Shape>
+							<Density>Infinite</Density>
+							<PhysicsMaterial>Normal</PhysicsMaterial>
+						</PhysicsComponent>
+					</Components>
+				</StaticObject>
 				
 				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="Temple_Center_Room_Floor_1">
 					<Components>
@@ -71,7 +94,7 @@
 						<TransformComponent>
 							<Scale x="0.125" y="0.125" z="0.125" />
 							<Rotation x="0" y="0" z="0" />
-							<Position x="0.0" y="1.0" z="7.0" />
+							<Position x="0.0" y="3.0" z="7.0" />
 						</TransformComponent>
 						<MeshRenderComponent Static="true">
 							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
@@ -103,7 +126,7 @@
 						<TransformComponent>
 							<Scale x="0.125" y="0.125" z="0.125" />
 							<Rotation x="0" y="0" z="0" />
-							<Position x="7.0" y="1.0" z="0.0" />
+							<Position x="7.0" y="3.0" z="0.0" />
 						</TransformComponent>
 						<MeshRenderComponent Static="true">
 							<MeshResource Path="Art\StaticObjects\Stanford_Models\Stanford_Dragon.dae" />
@@ -230,17 +253,401 @@
 					</Components>
 				</StaticObject>
 				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="SilverSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="4.5" y="2.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="true" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Metal_Silver_Shader.shd" Material = "Art\StaticObjects\Materials\Metal_Silver_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="PointLightSphere_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.1" y="0.1" z="0.1" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="0.0" y="6.0" z="6.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Emissive_Shader.shd" Material = "Art\StaticObjects\Materials\Emission_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="PointLightSphere_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.1" y="0.1" z="0.1" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="0.0" y="6.0" z="-6.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Emissive_Shader.shd" Material = "Art\StaticObjects\Materials\Emission_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="PointLightSphere_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.1" y="0.1" z="0.1" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="6.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Emissive_Shader.shd" Material = "Art\StaticObjects\Materials\Emission_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="PointLightSphere_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.1" y="0.1" z="0.1" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-6.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Emissive_Shader.shd" Material = "Art\StaticObjects\Materials\Emission_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
+				<StaticObject type="StaticObject" resource="" Collides="true" ID="1" Name="SpotLightSphere">
+					<Components>
+						<TransformComponent>
+							<Scale x="0.1" y="0.1" z="0.1" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="0.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<MeshRenderComponent Static="false">
+							<MeshResource Path="Art\StaticObjects\Sphere.dae" />
+							<RenderProperties ShadowGeneratedAsTwoSided = "false" CastShadows="false" CastVolumetricShadow="false" ActiveParallax = "false"/>
+							<Shaders ShaderFill="Shaders\MaterialShaders\Emissive_Shader.shd" Material = "Art\StaticObjects\Materials\Emission_Material.mat"/>
+						</MeshRenderComponent>
+					</Components>
+				</StaticObject>
+				
 			</StaticObjects>
 			
 			<Entities>
 				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-9.2388" y="0.0" z="-3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
 				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.82683" y="0.0" z="-9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.82683" y="0.0" z="-9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="9.2388" y="0.0" z="-3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="9.2388" y="0.0" z="3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.82683" y="0.0" z="9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.82683" y="0.0" z="9.2388" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Small_Column.ent" Collides="true" ID="1" Name="Temple_Small_Column_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-9.2388" y="0.0" z="3.82683" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-7.39104" y="0.0" z="-3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.23358" y="0.0" z="-1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.06147" y="0.0" z="-7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_4">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.33939" y="0.0" z="-3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_5">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.06147" y="0.0" z="-7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_6">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="1.33939" y="0.0" z="-3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_7">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="7.39104" y="0.0" z="-3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_8">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.23358" y="0.0" z="-1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_9">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="7.39104" y="0.0" z="3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_10">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.23358" y="0.0" z="1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_11">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="3.06147" y="0.0" z="7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_12">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="1.33939" y="0.0" z="3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_13">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.06147" y="0.0" z="7.39104" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_14">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-1.33939" y="0.0" z="3.23358" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_15">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-7.39104" y="0.0" z="3.06147" />
+						</TransformComponent>
+					</Components>
+				</Entity>
+				
+				<Entity type="StaticObject" resource="Entities\StaticObjects\Build\Temple_Big_Column.ent" Collides="true" ID="1" Name="Temple_Big_Column_16">
+					<Components>
+						<TransformComponent>
+							<Scale x="1.0" y="1.0" z="1.0" />
+							<Rotation x="0" y="0.0f" z="0" />
+							<Position x="-3.23358" y="0.0" z="1.33939" />
+						</TransformComponent>
+					</Components>
+				</Entity>
 				
 			</Entities>
 			
 			<Lights>	
 				
-				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_0">
+				<Light type="POINT_LIGHT" resource="" Collides="false" ID="1" Name="PointLight_0">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="6.0" z="6.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="POINT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="15.0" GenerateShadow="true" GenerateVolumetricShadow="true" LightRadius="11.0" />
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="POINT_LIGHT" resource="" Collides="false" ID="2" Name="PointLight_1">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="0.0" y="6.0" z="-6.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="POINT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="15.0" GenerateShadow="true" GenerateVolumetricShadow="true" LightRadius="11.0" />
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="POINT_LIGHT" resource="" Collides="false" ID="3" Name="PointLight_2">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="6.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="POINT_LIGHT" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="15.0" GenerateShadow="true" GenerateVolumetricShadow="true" LightRadius="11.0" />
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="POINT_LIGHT" resource="" Collides="false" ID="4" Name="PointLight_3">
+					<Components>
+						<TransformComponent>
+							<Scale x="1" y="1" z="1" />
+							<Rotation x="0" y="0" z="0" />
+							<Position x="-6.0" y="6.0" z="0.0" />
+						</TransformComponent>
+						<LightRenderComponent Static="false">
+							<LightType type="POINT_LIGHT" />
+							<LightProperties Color="1.0 0.0 0.0 1.0" Intensitive="15.0" GenerateShadow="true" GenerateVolumetricShadow="true" LightRadius="11.0" />
+						</LightRenderComponent>
+					</Components>
+				</Light>
+				
+				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="5" Name="SpotLight_0">
 					<Components>
 						<TransformComponent>
 							<Scale x="1" y="1" z="1" />
@@ -250,62 +657,6 @@
 						<LightRenderComponent Static="false">
 							<LightType type="SPOT_LIGHT" />
 							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="35.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="60" phiAngle="80"/>
-						</LightRenderComponent>
-					</Components>
-				</Light>
-				
-				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_1">
-					<Components>
-						<TransformComponent>
-							<Scale x="1" y="1" z="1" />
-							<Rotation x="0" y="0" z="0" />
-							<Position x="-7.0" y="6.0" z="0.0" />
-						</TransformComponent>
-						<LightRenderComponent Static="false">
-							<LightType type="SPOT_LIGHT" />
-							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
-						</LightRenderComponent>
-					</Components>
-				</Light>
-				
-				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_2">
-					<Components>
-						<TransformComponent>
-							<Scale x="1" y="1" z="1" />
-							<Rotation x="0" y="0" z="0" />
-							<Position x="7.0" y="6.0" z="0.0" />
-						</TransformComponent>
-						<LightRenderComponent Static="false">
-							<LightType type="SPOT_LIGHT" />
-							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
-						</LightRenderComponent>
-					</Components>
-				</Light>
-				
-				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_3">
-					<Components>
-						<TransformComponent>
-							<Scale x="1" y="1" z="1" />
-							<Rotation x="0" y="0" z="0" />
-							<Position x="0.0" y="6.0" z="-7.0" />
-						</TransformComponent>
-						<LightRenderComponent Static="false">
-							<LightType type="SPOT_LIGHT" />
-							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
-						</LightRenderComponent>
-					</Components>
-				</Light>
-				
-				<Light type="SPOT_LIGHT" resource="" Collides="false" ID="4" Name="SpotLight_4">
-					<Components>
-						<TransformComponent>
-							<Scale x="1" y="1" z="1" />
-							<Rotation x="0" y="0" z="0" />
-							<Position x="0.0" y="6.0" z="7.0" />
-						</TransformComponent>
-						<LightRenderComponent Static="false">
-							<LightType type="SPOT_LIGHT" />
-							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="60.0" Direction="0 -1 0 0" GenerateShadow="true" GenerateVolumetricShadow="false" LightRadius="15.0" thetaAngle="40" phiAngle="60"/>
 						</LightRenderComponent>
 					</Components>
 				</Light>

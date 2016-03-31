@@ -250,7 +250,7 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 	//Init Voxel Manager
 	m_pVoxelManager.reset(CHG_NEW VoxelManager());
 
-	m_pVoxelManager->Initialize(true, false, 128, Vec3(160, 90, 256), 1, 0.5f);
+	m_pVoxelManager->Initialize(true, true, 128, Vec3(160, 90, 256), 1, 0.5f);
 	m_pVoxelManager->ActiveDebugMode(false);
 
 	//Init TextHelper for console

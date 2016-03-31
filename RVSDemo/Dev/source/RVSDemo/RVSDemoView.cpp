@@ -267,7 +267,7 @@ AncientCivilizationDemoHumanView::AncientCivilizationDemoHumanView(shared_ptr<Re
 		Vec2(1.0f, 1.0f), "font\\Arial.fnt", (int)CROSS_MULTIPLY_H(24, vScreenSize.y), 0.1f, "LEFT_ALIGN", "MIDDLE_ALIGN", Vec4(0.0f, 0.0f, 0.0f, 1.0f), 0);
 
 	pFunctionText = std::static_pointer_cast<UIFunctionText>(m_pDirectionalLightCheckBoxText1->GetUIFunction(UIFUNCTION_TEXT));
-	pFunctionText->SetText("Directional Light 1");
+	pFunctionText->SetText("Point Light 1");
 
 	m_pDirectionalLightCheckBoxText1->SetVisible(false);
 
@@ -275,7 +275,7 @@ AncientCivilizationDemoHumanView::AncientCivilizationDemoHumanView(shared_ptr<Re
 		Vec2(1.0f, 1.0f), "font\\Arial.fnt", (int)CROSS_MULTIPLY_H(24, vScreenSize.y), 0.1f, "LEFT_ALIGN", "MIDDLE_ALIGN", Vec4(0.0f, 0.0f, 0.0f, 1.0f), 0);
 
 	pFunctionText = std::static_pointer_cast<UIFunctionText>(m_pDirectionalLightCheckBoxText2->GetUIFunction(UIFUNCTION_TEXT));
-	pFunctionText->SetText("Directional Light 2");
+	pFunctionText->SetText("Point Light 2");
 
 	m_pDirectionalLightCheckBoxText2->SetVisible(false);
 
@@ -283,7 +283,7 @@ AncientCivilizationDemoHumanView::AncientCivilizationDemoHumanView(shared_ptr<Re
 		Vec2(1.0f, 1.0f), "font\\Arial.fnt", (int)CROSS_MULTIPLY_H(24, vScreenSize.y), 0.1f, "LEFT_ALIGN", "MIDDLE_ALIGN", Vec4(0.0f, 0.0f, 0.0f, 1.0f), 0);
 
 	pFunctionText = std::static_pointer_cast<UIFunctionText>(m_pDirectionalLightCheckBoxText3->GetUIFunction(UIFUNCTION_TEXT));
-	pFunctionText->SetText("Directional Light 3");
+	pFunctionText->SetText("Point Light 3");
 
 	m_pDirectionalLightCheckBoxText3->SetVisible(false);
 
@@ -291,7 +291,7 @@ AncientCivilizationDemoHumanView::AncientCivilizationDemoHumanView(shared_ptr<Re
 		Vec2(1.0f, 1.0f), "font\\Arial.fnt", (int)CROSS_MULTIPLY_H(24, vScreenSize.y), 0.1f, "LEFT_ALIGN", "MIDDLE_ALIGN", Vec4(0.0f, 0.0f, 0.0f, 1.0f), 0);
 
 	pFunctionText = std::static_pointer_cast<UIFunctionText>(m_pDirectionalLightCheckBoxText4->GetUIFunction(UIFUNCTION_TEXT));
-	pFunctionText->SetText("Directional Light 4");
+	pFunctionText->SetText("Point Light 4");
 
 	m_pDirectionalLightCheckBoxText4->SetVisible(false);
 
@@ -299,7 +299,7 @@ AncientCivilizationDemoHumanView::AncientCivilizationDemoHumanView(shared_ptr<Re
 		Vec2(1.0f, 1.0f), "font\\Arial.fnt", (int)CROSS_MULTIPLY_H(24, vScreenSize.y), 0.1f, "LEFT_ALIGN", "MIDDLE_ALIGN", Vec4(0.0f, 0.0f, 0.0f, 1.0f), 0);
 
 	pFunctionText = std::static_pointer_cast<UIFunctionText>(m_pPointLightCheckBoxText1->GetUIFunction(UIFUNCTION_TEXT));
-	pFunctionText->SetText("Point Light 1");
+	pFunctionText->SetText("Spot Light 1");
 
 	m_pPointLightCheckBoxText1->SetVisible(false);
 
@@ -422,10 +422,14 @@ void AncientCivilizationDemoHumanView::OnActionPerformedDirectionalLightCheckBox
 			AncientCivilizationDemoHumanView* pObject = (AncientCivilizationDemoHumanView*)pUserContext;
 			std::shared_ptr<UIFunctionCheckBox> pFunctionCheckBox = std::static_pointer_cast<UIFunctionCheckBox>(pObject->m_pDirectionalLightCheckBox1->GetUIFunction(UIFUNCTION_CHECKBOX));
 			
-			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("DirectionalLight_0"));
+			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLight_0"));
 			std::shared_ptr<ISceneNode> pDirectionalLightNode = pObject->m_pScene->FindEntity(pDirectionalLightEntity->GetId());
 
+			std::shared_ptr<Entity> pPointLightSphereEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLightSphere_0"));
+			std::shared_ptr<ISceneNode> pPointLightSphereNode = pObject->m_pScene->FindEntity(pPointLightSphereEntity->GetId());
+
 			pDirectionalLightNode->VSetVisible(pFunctionCheckBox->IsActive());
+			pPointLightSphereNode->VSetVisible(pFunctionCheckBox->IsActive());
 
 			break;
 		}
@@ -441,10 +445,14 @@ void AncientCivilizationDemoHumanView::OnActionPerformedDirectionalLightCheckBox
 			AncientCivilizationDemoHumanView* pObject = (AncientCivilizationDemoHumanView*)pUserContext;
 			std::shared_ptr<UIFunctionCheckBox> pFunctionCheckBox = std::static_pointer_cast<UIFunctionCheckBox>(pObject->m_pDirectionalLightCheckBox2->GetUIFunction(UIFUNCTION_CHECKBOX));
 			
-			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("DirectionalLight_1"));
+			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLight_1"));
 			std::shared_ptr<ISceneNode> pDirectionalLightNode = pObject->m_pScene->FindEntity(pDirectionalLightEntity->GetId());
 
+			std::shared_ptr<Entity> pPointLightSphereEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLightSphere_1"));
+			std::shared_ptr<ISceneNode> pPointLightSphereNode = pObject->m_pScene->FindEntity(pPointLightSphereEntity->GetId());
+
 			pDirectionalLightNode->VSetVisible(pFunctionCheckBox->IsActive());
+			pPointLightSphereNode->VSetVisible(pFunctionCheckBox->IsActive());
 
 			break;
 		}
@@ -460,10 +468,14 @@ void AncientCivilizationDemoHumanView::OnActionPerformedDirectionalLightCheckBox
 			AncientCivilizationDemoHumanView* pObject = (AncientCivilizationDemoHumanView*)pUserContext;
 			std::shared_ptr<UIFunctionCheckBox> pFunctionCheckBox = std::static_pointer_cast<UIFunctionCheckBox>(pObject->m_pDirectionalLightCheckBox3->GetUIFunction(UIFUNCTION_CHECKBOX));
 			
-			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("DirectionalLight_2"));
+			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLight_2"));
 			std::shared_ptr<ISceneNode> pDirectionalLightNode = pObject->m_pScene->FindEntity(pDirectionalLightEntity->GetId());
 
+			std::shared_ptr<Entity> pPointLightSphereEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLightSphere_2"));
+			std::shared_ptr<ISceneNode> pPointLightSphereNode = pObject->m_pScene->FindEntity(pPointLightSphereEntity->GetId());
+
 			pDirectionalLightNode->VSetVisible(pFunctionCheckBox->IsActive());
+			pPointLightSphereNode->VSetVisible(pFunctionCheckBox->IsActive());
 
 			break;
 		}
@@ -479,10 +491,14 @@ void AncientCivilizationDemoHumanView::OnActionPerformedDirectionalLightCheckBox
 			AncientCivilizationDemoHumanView* pObject = (AncientCivilizationDemoHumanView*)pUserContext;
 			std::shared_ptr<UIFunctionCheckBox> pFunctionCheckBox = std::static_pointer_cast<UIFunctionCheckBox>(pObject->m_pDirectionalLightCheckBox4->GetUIFunction(UIFUNCTION_CHECKBOX));
 			
-			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("DirectionalLight_3"));
+			std::shared_ptr<Entity> pDirectionalLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLight_3"));
 			std::shared_ptr<ISceneNode> pDirectionalLightNode = pObject->m_pScene->FindEntity(pDirectionalLightEntity->GetId());
 
+			std::shared_ptr<Entity> pPointLightSphereEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLightSphere_3"));
+			std::shared_ptr<ISceneNode> pPointLightSphereNode = pObject->m_pScene->FindEntity(pPointLightSphereEntity->GetId());
+
 			pDirectionalLightNode->VSetVisible(pFunctionCheckBox->IsActive());
+			pPointLightSphereNode->VSetVisible(pFunctionCheckBox->IsActive());
 
 			break;
 		}
@@ -498,14 +514,10 @@ void AncientCivilizationDemoHumanView::OnActionPerformedPointLightCheckBox1(CHG_
 			AncientCivilizationDemoHumanView* pObject = (AncientCivilizationDemoHumanView*)pUserContext;
 			std::shared_ptr<UIFunctionCheckBox> pFunctionCheckBox = std::static_pointer_cast<UIFunctionCheckBox>(pObject->m_pPointLightCheckBox1->GetUIFunction(UIFUNCTION_CHECKBOX));
 			
-			std::shared_ptr<Entity> pPointLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLight_0"));
+			std::shared_ptr<Entity> pPointLightEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("SpotLight_0"));
 			std::shared_ptr<ISceneNode> pPointLightNode = pObject->m_pScene->FindEntity(pPointLightEntity->GetId());
 
-			std::shared_ptr<Entity> pPointLightSphereEntity = MakeStrongPtr(g_pApp->m_pGame->VGetEntity("PointLightSphere"));
-			std::shared_ptr<ISceneNode> pPointLightSphereNode = pObject->m_pScene->FindEntity(pPointLightSphereEntity->GetId());
-
 			pPointLightNode->VSetVisible(pFunctionCheckBox->IsActive());
-			pPointLightSphereNode->VSetVisible(pFunctionCheckBox->IsActive());
 
 			break;
 		}

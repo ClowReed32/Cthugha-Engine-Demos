@@ -15,7 +15,7 @@
 #include "..\RVSDemoView.h"
 #include "..\RVSDemoEvents.h"
 #include "..\Entity\RVSDemoEntityFactory.h"
-//#include "..\MainLoop\MoveSceneObject.h"
+#include "..\MainLoop\MoveSceneObject.h"
 
 RVSDemoApp g_EvolutioneApp;
 
@@ -40,8 +40,8 @@ bool RVSDemoLogic::VLoadGameDelegate(TiXmlElement* pLevelData)
 {
     CHG_INFO("------ Init Game ------");
 
-	//std::shared_ptr<MoveSceneObjectProcess> pMoveObjectsProcess(CHG_NEW MoveSceneObjectProcess());
-	//m_pProcessManager->AttachProcess(pMoveObjectsProcess);
+	std::shared_ptr<MoveSceneObjectProcess> pMoveObjectsProcess(CHG_NEW MoveSceneObjectProcess());
+	m_pProcessManager->AttachProcess(pMoveObjectsProcess);
 
 	return true;
 }
