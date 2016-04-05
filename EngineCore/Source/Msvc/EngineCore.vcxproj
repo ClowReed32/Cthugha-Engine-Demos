@@ -231,6 +231,13 @@
     <ClInclude Include="..\Utilities\types.h" />
     <ClInclude Include="CthughaAppEntry.h" />
     <ClInclude Include="CthughaStd.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EngineCore.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

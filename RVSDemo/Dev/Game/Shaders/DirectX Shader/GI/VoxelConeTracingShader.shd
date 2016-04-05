@@ -269,9 +269,8 @@ float4 main(PsIn In) : SV_Target
 	{
 		float iblConeRatio = 1.0f;
 		float iblMaxDist = 5.0f;
-		// this sample gets full weight (dot(normal, normal) == 1)
+		
 		vLambertRadiance.rgb += 0.785f*voxelTraceCone(vertexPosition_worldspace.xyz, vertexNormal_worldspace, iblConeRatio, iblMaxDist).rgb;
-		// these samples get partial weight
 		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, 0.5f*vertexNormal_worldspace + 0.866025f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
 		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, 0.823639f*vertexTangent_worldspace + 0.5f*vertexNormal_worldspace + 0.267617f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
 		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, 0.509037f*vertexTangent_worldspace + 0.5f*vertexNormal_worldspace + -0.700629f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;

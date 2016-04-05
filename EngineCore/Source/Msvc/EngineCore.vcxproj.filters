@@ -418,5 +418,12 @@
     <ClInclude Include="..\Graphics\ScreenPostProcessing.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EngineCore.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>

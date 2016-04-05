@@ -771,6 +771,37 @@ void VoxelManager::DensityEstimationVolumeLighting(Scene* pScene)
 	pRenderer->setShaderConstant4x4f("mInverseProjection", pScene->GetCamera()->GetInverseProjection());
 
 	g_pApp->m_pRenderer->setShaderConstant1i("iActiveShadows", 1);
+	g_pApp->m_pRenderer->setShaderConstant1i("iActiveVolumetricGI", 1);
+
+	// Volumetric GI //////////////////////////////////////////////////////////////////////////////
+
+	/*Vec4 cascadeBounds[12];
+	int count = 0;
+
+	for (UINT i = 0; i < 2 * m_uiNumCascades; i += 2)
+	{
+		Vec3 vCascadePos = m_vLastCascadePosition[count];
+		Mat4x4 cameraTransform = translate(vCascadePos);
+
+		Aabb aabb = m_pCascadeAabb[count].Transform(cameraTransform);
+		cascadeBounds[i] = Vec4(aabb.vcMin, 1.0f);
+		cascadeBounds[i + 1] = Vec4(aabb.vcMax, 1.0f);
+
+		count++;
+	}
+
+	pRenderer->setSamplerState("VoxelFilter", pScene->m_linearClamp);
+
+	pRenderer->setShaderConstant1f("minVoxelDiameter", 1.0f / m_uiCascadeResolution);
+	pRenderer->setShaderConstant1f("minVoxelDiameterInv", (float)m_uiCascadeResolution);
+	pRenderer->setTexture("giSceneData", m_rVoxelRadiance);
+
+	pRenderer->setShaderConstantArray4x4f("worldToVoxelTex", m_pWorldToUnitMatrix, 6);
+	pRenderer->setShaderConstantArray4x4f("voxelTexToWorld", m_pCascadeToWorldMatrix, 6);
+	pRenderer->setShaderConstantArray4f("cascadeBounds", cascadeBounds, m_uiNumCascades * 2);
+	pRenderer->setShaderConstant1i("numCascades", m_uiNumCascades);*/
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
 
 	g_pApp->m_pSDFShadowManager->SetShaderSDFBuffersForLight(pScene);
 	pScene->m_pLightManager->SetLightBuffers(pScene);

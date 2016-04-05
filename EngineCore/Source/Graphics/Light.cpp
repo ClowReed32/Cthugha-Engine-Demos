@@ -156,7 +156,7 @@ void LightManager::UpdateLightBuffers(Scene* pScene)
 
 	PointSpotLightShaderData* pLights = (PointSpotLightShaderData*)pRenderer->mapBuffer(m_sbSpotPointLightBuffer, MAP_WRITE_DISCARD);
 
-	for (UINT i = 0; i < m_NumActiveSpotPointLights; i++)
+	for (UINT i = 0; i < (UINT)m_NumActiveSpotPointLights; i++)
 		pLights[i] = m_SpotPointLights[i];
 
 	pRenderer->unMapBuffer(m_sbSpotPointLightBuffer);

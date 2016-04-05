@@ -113,6 +113,7 @@
     <ClInclude Include="..\KinematicPlayerController.h" />
     <ClInclude Include="..\MainLoop\MoveSceneObject.h" />
     <ClInclude Include="ACDemo.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

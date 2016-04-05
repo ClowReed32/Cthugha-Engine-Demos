@@ -31,6 +31,7 @@
     <ClInclude Include="..\Physics\FluidSimulator.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Entity">
@@ -51,5 +52,11 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{88055d94-2250-4802-a201-44ca5904bc7a}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RVSDemo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\EngineCore\Resources\chgico.ico" />
   </ItemGroup>
 </Project>

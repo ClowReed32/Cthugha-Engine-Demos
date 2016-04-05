@@ -20,11 +20,12 @@ float g_ReprojectDepthBias; //g_ReprojectDepthBias = zFar / (zFar * zNear)
 // Voxel Grid Data //////////////////////////////
 float3 vGridDimension;
 float fFogRange;
+float fInverseZDimension;
 /////////////////////////////////////////////////
 
-float3 ScreenCoordsFromThreadID(float3 threadID)
+float3 ScreenCoordsFromThreadID(uint3 threadID)
 {
-    return threadID.xyz*float3(2.0f / vGridDimension.x, -2.0f / vGridDimension.y, 1.0f / vGridDimension.z) + float3(-1, 1, 0);
+    return ((float3)threadID.xyz)*float3(2.0f / vGridDimension.x, -2.0f / vGridDimension.y, 1.0f / vGridDimension.z) + float3(-1, 1, 0);
 }
 
 float3 WorldPositionFromCoords(float2 screenPos, float linearDepth)

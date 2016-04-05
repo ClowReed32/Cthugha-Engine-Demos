@@ -114,7 +114,14 @@
     <ClInclude Include="..\Entity\RVSDemoEntityFactory.h" />
     <ClInclude Include="..\KinematicPlayerController.h" />
     <ClInclude Include="..\MainLoop\MoveSceneObject.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RVSDemo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RVSDemo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\EngineCore\Resources\chgico.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

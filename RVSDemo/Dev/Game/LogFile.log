@@ -31035,3 +31035,1719 @@ Line: 68
 [INFO] Remove Texture: 62
 [INFO] Remove Texture: 63
 [INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 16:32:29 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:33:34 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:37:14 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:37:59 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:38:39 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:40:14 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:42:51 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:46:31 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[ERROR] handle
+Function: ResCache::GetHandle
+..\ResourceCache\ResCache.cpp
+Line: 319
+[INFO] ---------------- 2016-04-04 16:47:55 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 16:52:24 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 16:54:45 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[INFO] Create new Vertex Buffer: 47
+[INFO] Create new Index Buffer: 8
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 17:00:53 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[INFO] Create new Vertex Buffer: 47
+[INFO] Create new Index Buffer: 8
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 17:04:53 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 17:23:29 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 17:24:56 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-04 17:26:48 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[INFO] Create new Vertex Buffer: 7
+[INFO] Create new Vertex Buffer: 8
+[INFO] Create new Vertex Buffer: 9
+[INFO] Create new Vertex Buffer: 10
+[INFO] Create new Vertex Buffer: 11
+[INFO] Create new Index Buffer: 0
+[INFO] Create new Vertex Buffer: 12
+[INFO] Create new Vertex Buffer: 13
+[INFO] Create new Vertex Buffer: 14
+[INFO] Create new Vertex Buffer: 15
+[INFO] Create new Vertex Buffer: 16
+[INFO] Create new Index Buffer: 1
+[INFO] Create new Vertex Buffer: 17
+[INFO] Create new Vertex Buffer: 18
+[INFO] Create new Vertex Buffer: 19
+[INFO] Create new Vertex Buffer: 20
+[INFO] Create new Vertex Buffer: 21
+[INFO] Create new Index Buffer: 2
+[INFO] Create new Vertex Buffer: 22
+[INFO] Create new Vertex Buffer: 23
+[INFO] Create new Vertex Buffer: 24
+[INFO] Create new Vertex Buffer: 25
+[INFO] Create new Vertex Buffer: 26
+[INFO] Create new Index Buffer: 3
+[INFO] Create new Vertex Buffer: 27
+[INFO] Create new Vertex Buffer: 28
+[INFO] Create new Vertex Buffer: 29
+[INFO] Create new Vertex Buffer: 30
+[INFO] Create new Vertex Buffer: 31
+[INFO] Create new Index Buffer: 4
+[INFO] Create new Vertex Buffer: 32
+[INFO] Create new Vertex Buffer: 33
+[INFO] Create new Vertex Buffer: 34
+[INFO] Create new Vertex Buffer: 35
+[INFO] Create new Vertex Buffer: 36
+[INFO] Create new Index Buffer: 5
+[INFO] Create new Vertex Buffer: 37
+[INFO] Create new Vertex Buffer: 38
+[INFO] Create new Vertex Buffer: 39
+[INFO] Create new Vertex Buffer: 40
+[INFO] Create new Vertex Buffer: 41
+[INFO] Create new Index Buffer: 6
+[INFO] Create new Vertex Buffer: 42
+[INFO] Create new Vertex Buffer: 43
+[INFO] Create new Vertex Buffer: 44
+[INFO] Create new Vertex Buffer: 45
+[INFO] Create new Vertex Buffer: 46
+[INFO] Create new Index Buffer: 7
+[INFO] ------ Init Game ------
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[WARNING] ~ScreenElementScene()
+Function: ScreenElementScene::~ScreenElementScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 68
+[INFO] Remove Texture: 0
+[INFO] Remove Texture: 1
+[INFO] Remove Texture: 2
+[INFO] Remove Texture: 3
+[INFO] Remove Texture: 4
+[INFO] Remove Texture: 5
+[INFO] Remove Texture: 6
+[INFO] Remove Texture: 7
+[INFO] Remove Texture: 8
+[INFO] Remove Texture: 9
+[INFO] Remove Texture: 10
+[INFO] Remove Texture: 11
+[INFO] Remove Texture: 12
+[INFO] Remove Texture: 13
+[INFO] Remove Texture: 14
+[INFO] Remove Texture: 15
+[INFO] Remove Texture: 16
+[INFO] Remove Texture: 17
+[INFO] Remove Texture: 18
+[INFO] Remove Texture: 19
+[INFO] Remove Texture: 20
+[INFO] Remove Texture: 21
+[INFO] Remove Texture: 22
+[INFO] Remove Texture: 23
+[INFO] Remove Texture: 24
+[INFO] Remove Texture: 25
+[INFO] Remove Texture: 26
+[INFO] Remove Texture: 27
+[INFO] Remove Texture: 28
+[INFO] Remove Texture: 29
+[INFO] Remove Texture: 30
+[INFO] Remove Texture: 31
+[INFO] Remove Texture: 32
+[INFO] Remove Texture: 33
+[INFO] Remove Texture: 34
+[INFO] Remove Texture: 35
+[INFO] Remove Texture: 36
+[INFO] Remove Texture: 37
+[INFO] Remove Texture: 38
+[INFO] Remove Texture: 39
+[INFO] Remove Texture: 40
+[INFO] Remove Texture: 41
+[INFO] Remove Texture: 42
+[INFO] Remove Texture: 43
+[INFO] Remove Texture: 44
+[INFO] Remove Texture: 45
+[INFO] Remove Texture: 46
+[INFO] Remove Texture: 47
+[INFO] Remove Texture: 48
+[INFO] Remove Texture: 49
+[INFO] Remove Texture: 50
+[INFO] Remove Texture: 51
+[INFO] Remove Texture: 52
+[INFO] Remove Texture: 53
+[INFO] Remove Texture: 54
+[INFO] Remove Texture: 55
+[INFO] Remove Texture: 56
+[INFO] Remove Texture: 57
+[INFO] Remove Texture: 58
+[INFO] Remove Texture: 59
+[INFO] Remove Texture: 60
+[INFO] Remove Texture: 61
+[INFO] Remove Texture: 62
+[INFO] Remove Texture: 63
+[INFO] Remove Texture: 64

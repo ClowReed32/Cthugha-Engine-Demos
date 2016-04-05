@@ -628,7 +628,7 @@
 						</TransformComponent>
 						<LightRenderComponent Static="false">
 							<LightType type="POINT_LIGHT" />
-							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="15.0" GenerateShadow="true" GenerateVolumetricShadow="true" LightRadius="11.0" />
+							<LightProperties Color="1.0 1.0 1.0 1.0" Intensitive="2.0" GenerateShadow="true" GenerateVolumetricShadow="true" LightRadius="5.0" />
 						</LightRenderComponent>
 					</Components>
 				</Light>

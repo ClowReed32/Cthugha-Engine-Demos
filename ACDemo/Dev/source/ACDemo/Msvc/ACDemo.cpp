@@ -40,6 +40,8 @@ bool AncientCivilizationDemoLogic::VLoadGameDelegate(TiXmlElement* pLevelData)
 {
     CHG_INFO("------ Init Game ------");
 
+	g_pApp->m_pVoxelManager->SetActiveVolumeLighting(false);
+
 	std::shared_ptr<MoveSceneObjectProcess> pMoveObjectsProcess(CHG_NEW MoveSceneObjectProcess());
 	m_pProcessManager->AttachProcess(pMoveObjectsProcess);
 

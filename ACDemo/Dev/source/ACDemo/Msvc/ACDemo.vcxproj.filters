@@ -25,6 +25,7 @@
     <ClInclude Include="..\MainLoop\MoveSceneObject.h">
       <Filter>MainLoop</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Entity">
