@@ -1,8 +1,7 @@
 #include "CthughaStd.h"
 #include "Renderer.h"
-//#include "BitMapFontLoader.h"
-//#include "Util/String.h"
 
+// Constant buffer types sizes //////////////
 int constantTypeSizes[CONSTANT_TYPE_COUNT] = 
 {
 	sizeof(float),
@@ -21,7 +20,11 @@ int constantTypeSizes[CONSTANT_TYPE_COUNT] =
 	36,
 	sizeof(Mat4x4),
 };
+//////////////////////////////////////////////
 
+//
+//	Renderer class implementation
+//
 
 Renderer::Renderer()
 {
@@ -46,9 +49,13 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-//	delete textureLod;
+	// Other elements must be released by specific rendererer implementation.
 	delete[] fontBuffer;
 }
+
+/*
+ *	Reset to init renderer configuration
+ */
 
 void Renderer::resetToDefaults()
 {
@@ -81,12 +88,14 @@ void Renderer::resetToDefaults()
 	currentDepthSlice = NO_SLICE;
 	nCurrentRenderTargets = 1;
 
-	//reset();
-
 #ifdef DEBUG
 	wasReset = false;
 #endif
 }
+
+/*
+ *	Reset to default renderer configuration
+ */
 
 void Renderer::reset(const UINT flags)
 {
@@ -120,6 +129,10 @@ void Renderer::reset(const UINT flags)
 	wasReset = true;
 #endif
 }
+
+/*
+ *	Apply selected renderer configuration
+ */
 
 void Renderer::apply()
 {
@@ -163,9 +176,11 @@ void Renderer::apply()
 		changeBlendState(selectedBlendState, selectedSampleMask);
 	}
 	if (selectedRasterizerState != DONTCARE) changeRasterizerState(selectedRasterizerState);
-
-//	reset();
 }
+
+/*
+ *	Create Texture from file
+ */
 
 TextureID Renderer::createTexture(const char *fileName, const bool useMipMaps, const SamplerStateID samplerState, UINT flags){
 	Image img;
@@ -189,6 +204,10 @@ TextureID Renderer::createTexture(const char *fileName, const bool useMipMaps, c
 	}
 }
 
+/*
+ *	Create Texture from memory
+ */
+
 TextureID Renderer::createTexture(char *rawBuffer, unsigned int rawSize, std::string extension, const bool useMipMaps, const SamplerStateID samplerState, UINT flags){
 	Image img;
 
@@ -211,23 +230,7 @@ TextureID Renderer::createTexture(char *rawBuffer, unsigned int rawSize, std::st
 	}
 }
 
-/*TextureID Renderer::addCubemap(const char **fileNames, const bool useMipMaps, const SamplerStateID samplerState, const int nArraySlices, uint flags){
-	Image img;
-	if (img.loadSlicedImage(fileNames, 0, nArraySlices)){
-		if (img.getFormat() == FORMAT_RGBE8) img.unpackImage();
-		if (useMipMaps && img.getMipMapCount() <= 1) img.createMipMaps();
-		return addTexture(img, samplerState, flags);
-	} else {
-		char str[1024];
-		int n = sprintf(str, "Couldn't open cubemap:\n");
-		for (int i = 0; i < 6 * nArraySlices; i++){
-			n += sprintf(str + n, "%s\n", fileNames[i]);
-		}
-
-		ErrorMsg(str);
-		return TEXTURE_NONE;
-	}
-}*/
+// Create shader from memory //////////////////////////////////////////////////////////////////////////////////////////
 
 ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const UINT flags)
 {
@@ -239,14 +242,18 @@ ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const cha
 	return createShader(rawBuffer, rawSize, NULL, 0, extra, flags);
 }
 
+/*
+ * Divide shader data on pipeline stages and send divided data to
+ * specific implementation compiler.
+ */
+
 ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const char **attributeNames, const int nAttributes, const char *extra, const UINT flags)
 {
 	ShaderID res = SHADER_NONE;
 
 	if (rawBuffer == NULL)
 	{
-		printf_s("NULL mem pointer");
-		//ErrorMsg(String("Couldn't load \"") + fileName + "\"");
+		CHG_ERROR("NULL mem pointer");
 	} 
 	else 
 	{
@@ -265,32 +272,39 @@ ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const cha
 
 		char *header = (shaderText[0] != '[')? shaderText : NULL;
 
+		// Vertex Shader
 		int vsLine = 0;
-		if (vs != NULL){
+		if (vs != NULL)
+		{
 			*vs = '\0';
 			vs += 15;
 			while (*vs == '\r' || *vs == '\n') vs++;
 
 			char *str = shaderText;
-			while (str < vs){
+			while (str < vs)
+			{
                 if (*str == '\n') vsLine++;
 				str++;
 			}
 		}
 
+		// Geometry Shader
 		int gsLine = 0;
-		if (gs != NULL){
+		if (gs != NULL)
+		{
 			*gs = '\0';
 			gs += 17;
 			while (*gs == '\r' || *gs == '\n') gs++;
 
 			char *str = shaderText;
-			while (str < gs){
+			while (str < gs)
+			{
                 if (*str == '\n') gsLine++;
 				str++;
 			}
 		}
 
+		// Fragment Shader
 		int fsLine = 0;
 		if (fs != NULL)
 		{
@@ -306,6 +320,7 @@ ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const cha
 			}
 		}
 
+		// Compute Shader
 		int csLine = 0;
 		if (cs != NULL)
 		{
@@ -321,6 +336,7 @@ ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const cha
 			}
 		}
 
+		// Tesselation control shader
 		int tcsLine = 0;
 		if (tcs != NULL)
 		{
@@ -335,6 +351,8 @@ ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const cha
 				str++;
 			}
 		}
+
+		// Tesselation evaluation shader
 
 		int tesLine = 0;
 		if (tes != NULL)
@@ -357,6 +375,9 @@ ShaderID Renderer::createShader(char *rawBuffer, unsigned int rawSize, const cha
 	}
 	return res;
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Create shader from file //////////////////////////////////////////////////////////////////////////////////////////
 
 ShaderID Renderer::createShader(const char *fileName, const UINT flags)
 {
@@ -373,6 +394,11 @@ bool Renderer::activeShaderHasTessellation()
     return (currentShader >= 0) ? hasTessellation(currentShader) : false;
 }
 
+/*
+ * Divide shader data on pipeline stages and send divided data to
+ * specific implementation compiler.
+ */
+
 ShaderID Renderer::createShader(const char *fileName, const char **attributeNames, const int nAttributes, const char *extra, const UINT flags)
 {
 	FILE *file = fopen(fileName, "rb");
@@ -382,8 +408,9 @@ ShaderID Renderer::createShader(const char *fileName, const char **attributeName
 	{
 		char str[256];
 		sprintf_s(str, "Couldn't open \"%s\"", fileName);
-		//ErrorMsg(String("Couldn't load \"") + fileName + "\"");
-	} else {
+	} 
+	else 
+	{
 #ifdef DEBUG
 		char str[66];
 		str[0] = '\n';
@@ -417,32 +444,39 @@ ShaderID Renderer::createShader(const char *fileName, const char **attributeName
 
 		char *header = (shaderText[0] != '[')? shaderText : NULL;
 
+		// Vertex Shader
 		int vsLine = 0;
-		if (vs != NULL){
+		if (vs != NULL)
+		{
 			*vs = '\0';
 			vs += 15;
 			while (*vs == '\r' || *vs == '\n') vs++;
 
 			char *str = shaderText;
-			while (str < vs){
+			while (str < vs)
+			{
                 if (*str == '\n') vsLine++;
 				str++;
 			}
 		}
 
+		// Geometry Shader
 		int gsLine = 0;
-		if (gs != NULL){
+		if (gs != NULL)
+		{
 			*gs = '\0';
 			gs += 17;
 			while (*gs == '\r' || *gs == '\n') gs++;
 
 			char *str = shaderText;
-			while (str < gs){
+			while (str < gs)
+			{
                 if (*str == '\n') gsLine++;
 				str++;
 			}
 		}
 
+		// Fragment Shader
 		int fsLine = 0;
 		if (fs != NULL)
 		{
@@ -458,6 +492,7 @@ ShaderID Renderer::createShader(const char *fileName, const char **attributeName
 			}
 		}
 
+		// Compute Shader
 		int csLine = 0;
 		if (cs != NULL)
 		{
@@ -473,6 +508,7 @@ ShaderID Renderer::createShader(const char *fileName, const char **attributeName
 			}
 		}
 
+		// Tesselation Control Shader
 		int tcsLine = 0;
 		if (tcs != NULL)
 		{
@@ -488,6 +524,7 @@ ShaderID Renderer::createShader(const char *fileName, const char **attributeName
 			}
 		}
 
+		// Tesselation Evaluation Shader
 		int tesLine = 0;
 		if (tes != NULL)
 		{
@@ -503,12 +540,14 @@ ShaderID Renderer::createShader(const char *fileName, const char **attributeName
 			}
 		}
 		
-		
+		// Send to compiler
 		res = createShader(vs, gs, fs, cs, tcs, tes, vsLine, gsLine, fsLine, csLine, tcsLine, tesLine, header, extra, NULL, attributeNames, nAttributes, flags);
+
 		delete shaderText;
 	}
 	return res;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int Renderer::getFormatSize(const AttributeFormat format) const 
 {
@@ -620,6 +659,10 @@ FontID Renderer::addFont(TexFont texFont)
 	return fonts.size() - 1;
 }
 
+/*
+ *	From text font and text compute pixel text length on screen
+ */
+
 float Renderer::getTextWidth(const FontID font, const char *str, int length) const 
 {
 	if (font < 0) return 0;
@@ -635,6 +678,10 @@ float Renderer::getTextWidth(const FontID font, const char *str, int length) con
 
 	return len;
 }
+
+/*
+ *	From text font and text compute max pixel text height on screen
+ */
 
 float Renderer::getTextHeight(const FontID font, const char *str, int length) const 
 {
@@ -668,6 +715,10 @@ UINT Renderer::getTextQuads(const char *str) const
 	}
 	return n;
 }
+
+/*
+ *	Fill a vertex buffer for draw text on screen
+ */
 
 void Renderer::fillTextBuffer(TexVertex *dest, const char *str, float x, float y, const float charWidth, const float charHeight, const FontID font) const 
 {

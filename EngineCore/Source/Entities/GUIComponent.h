@@ -11,7 +11,7 @@
 class ComponentResource;
 
 //---------------------------------------------------------------------------------------------------------------------
-// GUIComponent base class.  This class does most of the work except actually creating the scene, which is 
+// GUIComponent base class.  This class does most of the work except actually creating the GUI scene, which is 
 // delegated to the subclass through a factory method.
 //---------------------------------------------------------------------------------------------------------------------
 class BaseGUIComponent : public GUIComponentInterface

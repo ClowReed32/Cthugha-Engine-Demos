@@ -80,27 +80,7 @@ void AncientCivilizationDemoLogic::VChangeState(BaseGameState newState)
 				shared_ptr<IGameView> playersView(CHG_NEW AncientCivilizationDemoHumanView(g_pApp->m_pRenderer));
 				VAddView(playersView);
 				ChangeCurrentHumanView(playersView->VGetId());
-
-				if (m_bProxy)
-				{
-					// if we are a remote player, all we have to do is spawn our view - the server will do the rest.
-					return;
-				}
 			}
-
-			// spawn all remote player's views on the game
-			/*for (int i = 0; i < m_ExpectedRemotePlayers; ++i)
-			{
-				shared_ptr<IGameView> remoteGameView(GCC_NEW NetworkGameView);
-				VAddView(remoteGameView);
-			}
-
-			// spawn all AI's views on the game
-			for (int i = 0; i < m_ExpectedAI; ++i)
-			{
-				shared_ptr<IGameView> aiView(GCC_NEW AITeapotView(m_pPathingGraph));
-				VAddView(aiView);
-			}*/
 
 			m_HumanPlayersAttached++; //Eliminar despues
 
@@ -110,12 +90,6 @@ void AncientCivilizationDemoLogic::VChangeState(BaseGameState newState)
 
 		case BGS_SpawningPlayersActors:
 		{
-			if (m_bProxy)
-			{
-				// only the server needs to do this.
-				return;
-			}
-
 			for (auto it = m_gameViews.begin(); it != m_gameViews.end(); ++it)
 			{
 				shared_ptr<IGameView> pView = *it;
@@ -128,26 +102,6 @@ void AncientCivilizationDemoLogic::VChangeState(BaseGameState newState)
                         IEventManager::Get()->VTriggerEvent(pSetControlledEvent); // --------------------------------------------------------------> CHANGE OTHER C CLASS OR SCRIPT
 					}
 				}
-				/*else if (pView->VGetType() == GameView_Remote)
-				{
-					shared_ptr<NetworkGameView> pNetworkGameView = static_pointer_cast<NetworkGameView, IGameView>(pView);
-					StrongActorPtr pActor = VCreateActor("actors\\remote_teapot.xml", NULL);
-					if (pActor)
-					{
-						shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId(), pNetworkGameView->VGetId()));
-						IEventManager::Get()->VQueueEvent(pNewActorEvent);
-					}
-				}
-				else if (pView->VGetType() == GameView_AI)
-				{
-					shared_ptr<AITeapotView> pAiView = static_pointer_cast<AITeapotView, IGameView>(pView);
-					StrongActorPtr pActor = VCreateActor("actors\\ai_teapot.xml", NULL);
-					if (pActor)
-					{
-						shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId(), pAiView->VGetId()));
-						IEventManager::Get()->VQueueEvent(pNewActorEvent);
-					}
-				}*/
 			}
 
 			break;
@@ -274,17 +228,4 @@ void AncientCivilizationDemoLogic::RemoveAllDelegates(void)
 void AncientCivilizationDemoLogic::VAddView(shared_ptr<IGameView> pView, EntityId entity)
 {
 	BaseGameLogic::VAddView(pView, entity);
-//  This is commented out because while the view is created and waiting, the player has NOT attached yet. 
-//	if (dynamic_pointer_cast<NetworkGameView>(pView))
-//	{
-//		m_HumanPlayersAttached++;
-//	}
-	/*if (dynamic_pointer_cast<EvolutioneHumanView>(pView))
-	{
-		m_HumanPlayersAttached++;
-	}
-	else if (dynamic_pointer_cast<AITeapotView>(pView))
-	{
-		m_AIPlayersAttached++;
-	}*/
 }

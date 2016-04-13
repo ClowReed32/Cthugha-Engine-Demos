@@ -32751,3 +32751,84 @@ Line: 68
 [INFO] Remove Texture: 62
 [INFO] Remove Texture: 63
 [INFO] Remove Texture: 64
+[INFO] ---------------- 2016-04-07 17:12:27 ----------------
+[INFO] Create new texture: 0
+[INFO] Create new Target Surface: 1
+[INFO] Create new Target Surface: 2
+[INFO] Create new Target Surface: 3
+[INFO] Create new Target Surface: 4
+[INFO] Create new Target Surface: 5
+[INFO] Create new Target Surface: 6
+[INFO] Create new Target Surface: 7
+[INFO] Create new Target Surface: 8
+[INFO] Create new Target Surface: 9
+[INFO] Create new Vertex Buffer: 0
+[INFO] Create new Vertex Buffer: 1
+[INFO] Create new Vertex Buffer: 2
+[INFO] Create new Target Surface: 10
+[INFO] Create new texture: 11
+[INFO] Create new texture: 12
+[INFO] Create new texture: 13
+[INFO] Create new texture: 14
+[INFO] Create new texture: 15
+[INFO] Create new texture: 16
+[INFO] Create new texture: 17
+[INFO] Create new texture: 18
+[INFO] Create new texture: 19
+[INFO] Create new texture: 20
+[INFO] Create new texture: 21
+[INFO] Create new texture: 22
+[INFO] Create new texture: 23
+[INFO] Create new texture: 24
+[INFO] Create new texture: 25
+[INFO] Create new texture: 26
+[INFO] Create new texture: 27
+[INFO] Create new texture: 28
+[INFO] Create new texture: 29
+[INFO] Create new texture: 30
+[INFO] Create new texture: 31
+[INFO] Create new texture: 32
+[INFO] Create new texture: 33
+[INFO] Create new texture: 34
+[INFO] Create new texture: 35
+[INFO] Create new texture: 36
+[INFO] Create new texture: 37
+[INFO] Create new texture: 38
+[INFO] Create new Vertex Buffer: 3
+[WARNING] ~ScreenElementUIScene()
+Function: ScreenElementUIScene::~ScreenElementUIScene
+c:\users\clow reed\documents\visual studio 2013\projects\cthugha engine demos\enginecore\source\userinterface\../UserInterface/UserInterface.h
+Line: 103
+[INFO] Create new Vertex Buffer: 4
+[INFO] Create new Vertex Buffer: 5
+[INFO] Create new Target Surface: 39
+[INFO] Create new Target Surface: 40
+[INFO] Create new Target Surface: 41
+[INFO] Create new Target Surface: 42
+[INFO] Create new Target Surface: 43
+[INFO] Create new Target Surface: 44
+[INFO] Create new Target Surface: 45
+[INFO] Create new Depth Surface: 46
+[INFO] Create new Target Surface: 47
+[INFO] Create new Target Surface: 48
+[INFO] Create new Target Surface: 49
+[INFO] Create new Target Surface: 50
+[INFO] Create new Target Surface: 51
+[INFO] Create new Target Surface: 52
+[INFO] Create new Target Surface: 53
+[INFO] Create new Target Surface: 54
+[INFO] Create new Target Surface: 55
+[INFO] Create new Target Surface: 56
+[INFO] Create new Target Surface: 57
+[INFO] Create new Target Surface: 58
+[INFO] Create new Target Surface: 59
+[INFO] Create new Target Surface: 60
+[INFO] Create new Target Surface: 61
+[INFO] Create new Target Surface: 62
+[INFO] Create new Target Surface: 63
+[INFO] Create new Vertex Buffer: 6
+[INFO] Create new Target Surface: 64
+[ERROR] rawSize > 0 && "Resource size returned -1 - Resource not found: "
+Function: ResCache::Load
+..\ResourceCache\ResCache.cpp
+Line: 358

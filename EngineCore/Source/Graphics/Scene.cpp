@@ -688,7 +688,7 @@ void Scene::TraverseDynamicObjectFromSpecificFrustum(std::vector<std::shared_ptr
 		{
 			if(!object->IsInFrustumQueue())
 			{
-				if (object->VGetType() == MESH_NODE || object->VGetType() == TERRAIN_NODE)
+				if (object->VGetType() == MESH_NODE)
 				{
 					frustumQueue.push_back(object);
 					object->SetInFrustumQueue(true);

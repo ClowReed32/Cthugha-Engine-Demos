@@ -68,35 +68,6 @@ bool TransformComponent::VInit(TiXmlElement* pData)
     m_Scale = scaleV;
     m_Rotation = rotate;
 
-	/**
-	// This is not supported yet.
-    TiXmlElement* pLookAtElement = pData->FirstChildElement("LookAt");
-    if (pLookAtElement)
-    {
-        double x = 0;
-        double y = 0;
-        double z = 0;
-        pLookAtElement->Attribute("x", &x);
-        pLookAtElement->Attribute("y", &y);
-        pLookAtElement->Attribute("z", &z);
-
-		Vec3 lookAt((float)x, (float)y, (float)z);
-		rotation.BuildRotationLookAt(translation.GetPosition(), lookAt, g_Up);
-    }
-
-    TiXmlElement* pScaleElement = pData->FirstChildElement("Scale");
-    if (pScaleElement)
-    {
-        double x = 0;
-        double y = 0;
-        double z = 0;
-        pScaleElement->Attribute("x", &x);
-        pScaleElement->Attribute("y", &y);
-        pScaleElement->Attribute("z", &z);
-        m_scale = Vec3((float)x, (float)y, (float)z);
-    }
-	**/
-
     m_transform = translation * rotation * scaleM;
     
     return true;
@@ -127,35 +98,6 @@ bool TransformComponent::VInit(std::shared_ptr<ComponentResource> pData)
 	m_Position = position;
 	m_Scale = scaleV;
 	m_Rotation = rotate;
-
-	/**
-	// This is not supported yet.
-	TiXmlElement* pLookAtElement = pData->FirstChildElement("LookAt");
-	if (pLookAtElement)
-	{
-	double x = 0;
-	double y = 0;
-	double z = 0;
-	pLookAtElement->Attribute("x", &x);
-	pLookAtElement->Attribute("y", &y);
-	pLookAtElement->Attribute("z", &z);
-
-	Vec3 lookAt((float)x, (float)y, (float)z);
-	rotation.BuildRotationLookAt(translation.GetPosition(), lookAt, g_Up);
-	}
-
-	TiXmlElement* pScaleElement = pData->FirstChildElement("Scale");
-	if (pScaleElement)
-	{
-	double x = 0;
-	double y = 0;
-	double z = 0;
-	pScaleElement->Attribute("x", &x);
-	pScaleElement->Attribute("y", &y);
-	pScaleElement->Attribute("z", &z);
-	m_scale = Vec3((float)x, (float)y, (float)z);
-	}
-	**/
 
 	m_transform = translation * rotation * scaleM;
 
@@ -255,16 +197,6 @@ TiXmlElement* TransformComponent::VGenerateXml(void)
     pDirection->SetAttribute("y", ToStr(orient.y).c_str());
     pDirection->SetAttribute("z", ToStr(orient.z).c_str());
     pBaseElement->LinkEndChild(pDirection);
-
-	/***
-	// This is not supported yet
-    // initial transform -> position
-    TiXmlElement* pScale = GCC_NEW TiXmlElement("Scale");
-    pPosition->SetAttribute("x", ToStr(m_scale.x).c_str());
-    pPosition->SetAttribute("y", ToStr(m_scale.y).c_str());
-    pPosition->SetAttribute("z", ToStr(m_scale.z).c_str());
-    pBaseElement->LinkEndChild(pScale);
-	**/
 
     return pBaseElement;
 }

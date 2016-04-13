@@ -1057,12 +1057,38 @@ void COLLADAMesh::Render()
 	}
 }
 
+void COLLADAMesh::RenderInstances(const UINT uNumInstances)
+{
+	for (UINT i = 0; i < m_vSubMeshes.size(); i++)
+	{
+		m_vSubMeshes[i].RenderInstances(uNumInstances);
+	}
+}
+
 void COLLADAMesh::RemoveSubMeshes()
 {
 	for (UINT i = 0; i < m_vSubMeshes.size(); i++)
 	{
 		m_vSubMeshes[i].Remove();
 	}
+}
+
+void COLLADASubMesh::RenderInstances(const UINT uNumInstances)
+{
+	//Set separate vertexBuffers
+
+	VertexBufferID vertexBuffer[5] = { m_PosVertexBufferID, m_NormVertexBufferID, m_UVVertexBufferID, m_TangVertexBufferID, m_BinormVertexBufferID };
+	UINT offset[5] = { 0, 0, 0, 0, 0 };
+
+	m_pParent->m_pRenderer->setVertexBuffer(0, 5, vertexBuffer, offset);
+	m_pParent->m_pRenderer->setIndexBuffer(m_IndexBufferID);
+
+	m_pParent->m_pRenderer->apply();
+
+	if (m_pParent->m_pRenderer->activeShaderHasTessellation())
+		m_pParent->m_pRenderer->drawElementsInstanced(PRIM_PATCHES, 0, m_NumIndex, 0, m_NumVertex, uNumInstances, 0);
+	else
+		m_pParent->m_pRenderer->drawElementsInstanced(m_PrimitiveType, 0, m_NumIndex, 0, m_NumVertex, uNumInstances, 0);
 }
 
 void COLLADASubMesh::Render()

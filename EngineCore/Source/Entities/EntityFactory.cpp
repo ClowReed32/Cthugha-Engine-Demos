@@ -36,14 +36,6 @@ EntityFactory::EntityFactory(void)
     m_componentFactory.Register<ButtonUIComponent>(EntityComponent::GetIdFromName(ButtonUIComponent::g_Name));
 	m_componentFactory.Register<CheckBoxUIComponent>(EntityComponent::GetIdFromName(CheckBoxUIComponent::g_Name));
     m_componentFactory.Register<RectTransformComponent>(EntityComponent::GetIdFromName(RectTransformComponent::g_Name));
-	/*m_componentFactory.Register<SphereRenderComponent>(ActorComponent::GetIdFromName(SphereRenderComponent::g_Name));
-    m_componentFactory.Register<TeapotRenderComponent>(ActorComponent::GetIdFromName(TeapotRenderComponent::g_Name));
-    m_componentFactory.Register<GridRenderComponent>(ActorComponent::GetIdFromName(GridRenderComponent::g_Name));
-    m_componentFactory.Register<SkyRenderComponent>(ActorComponent::GetIdFromName(SkyRenderComponent::g_Name));
-    m_componentFactory.Register<AudioComponent>(ActorComponent::GetIdFromName(AudioComponent::g_Name));*/
-
-	// FUTURE WORK - certainly don't need to do this now, but the following stuff should be in a TeapotWarsActorFactory, eh?
-    //m_componentFactory.Register<BaseScriptComponent>(ActorComponent::GetIdFromName(BaseScriptComponent::g_Name));
 }
 
 StrongEntityPtr EntityFactory::CreateStaticObject(TiXmlElement* overrides, const Mat4x4* initialTransform, const EntityId serversEntityId)
@@ -92,10 +84,6 @@ StrongEntityPtr EntityFactory::CreateStaticObject(TiXmlElement* overrides, const
 	// This is a bit of a hack to get the initial transform of the transform component set before the 
 	// other components (like PhysicsComponent) read it.
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pEntity->GetComponent<TransformComponent>(TransformComponent::g_Name));
-	/*if (pInitialTransform && pTransformComponent)
-	{
-		pTransformComponent->SetPosition(pInitialTransform->GetPosition());
-	}*/
 
     // Now that the actor has been fully created, run the post init phase
     pEntity->PostInit();
@@ -153,10 +141,6 @@ StrongEntityPtr EntityFactory::CreateEntity(const char* entityResource, std::str
 	// This is a bit of a hack to get the initial transform of the transform component set before the 
 	// other components (like PhysicsComponent) read it.
 	shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pEntity->GetComponent<TransformComponent>(TransformComponent::g_Name));
-	/*if (pInitialTransform && pTransformComponent)
-	{
-	pTransformComponent->SetPosition(pInitialTransform->GetPosition());
-	}*/
 
 	// Now that the actor has been fully created, run the post init phase
 	pEntity->PostInit();
@@ -229,10 +213,6 @@ StrongEntityPtr EntityFactory::CreateEntity(const char* entityResource, TiXmlEle
 	// This is a bit of a hack to get the initial transform of the transform component set before the 
 	// other components (like PhysicsComponent) read it.
     shared_ptr<TransformComponent> pTransformComponent = MakeStrongPtr(pEntity->GetComponent<TransformComponent>(TransformComponent::g_Name));
-	/*if (pInitialTransform && pTransformComponent)
-	{
-		pTransformComponent->SetPosition(pInitialTransform->GetPosition());
-	}*/
 
     // Now that the actor has been fully created, run the post init phase
     pEntity->PostInit();

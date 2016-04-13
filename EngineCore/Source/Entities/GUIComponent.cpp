@@ -24,7 +24,7 @@ const char* ButtonUIComponent::g_Name = "ButtonUIComponent";
 const char* CheckBoxUIComponent::g_Name = "CheckBoxUIComponent";
 
 //---------------------------------------------------------------------------------------------------------------------
-// RenderComponent
+// BaseGUIComponent
 //---------------------------------------------------------------------------------------------------------------------
 bool BaseGUIComponent::VInit(TiXmlElement* pData)
 {

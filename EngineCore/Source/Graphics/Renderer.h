@@ -1,6 +1,7 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
 
+// Some useful alias /////////////////////
 typedef int AtlasTextureID;
 typedef int TextureID;
 typedef int ShaderID;
@@ -16,6 +17,12 @@ typedef int QueryID;
 typedef int ObjectBufferID;
 typedef int StructuredBufferID;
 
+///////////////////////////////////////////
+
+// classes and structs "pre"-declaration ////////////////
+/*
+* Must be define on specific renderer implementation
+*/
 class Texture;
 class Shader;
 struct VertexBuffer;
@@ -29,6 +36,8 @@ struct ImageBufferSlot;
 struct Query;
 struct ObjectBuffer;
 struct StructuredBuffer;
+/////////////////////////////////////////////////////////
+
 
 //Structured Buffer flags//////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +58,7 @@ enum BUFFER_UAV_FLAG
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Shader enumerators //////////////////////////
 enum ConstantType 
 {
 	CONSTANT_FLOAT,
@@ -79,7 +89,9 @@ enum ObjectBufferType
 };
 
 extern int constantTypeSizes[CONSTANT_TYPE_COUNT];
+//////////////////////////////////////////////////
 
+// Texture sample filters //////
 enum Filter 
 {
 	NEAREST,
@@ -101,6 +113,9 @@ enum AddressMode
 inline bool hasMipmaps(const Filter filter){ return (filter >= LINEAR); }
 inline bool hasAniso(const Filter filter){ return (filter >= BILINEAR_ANISO); }
 
+///////////////////////////////////
+
+// TTF font structs ///////////////
 struct Character 
 {
 	float x0, y0;
@@ -127,6 +142,8 @@ struct TexFont
 };
 
 struct TTFFont;
+
+///////////////////////////////////
 
 struct TexVertex 
 {
@@ -252,6 +269,7 @@ struct TexVertex
 #define SHADER_STORAGE_BARRIER_BIT			0x2000
 //#define ALL_BARRIER_BITS
 
+// Buffer access type /////////////////
 enum BufferAccess {
 	STATIC,
 	DEFAULT,
@@ -274,6 +292,8 @@ enum MapMode
 	MAP_WRITE_DISCARD,
 	MAP_WRITE_NO_OVERWRITE
 };
+
+///////////////////////////////////////
 
 enum Primitives {
 	PRIM_TRIANGLES      = 0,
@@ -367,6 +387,15 @@ extern const int CULL_FRONT;
 extern const int SOLID;
 extern const int WIREFRAME;
 
+////////////////////////////////////////////////////
+//
+// Class Renderer
+//
+////////////////////////////////////////////////////
+
+/*
+ *	This class abstracts and simplifies low level rendering operations
+ */
 
 class Renderer 
 {
@@ -378,65 +407,70 @@ public:
 	virtual void reset(const UINT flags = RESET_ALL);
 	void apply();
 
+	// Texture Methods. Create a texture from file or memory ///////////////////////////////////////////////////////////////////////////////////////////////
 	TextureID createTexture(const char *fileName, const bool useMipMaps, const SamplerStateID samplerState = SS_NONE, UINT flags = 0);
-	virtual TextureID createTexture(Image &img, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
-    virtual TextureID createTexture(char* rawData, FORMAT rawDataFormat, const int width, const int height, const int depth, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
 	TextureID createTexture(char *rawBuffer, unsigned int rawSize, std::string extension, const bool useMipMaps, const SamplerStateID samplerState = SS_NONE, UINT flags = 0);
-	//Texture* createTexture(const char **fileNames, const bool useMipMaps, const SamplerStateID samplerState = SS_NONE, const int nArraySlices = 1, UINT flags = 0);
+	virtual TextureID createTexture(char* rawData, FORMAT rawDataFormat, const int width, const int height, const int depth, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// Render Targets Methods. Create Render Targets and Depth buffer. /////////////////////////////////////////////////////////////////////////////////////
 	TextureID addRenderTarget(const int width, const int height, const FORMAT format, const SamplerStateID samplerState = SS_NONE, UINT flags = 0)
 	{
 		return addRenderTarget(width, height, 1, 1, 1, format, 1, samplerState, flags);
 	}
-	virtual TextureID addRenderTarget(const int width, const int height, const int depth, const int mipMapCount, const int arraySize, const FORMAT format, const int msaaSamples = 1, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
 	TextureID addRenderDepth(const int width, const int height, const int depthBits)
 	{
 		return addRenderDepth(width, height, 1, depthBits <= 16? FORMAT_D16 : FORMAT_D24);
 	}
+
 	virtual TextureID addRenderDepth(const int width, const int height, const int arraySize, const FORMAT format, const int msaaSamples = 1, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
+	virtual TextureID addRenderTarget(const int width, const int height, const int depth, const int mipMapCount, const int arraySize, const FORMAT format, 
+		const int msaaSamples = 1, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	virtual bool resizeRenderTarget(const TextureID renderTarget, const int width, const int height, const int depth, const int mipMapCount, const int arraySize) = 0;
 	virtual bool generateMipMaps(const TextureID renderTarget) = 0;
 
+	// Shaders Methods. Read Shader data from file and memory and compile. //////////////////////////////////////////////////////////////////////////////////////
 	ShaderID createShader(const char *fileName, const UINT flags = 0);
 	ShaderID createShader(const char *fileName, const char *extra, const UINT flags = 0);
 	ShaderID createShader(const char *fileName, const char **attributeNames, const int nAttributes, const char *extra = NULL, const UINT flags = 0);
 	ShaderID createShader(char *rawBuffer, unsigned int rawSize, const UINT flags = 0);
 	ShaderID createShader(char *rawBuffer, unsigned int rawSize, const char *extra, const UINT flags = 0);
 	ShaderID createShader(char *rawBuffer, unsigned int rawSize, const char **attributeNames, const int nAttributes, const char *extra = NULL, const UINT flags = 0);
-	virtual ShaderID createShader(const char *vsText, const char *gsText, const char *fsText, const char *csText, const char* tcsText, const char* tesText, const int vsLine, const int gsLine, const int fsLine, const int csLine,
-		const int tcsLine, const int tesLine, const char *header = NULL, const char *extra = NULL, const char *fileName = NULL, const char **attributeNames = NULL, const int nAttributes = 0, const UINT flags = 0) = 0;
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// Vertex formats, vertex buffers and index buffers creator ///////////////////////////////////////////////////////////////////////////////////
 	int getFormatSize(const AttributeFormat format) const;
 	virtual VertexFormatID addVertexFormat(const FormatDesc *formatDesc, const UINT nAttribs, const ShaderID shader = SHADER_NONE) = 0; 
 	virtual VertexBufferID addVertexBuffer(const long size, const BufferAccess bufferAccess, const void *data = NULL) = 0;
 	virtual IndexBufferID addIndexBuffer(const UINT nIndices, const UINT indexSize, const BufferAccess bufferAccess, const void *data = NULL) = 0;
 
 	virtual ObjectBufferID createObjectBuffer(const ObjectBufferType type, const UINT objectSize, const UINT nObjects, const BufferAccess bufferAccess, const void *data = NULL) = 0;
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// Buffer only for DirectX 11 ////////////////////////////////////////////////////////////////////////
-
+	// Structured Buffers creator ////////////////////////////////////////////////////////////////////////
 	virtual StructuredBufferID createStructuredBuffer(const UINT elementSize, const UINT nElements, const bool bIsCPUWritable, const bool bIsGPUWritable, const UINT UAVFlags = 0, const void *data = NULL) = 0;
 	virtual StructuredBufferID createIndirectDrawArgBuffer() = 0;
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	virtual SamplerStateID addSamplerState(const Filter filter, const AddressMode s, const AddressMode t, const AddressMode r, const float lod = 0, const UINT maxAniso = 16, const int compareFunc = 0, const float *border_color = NULL) = 0;
+	// Create render states ////////////////////////////////////////////////////////////////////////////////
+	virtual SamplerStateID addSamplerState(const Filter filter, const AddressMode s, const AddressMode t, const AddressMode r, const float lod = 0, const UINT maxAniso = 16, 
+		const int compareFunc = 0, const float *border_color = NULL) = 0;
 	BlendStateID addBlendState(const int srcFactor, const int destFactor, const int blendMode = BM_ADD, const int mask = ALL, const bool alphaToCoverage = false)
 	{
 		return addBlendState(srcFactor, destFactor, srcFactor, destFactor, blendMode, blendMode, mask, alphaToCoverage);
 	}
-	virtual BlendStateID addBlendState(const int srcFactorRGB, const int destFactorRGB, const int srcFactorAlpha, const int destFactorAlpha, const int blendModeRGB, const int blendModeAlpha, const int mask = ALL, const bool alphaToCoverage = false) = 0;
-	virtual DepthStateID addDepthState(const bool depthTest, const bool depthWrite, const int depthFunc, const bool stencilTest, const UINT8 stencilReadMask, const UINT8 stencilWriteMask,
-		const int stencilFuncFront, const int stencilFuncBack, const int stencilFailFront, const int stencilFailBack,
-		const int depthFailFront, const int depthFailBack, const int stencilPassFront, const int stencilPassBack) = 0;
 	DepthStateID addDepthState(const bool depthTest, const bool depthWrite, const int depthFunc = LEQUAL, const bool stencilTest = false,
 		const UINT8 stencilMask = 0xFF, const int stencilFunc = ALWAYS, const int stencilFail = KEEP, const int depthFail = KEEP, const int stencilPass = KEEP)
 	{
 		return addDepthState(depthTest, depthWrite, depthFunc, stencilTest, stencilMask, stencilMask, stencilFunc, stencilFunc, stencilFail, stencilFail, depthFail, depthFail, stencilPass, stencilPass);
 	}
-	virtual RasterizerStateID addRasterizerState(const int cullMode, const int fillMode = SOLID, const bool multiSample = true, const bool scissor = false, const float depthBias = 0.0f, const float slopeDepthBias = 0.0f) = 0;
+	virtual RasterizerStateID addRasterizerState(const int cullMode, const int fillMode = SOLID, const bool multiSample = true, const bool scissor = false, const float depthBias = 0.0f, 
+		const float slopeDepthBias = 0.0f) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// Set Texture slot in shaders /////////////////////////////////////////////////////////////////////////////
 	virtual void setTexture(const char *textureName, const TextureID texture) = 0;
 	virtual void setTexture(const int textureUnit, const TextureID texture) = 0;
 	virtual void setTexture(const char *textureName, const TextureID texture, const SamplerStateID samplerState) = 0;
@@ -444,62 +478,24 @@ public:
 	virtual void setTextureArray(const char *textureName, const TextureID *textures, const int arraySize) = 0;
 	virtual void setTextureSlice(const char *textureName, const TextureID texture, const int slice) = 0;
 	virtual void setImageBuffer(const char *ImageBufferName, const TextureID texture, const int mipLevel, const FORMAT formatImageBuffer, const ImageBufferAccess imageBufferAccess) = 0;
-	virtual void setImageBufferArray(const char *ImageBufferName, const TextureID *texture, const int *mipLevel, const FORMAT *formatImageBuffer, const ImageBufferAccess *imageBufferAccess, const UINT offset, const UINT arraySize) = 0;
+	virtual void setImageBufferArray(const char *ImageBufferName, const TextureID *texture, const int *mipLevel, const FORMAT *formatImageBuffer, const ImageBufferAccess *imageBufferAccess, 
+		const UINT offset, const UINT arraySize) = 0;
     virtual void setObjectBuffer(const char *objectBufferName, const ObjectBufferID objectBufferID) = 0;
-	virtual void setObjectBuffer(const int bindingSlot, const ObjectBufferID objectBufferID) = 0;
-	
+	virtual void setObjectBuffer(const int bindingSlot, const ObjectBufferID objectBufferID) = 0;	
 	virtual void setStructuredBuffer(const char *structuredBufferName, const StructuredBufferID structuredBufferID) = 0;
 	virtual void setStructuredBufferArray(const char *structuredBufferName, const StructuredBufferID *structuredBufferID, int offset, int n_StructuredBuffers) = 0;
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Apply change on shaders /////////////////
 	virtual void applyTextures() = 0;
 	virtual void applyImageBuffers() = 0;
     virtual void applyObjectBuffers() = 0;
 	virtual void applyStructuredBuffers() = 0;
 	virtual void applyRWStructuredBuffers() = 0;
+	/////////////////////////////////////////////
 
+	// Set Render States ///////////////////////////////////////////////////////////////
 	virtual void setSamplerState(const char *samplerName, const SamplerStateID samplerState) = 0;
-	virtual void applySamplerStates() = 0;
-
-	virtual void removeTexture(const TextureID texture) = 0;
-	virtual void removeVertexBuffer(const VertexBufferID vertexBuffer) = 0;
-	virtual void removeIndexBuffer(const IndexBufferID indexBuffer) = 0;
-	FontID addFont(TexFont texFont);
-	virtual FontID addFont(const char *ttfFontFile, const UINT size, const SamplerStateID samplerState = -1) = 0;
-	virtual FontID addFont(char *rawBuffer, unsigned int rawSize, const UINT size, const SamplerStateID samplerState = -1) = 0;
-
-	virtual bool getShaderWorkGroupSize(const int shaderID, UINT* localGroupSize) = 0;
-	virtual bool hasTessellation(const ShaderID shaderID) = 0;
-    bool activeShaderHasTessellation();
-	
-	void setShader(const ShaderID shader)
-	{
-		selectedShader = shader;
-	}
-	void setVertexFormat(const VertexFormatID VertexFormat)
-	{
-		selectedVertexFormat = VertexFormat;
-	}
-	void setVertexBuffer(UINT StartSlot, UINT NumBuffers, const VertexBufferID* vertexBuffer, const UINT* offset = 0)
-	{
-		UINT slot = StartSlot;
-		numVertexBufferUsed = NumBuffers;
-
-		for(UINT i=0; i < NumBuffers; i++)
-		{
-			selectedVertexBuffers[slot] = vertexBuffer[i];
-			selectedOffsets[slot] = offset[i];
-
-			slot++;
-		}
-	}
-	/*void setVertexBuffer(const int stream, const void *base){
-		selectedVertexBuffers[stream] = VB_NONE;
-		selectedOffsets[stream] = (intptr) base;
-	}*/
-	void setIndexBuffer(const IndexBufferID indexBuffer)
-	{
-		selectedIndexBuffer = indexBuffer;
-	}
-
 	void setBlendState(const BlendStateID blendState, const UINT sampleMask = ~0)
 	{
 		selectedBlendState = blendState;
@@ -514,8 +510,64 @@ public:
 	{
 		selectedRasterizerState = rasterizerState;
 	}
+	//////////////////////////////////////////////////////////////////////////////////////
 
+	// Apply Render States //////////////////////////////////////////////////////////////
+	virtual void applySamplerStates() = 0;
+	virtual void changeBlendState(const BlendStateID blendState, const UINT sampleMask = ~0) = 0;
+	virtual void changeDepthState(const DepthStateID depthState, const UINT stencilRef = 0) = 0;
+	virtual void changeRasterizerState(const RasterizerStateID rasterizerState) = 0;
+	/////////////////////////////////////////////////////////////////////////////////////
 
+	// Remove textures and buffers //////////////////////////////////////////////////////
+	virtual void removeTexture(const TextureID texture) = 0;
+	virtual void removeVertexBuffer(const VertexBufferID vertexBuffer) = 0;
+	virtual void removeIndexBuffer(const IndexBufferID indexBuffer) = 0;
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	// Create bitmap and ttf font ///////////////////////////////////////////////////////
+	FontID addFont(TexFont texFont);
+	virtual FontID addFont(const char *ttfFontFile, const UINT size, const SamplerStateID samplerState = -1) = 0;
+	virtual FontID addFont(char *rawBuffer, unsigned int rawSize, const UINT size, const SamplerStateID samplerState = -1) = 0;
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	// Set Shader on renderer ///////////////////////////////////
+	virtual bool hasTessellation(const ShaderID shaderID) = 0;
+    bool activeShaderHasTessellation();
+	
+	void setShader(const ShaderID shader)
+	{
+		selectedShader = shader;
+	}
+	/////////////////////////////////////////////////////////////
+
+	// Set vertex format on shader and set vertex and index buffers ////////////////////////////////////
+	void setVertexFormat(const VertexFormatID VertexFormat)
+	{
+		selectedVertexFormat = VertexFormat;
+	}
+
+	void setVertexBuffer(UINT StartSlot, UINT NumBuffers, const VertexBufferID* vertexBuffer, const UINT* offset = 0)
+	{
+		UINT slot = StartSlot;
+		numVertexBufferUsed = NumBuffers;
+
+		for(UINT i=0; i < NumBuffers; i++)
+		{
+			selectedVertexBuffers[slot] = vertexBuffer[i];
+			selectedOffsets[slot] = offset[i];
+
+			slot++;
+		}
+	}
+
+	void setIndexBuffer(const IndexBufferID indexBuffer)
+	{
+		selectedIndexBuffer = indexBuffer;
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Set constant buffers components /////////////////////////////////////////////////////////
 	void setShaderConstant1i(const char *name, const int constant);
 	void setShaderConstant1f(const char *name, const float constant);
 	void setShaderConstant2f(const char *name, const Vec2 &constant);
@@ -530,10 +582,13 @@ public:
 	void setShaderConstantArray4f(const char *name, const Vec4  *constant, const UINT count);
 	void setShaderConstantArray4x4f(const char *name, const Mat4x4 *constant, const UINT count);
 	void setShaderConstantArrayStruct(const char *name, const void* constant, const int elementSize, const UINT count);
+	/////////////////////////////////////////////////////////////////////////////////////////////
 
-	virtual void setShaderConstantRaw(const char *name, const void *data, const int size) = 0;
+	// Apply Constant buffers on shaders ///////////
 	virtual void applyConstants() = 0;
+	////////////////////////////////////////////////
 
+	// Apply Render Targets //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void changeRenderTarget(const TextureID colorRT, const TextureID depthRT = TEXTURE_NONE, const int slice = NO_SLICE, const UINT flags = DEFAULT_SIZE)
 	{
 		if(colorRT < 0)
@@ -545,21 +600,24 @@ public:
 	{
 		changeRenderTargets(colorRTs, nRenderTargets, depthRT, NO_SLICE, faces, flags);
 	}
-	virtual void changeRenderTargets(const TextureID *colorRTs, const UINT nRenderTargets, const TextureID depthRT = TEXTURE_NONE, const int depthSlice = NO_SLICE, const int *slices = NULL, const UINT flags = DEFAULT_SIZE) = 0;
+	virtual void changeRenderTargets(const TextureID *colorRTs, const UINT nRenderTargets, const TextureID depthRT = TEXTURE_NONE, const int depthSlice = NO_SLICE, const int *slices = NULL, 
+		const UINT flags = DEFAULT_SIZE) = 0;
 	virtual void changeToMainFramebuffer() = 0;
+
+	void setViewport(const int width, const int height, const int posX = 0, const int posY = 0);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Apply shader ////////////////////////////////////////
 	virtual void changeShader(const ShaderID shader) = 0;
+	////////////////////////////////////////////////////////
+	
+	// Apply geometry buffers ///////////////////////////////////////////////////////////////////////
 	virtual void changeVertexFormat(const VertexFormatID vertexFormat) = 0;
 	virtual void changeVertexBuffer(UINT StartSlot, UINT NumBuffers, const VertexBufferID* vertexBuffer, const UINT* offset = 0) = 0;
-	/*void changeVertexBuffer(const void *base){
-		changeVertexBuffer(0, VB_NONE, (intptr) base);
-	}*/
 	virtual void changeIndexBuffer(const IndexBufferID indexBuffer) = 0;
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
-	virtual void changeBlendState(const BlendStateID blendState, const UINT sampleMask = ~0) = 0;
-	virtual void changeDepthState(const DepthStateID depthState, const UINT stencilRef = 0) = 0;
-	virtual void changeRasterizerState(const RasterizerStateID rasterizerState) = 0;
-
-	// Backward compatibility
+	// Clear and draw primitives methods ////////////////////////////////////////////////////////////////////////////////////////////////////
 	void clear(const bool clearColor, const bool clearDepth, const float *color = NULL, const float depth = 1.0f)
 	{
 		clear(clearColor, clearDepth, false, color, depth, 0);
@@ -569,15 +627,16 @@ public:
 	virtual void drawArrays(const Primitives primitives, const int firstVertex, const int nVertices) = 0;
 	virtual void drawElements(const Primitives primitives, const int firstIndex, const int nIndices, const int firstVertex, const int nVertices) = 0;
 	virtual void drawElementsInstancedIndirect(const Primitives primitive, StructuredBufferID bufferArgs, UINT offset) = 0;
+	virtual void drawElementsInstanced(const Primitives primitive, const int firstIndex, const int nIndices, const int firstVertex, const int nVertices, UINT uNumInstances, UINT offset) = 0;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Compute Shader///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    // Compute Shader ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     virtual void dispatchCompute(const UINT num_groups_x, const UINT num_groups_y, const UINT num_groups_z) = 0;
     virtual void memoryBarrier(UINT flags) = 0;
-
+	virtual bool getShaderWorkGroupSize(const int shaderID, UINT* localGroupSize) = 0;
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//Queries///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Queries ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     virtual QueryID createQuery() = 0;
     virtual void beginQuery(QueryID id) = 0;
 	virtual void endQuery(QueryID id) = 0;
@@ -586,35 +645,43 @@ public:
 	virtual void deleteQueries() = 0;
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	// Simple draw methods for GUIs /////////////////////////////////////////////////////////////////////////////////////////////////////////
 	virtual void setup2DMode(const float left, const float right, const float top, const float bottom) = 0;
 	virtual void drawPlain(const Primitives primitives, Vec2 *vertices, const UINT nVertices, const BlendStateID blendState, const DepthStateID depthState, const Vec4 *color = NULL) = 0;
 	virtual void drawLine(Vec3 vPoint1, Vec3 vPoint2, Mat4x4 mView, Mat4x4 mProj, const BlendStateID blendState, const DepthStateID depthState, const Vec4 *color = NULL) = 0;
-	virtual void drawTextured(const Primitives primitives, TexVertex *vertices, const UINT nVertices, const TextureID texture, const SamplerStateID samplerState, const BlendStateID blendState, const DepthStateID depthState, const Vec4 *color = NULL) = 0;
+	virtual void drawTextured(const Primitives primitives, TexVertex *vertices, const UINT nVertices, const TextureID texture, const SamplerStateID samplerState, 
+		const BlendStateID blendState, const DepthStateID depthState, const Vec4 *color = NULL) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// Bitmap text methods ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	float getTextWidth(const FontID font, const char *str, int length = -1) const;
 	float getTextHeight(const FontID font, const char *str, int length = -1) const;
 	UINT getTextQuads(const char *str) const;
 	void fillTextBuffer(TexVertex *dest, const char *str, float x, float y, const float charWidth, const float charHeight, const FontID font) const;
-	bool drawText(const char *str, float x, float y, const float charWidth, const float charHeight, const FontID font, const SamplerStateID samplerState, const BlendStateID blendState, const DepthStateID depthState, Color* textColor = NULL);
-
-	void setViewport(const int width, const int height, const int posX = 0, const int posY = 0);
+	bool drawText(const char *str, float x, float y, const float charWidth, const float charHeight, const FontID font, const SamplerStateID samplerState, const BlendStateID blendState, 
+		const DepthStateID depthState, Color* textColor = NULL);
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
     //Reset AtomicCounter
     virtual void resetAtomicCounter(ObjectBufferID atomicCounterBuffer, UINT value) = 0;
 
-	//Map/UnMap Buffer
+	// Map/UnMap Buffer //////////////////////////////////////////////////////////////////////////
 	virtual void* mapBuffer(const StructuredBufferID objectBuffer, const MapMode mapMode) = 0;
 	virtual void unMapBuffer(const StructuredBufferID objectBuffer) = 0;
 	virtual void* mapVertexBuffer(const VertexBufferID objectBuffer, const MapMode mapMode) = 0;
 	virtual void unMapVertexBuffer(const VertexBufferID objectBuffer) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////
 
+	// Finish frame /////////////
 	virtual void endFrame() = 0;
+	/////////////////////////////
 	
-	// Gets
+	// Gets /////////////////////////////////////////////////////////////////////
 	ShaderID getCurrentShaderID() { return currentShader; }
 	ShaderID getSelectedShaderID() { return selectedShader; }
 	VertexFormatID getSelectedVertexFormatID() { return selectedVertexFormat; }
 	VertexFormatID getCurrentVertexFormatID() { return currentVertexFormat; }
+	/////////////////////////////////////////////////////////////////////////////
 
 #ifdef PROFILE
 	// Profiling
@@ -632,9 +699,8 @@ public:
 	virtual void flush() = 0;
 	virtual void finish() = 0;
 
-	//virtual void endFrame() = 0;
-
 protected:
+	// Elements loaded and created ///////////////////
 	Array <Texture> textures;
 	Array <Shader> shaders;
 	Array <VertexFormat> vertexFormats;
@@ -649,10 +715,12 @@ protected:
 	Array <ObjectBuffer> objectBuffers;
 	Array <Query> queries;
 	Array <StructuredBuffer> structuredBuffers;
+	//////////////////////////////////////////////////
 
 	UINT nImageUnits, nMRTs;
 	int maxAnisotropic;
 
+	// Renderer states /////////////////////////////////////////////////////////////////////////////////
 	ShaderID currentShader;
 	ShaderID selectedShader;
 
@@ -675,9 +743,31 @@ protected:
 	UINT nCurrentRenderTargets;
 
 	int viewportPosX, viewportPosY, viewportWidth, viewportHeight;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Statistics counters
 	UINT nDrawCalls;
+
+	// Abstract Protected Methods implements on specific renderer implementation
+	// Texture Methods. Create a texture from file or memory ///////////////////////////////////////////////////////////////////////////////////////////////
+	virtual TextureID createTexture(Image &img, const SamplerStateID samplerState = SS_NONE, UINT flags = 0) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Shaders Methods. Read Shader data from file and memory and compile. //////////////////////////////////////////////////////////////////////////////////////
+	virtual ShaderID createShader(const char *vsText, const char *gsText, const char *fsText, const char *csText, const char* tcsText, const char* tesText, const int vsLine, const int gsLine, const int fsLine, const int csLine,
+		const int tcsLine, const int tesLine, const char *header = NULL, const char *extra = NULL, const char *fileName = NULL, const char **attributeNames = NULL, const int nAttributes = 0, const UINT flags = 0) = 0;
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Create render states ////////////////////////////////////////////////////////////////////////////////
+	virtual BlendStateID addBlendState(const int srcFactorRGB, const int destFactorRGB, const int srcFactorAlpha, const int destFactorAlpha, const int blendModeRGB, const int blendModeAlpha, const int mask = ALL, const bool alphaToCoverage = false) = 0;
+	virtual DepthStateID addDepthState(const bool depthTest, const bool depthWrite, const int depthFunc, const bool stencilTest, const UINT8 stencilReadMask, const UINT8 stencilWriteMask,
+		const int stencilFuncFront, const int stencilFuncBack, const int stencilFailFront, const int stencilFailBack,
+		const int depthFailFront, const int depthFailBack, const int stencilPassFront, const int stencilPassBack) = 0;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Set constant buffers components /////////////////////////////////////////////////////////
+	virtual void setShaderConstantRaw(const char *name, const void *data, const int size) = 0;
+	/////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef PROFILE
 	// Profiling

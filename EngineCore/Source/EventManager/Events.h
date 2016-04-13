@@ -933,76 +933,10 @@ public:
     GameViewId GetViewId(void) const { return m_viewId; }
 };
 
-
-//---------------------------------------------------------------------------------------------------------------------
-// EvtData_Request_Destroy_Actor - sent by any system requesting that the game logic destroy an actor	
-//    FUTURE WORK - This event shouldn't really exist - subsystems should never ask the game logic to destroy something through an event, should they?
-//---------------------------------------------------------------------------------------------------------------------
-/*class EvtData_Request_Destroy_Actor : public ScriptEvent
-{
-    ActorId m_actorId;
-
-public:
-    static const EventType sk_EventType;
-
-    EvtData_Request_Destroy_Actor()
-    {
-        m_actorId = INVALID_ACTOR_ID;
-    }
-
-    EvtData_Request_Destroy_Actor(ActorId actorId)
-    {
-        m_actorId = actorId;
-    }
-
-    virtual const EventType& VGetEventType(void) const
-    {
-        return sk_EventType;
-    }
-
-    virtual void VDeserialize( std::istrstream & in )
-    {
-        in >> m_actorId;
-    }
-
-    virtual IEventDataPtr VCopy() const
-    {
-        return IEventDataPtr (GCC_NEW EvtData_Request_Destroy_Actor(m_actorId));
-    }
-
-    virtual void VSerialize( std::ostrstream & out ) const
-    {
-        out << m_actorId;
-    }
-
-    virtual const char* GetName(void) const
-    {
-        return "EvtData_Request_Destroy_Actor";
-    }
-
-    ActorId GetActorId(void) const
-    {
-        return m_actorId;
-    }
-
-    virtual bool VBuildEventFromScript(void)
-    {
-        if (m_eventData.IsInteger())
-        {
-            m_actorId = m_eventData.GetInteger();
-            return true;
-        }
-        return false;
-    }
-
-    EXPORT_FOR_SCRIPT_EVENT(EvtData_Request_Destroy_Actor);
-};
-
-
 //---------------------------------------------------------------------------------------------------------------------
 // EvtData_PlaySound - sent by any system wishing for a HumanView to play a sound
 //---------------------------------------------------------------------------------------------------------------------
-class EvtData_PlaySound : public ScriptEvent
+/*class EvtData_PlaySound : public ScriptEvent
 {
     std::string m_soundResource;
 

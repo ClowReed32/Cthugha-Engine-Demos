@@ -73,10 +73,6 @@ public:
 	int m_PointerRadius;
 	shared_ptr<IKeyboardHandler> m_KeyboardHandler;
 
-	// Audio
-	//bool InitAudio();
-	//ProcessManager* GetProcessManager() { return m_pProcessManager; }
-
 	//Camera adjustments.
 	virtual void VSetCameraOffset(const Vec4 & camOffset );
 
@@ -89,10 +85,6 @@ public:
 
 	// Added post press - this helps the network system attach views to the right actor.
 	virtual void VSetControlledActor(EntityId entityId) { m_EntityId = entityId; }
-
-	// Event delegates
-	/*void PlaySoundDelegate(IEventDataPtr pEventData);	
-    void GameStateDelegate(IEventDataPtr pEventData);*/
 
 private:
     void RegisterAllDelegates(void);

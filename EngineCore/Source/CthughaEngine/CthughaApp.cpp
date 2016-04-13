@@ -27,16 +27,13 @@ CthughaApp *g_pApp = NULL;
 CthughaApp::CthughaApp()
 {
 	g_pApp = this;
-	//m_pGame = NULL;
+	m_pGame = NULL;
 
-	m_rcDesktop.x = m_rcDesktop.y = m_rcDesktop.z = m_rcDesktop.w = 0;
 	m_screenSize = Vec2(0,0);
-	m_iColorDepth = 24;
 
 	m_bIsRunning = false;
-	m_bIsEditorRunning = false;
 
-	//m_pEventManager = NULL;
+	m_pEventManager = NULL;
 	m_ResCache = NULL;
 
 	m_bQuitRequested = false;
@@ -100,21 +97,8 @@ bool CthughaApp::InitRenderer()
 
 bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int screenHeight, bool windowedMode)
 {
-	// Check for existing instance of the same window
-	// 
-#ifndef _DEBUG
-	// Note - it can be really useful to debug network code to have
-	// more than one instance of the game up at one time - so
-	// feel free to comment these lines in or out as you wish!
-	//if (!IsOnlyInstance(VGetGameTitle()))
-		//return false;
-#endif
-
-	// We don't need a mouse cursor by default, let the game turn it on
-	//SetCursor( NULL );
-
-	// Check for adequate machine resources.
-	bool resourceCheck = false;
+	// Check for adequate machine resources. I don't use this
+	/*bool resourceCheck = false;
 	while (!resourceCheck)
 	{
 		const DWORDLONG physicalRAM = 512 * MEGABYTE;
@@ -132,17 +116,14 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 		}
 
 		resourceCheck = true;
-	}
+	}*/
 
     // register all events 
     RegisterEngineEvents();
     VRegisterGameEvents();
 
-	//
 	// Initialize the ResCache
-	//
-
-	IResourceFile *zipFile = (m_bIsEditorRunning || m_Options.m_useDevelopmentDirectories) ? 
+	IResourceFile *zipFile = (m_Options.m_useDevelopmentDirectories) ? 
 		CHG_NEW DevelopmentResourceZipFile(L"Assets.zip", DevelopmentResourceZipFile::Editor) :
 		CHG_NEW ResourceZipFile(L"Assets.zip");
 
@@ -154,14 +135,11 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 		return false;
 	}
 	
-	//extern shared_ptr<IResourceLoader> CreateWAVResourceLoader();
-	//extern shared_ptr<IResourceLoader> CreateOGGResourceLoader();
     extern shared_ptr<IResourceLoader> CreateRAWResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateDDSResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateJPGResourceLoader();
 	extern shared_ptr<IResourceLoader> CreatePNGResourceLoader();
     extern shared_ptr<IResourceLoader> CreateXmlResourceLoader();
-    //extern shared_ptr<IResourceLoader> CreateScriptResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateCOLLADAMeshResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateBitMapFontResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateTTFFontResourceLoader();
@@ -169,19 +147,16 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 	extern shared_ptr<IResourceLoader> CreateShaderLibraryResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateMeshColliderResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateEntityResourceLoader();
+	// Signed Distance Field loader //////////////////////////////////////
 	extern shared_ptr<IResourceLoader> CreateShadowCoordResourceLoader();
 	extern shared_ptr<IResourceLoader> CreateSDFResourceLoader();
+	//////////////////////////////////////////////////////////////////////
 	extern shared_ptr<IResourceLoader> CreateMaterialResourceLoader();
 
-	// Note - register these in order from least specific to most specific! They get pushed onto a list.
-
-	//m_ResCache->RegisterLoader(CreateWAVResourceLoader());
-	//m_ResCache->RegisterLoader(CreateOGGResourceLoader());
     m_ResCache->RegisterLoader(CreateRAWResourceLoader());
 	m_ResCache->RegisterLoader(CreateDDSResourceLoader());
 	m_ResCache->RegisterLoader(CreateJPGResourceLoader());
     m_ResCache->RegisterLoader(CreateXmlResourceLoader());
-    //m_ResCache->RegisterLoader(CreateScriptResourceLoader());
 	m_ResCache->RegisterLoader(CreateCOLLADAMeshResourceLoader());
 	m_ResCache->RegisterLoader(CreateBitMapFontResourceLoader());
 	m_ResCache->RegisterLoader(CreatePNGResourceLoader());
@@ -192,8 +167,7 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 	m_ResCache->RegisterLoader(CreateEntityResourceLoader());
 	m_ResCache->RegisterLoader(CreateShadowCoordResourceLoader());
 	m_ResCache->RegisterLoader(CreateSDFResourceLoader());
-	m_ResCache->RegisterLoader(CreateMaterialResourceLoader());
-	
+	m_ResCache->RegisterLoader(CreateMaterialResourceLoader());	
 
 	if(!LoadStrings("English"))
 	{
@@ -202,7 +176,6 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 	}
 
 	// The event manager should be created next so that subsystems can hook in as desired.
-	// Discussed in Chapter 5, page 144
 	m_pEventManager = CHG_NEW EventManager("CthughaEngine Event Mgr", true);
 	if (!m_pEventManager)
 	{
@@ -210,6 +183,7 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 		return false;
 	}
 
+	// Init SDL window and graphics stuff ///////////////////////////////////////////////
 	m_screenSize.x = screenWidth;
 	m_screenSize.y = screenHeight;
 	m_bWindowedMode = windowedMode;
@@ -221,12 +195,7 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 		return FALSE;
 	}
 
-	// initialize the directory location you can store save game files
-	//_tcscpy_s(m_saveGameDirectory, GetSaveGameDirectory(GetHwnd(), VGetGameAppDirectory()));
-
-	// DXUTCreateDevice - Chapter 5 - page 139
 	m_screenSize = Vec2(screenWidth, screenHeight);
-
 	m_iFrameNumber = 0;
 
     //Init Renderer
@@ -251,10 +220,12 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 	m_pVoxelManager.reset(CHG_NEW VoxelManager());
 
 	m_pVoxelManager->Initialize(true, true, 128, Vec3(160, 90, 256), 1, 0.5f);
-	m_pVoxelManager->ActiveDebugMode(false);
+	m_pVoxelManager->ActiveDebugMode(false);	// Draw voxel cubes
 
 	//Init TextHelper for console
 	//m_pTextHelper.reset(CHG_NEW CHGTextHelper("font\\arial.ttf"));
+
+	////////////////////////////////////////////////////////////////////////////////////////
 
 	// You usually must have an HWND to initialize your game views...
 	//    VCreateGameAndView
@@ -264,7 +235,6 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 		return false;
 
 	// now that all the major systems are initialized, preload resources 
-	//    Preload calls are discussed in Chapter 5, page 148
 	m_ResCache->Preload("*.dds", NULL);
 
 	m_bIsRunning = true;
@@ -392,12 +362,6 @@ int CthughaApp::OnProcessEvent(SDL_Event* Event)
 
 void CthughaApp::OnUpdateGame(double fTime, float fElapsedTime)
 {
-	/*if (g_pApp->HasModalDialog())
-	{	
-		// don't update the game if a modal dialog is up.
-		return;
-	}*/
-
 	if (g_pApp->m_bQuitting)
 	{
 		m_bIsRunning = false;
@@ -458,7 +422,6 @@ void CthughaApp::OnShutDownGame()
 	m_pAditionalShadowDataManager.reset();
 
 	/* Delete our opengl context, destroy our window, and shutdown SDL */
-    SDL_GL_DeleteContext(m_MainContext);
     SDL_DestroyWindow(m_pWindowHandle);
     SDL_Quit();
 
@@ -591,5 +554,4 @@ void CthughaApp::RegisterEngineEvents(void)
     REGISTER_EVENT(EvtData_Move_Actor);
     REGISTER_EVENT(EvtData_Destroy_Actor);
 	REGISTER_EVENT(EvtData_Request_New_Actor);
-	//REGISTER_EVENT(EvtData_Network_Player_Actor_Assignment);
 }

@@ -1,15 +1,11 @@
 #pragma once
 //==============================================================================
-// RectTransformComponent.h - Component for managing transforms on GUI Elements
+// RectTransformComponent.h - Component for managing 2D transforms on GUI Elements
 //
 //==============================================================================
 
 #include "EntityComponent.h"
 
-//---------------------------------------------------------------------------------------------------------------------
-// This component implementation is a very simple representation of the physical aspect of an actor.  It just defines 
-// the transform and doesn't register with the physics system at all.
-//---------------------------------------------------------------------------------------------------------------------
 class RectTransformComponent : public EntityComponent
 {
 	Mat4x4 m_transform;

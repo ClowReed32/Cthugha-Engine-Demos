@@ -56,7 +56,6 @@ BaseGameLogic::BaseGameLogic()
 	m_pProcessManager = CHG_NEW ProcessManager;
 	m_random.Randomize();
 	m_State = BGS_Initializing;
-	m_bProxy = false;
 	m_RenderDiagnostics = false;
 	m_ExpectedPlayers = 0;
 	m_ExpectedRemotePlayers = 0;
@@ -64,7 +63,6 @@ BaseGameLogic::BaseGameLogic()
 	m_HumanPlayersAttached = 0;
 	m_AIPlayersAttached = 0;
 	m_HumanGamesLoaded = 0;
-	//m_pPathingGraph = NULL;
     m_pEntityFactory = NULL;
 	m_bPause = false;
     m_CurrentHumanView = -1;
@@ -72,9 +70,6 @@ BaseGameLogic::BaseGameLogic()
 	m_pLevelManager = CHG_NEW LevelManager;
 	CHG_ASSERT(m_pProcessManager && m_pLevelManager);
 	m_pLevelManager->Initialize(g_pApp->m_ResCache->Match("world\\*.xml"));
-
-    // register script events from the engine
-    //RegisterEngineScriptEvents();
 }
 
 BaseGameLogic::~BaseGameLogic()
@@ -91,16 +86,11 @@ BaseGameLogic::~BaseGameLogic()
     for (auto it = m_entities.begin(); it != m_entities.end(); ++it)
         it->second->Destroy();
     m_entities.clear();
-
-    //IEventManager::Get()->VRemoveListener(MakeDelegate(this, &BaseGameLogic::RequestDestroyActorDelegate), EvtData_Request_Destroy_Actor::sk_EventType);
 }
 
 bool BaseGameLogic::Init(void)
 {
     m_pEntityFactory = VCreateEntityFactory();
-    //m_pPathingGraph.reset(CreatePathingGraph());
-
-    //IEventManager::Get()->VAddListener(MakeDelegate(this, &BaseGameLogic::RequestDestroyActorDelegate), EvtData_Request_Destroy_Actor::sk_EventType);
 
     return true;
 }
@@ -209,10 +199,6 @@ bool BaseGameLogic::VLoadGame(const char* levelResource)
         }
     }
 
-    // register script events from the engine
-	//   [mrmike] this was moved to the constructor post-press, since this function can be called when new levels are loaded by the game or editor
-    // RegisterEngineScriptEvents();
-
     // call the delegate load function
     if (!VLoadGameDelegate(pRoot))
         return false;  // no error message here because it's assumed VLoadGameDelegate() kicked out the error
@@ -251,33 +237,14 @@ bool BaseGameLogic::ChangeCurrentHumanView(GameViewId viewId)
     return false;
 }
 
-/*void BaseGameLogic::VSetProxy() 
-{
-	m_bProxy = true; 
-
-    IEventManager::Get()->VAddListener(MakeDelegate(this, &BaseGameLogic::RequestNewActorDelegate), EvtData_Request_New_Actor::sk_EventType);
-
-	m_pPhysics.reset(CreateNullPhysics());
-}*/
-
 StrongEntityPtr BaseGameLogic::VCreateEntity(const std::string &EntityResource, std::string sName, std::vector<ComponentResource> extraComponents, const Mat4x4 *initialTransform, const EntityId serversEntityId)
 {
 	CHG_ASSERT(m_pEntityFactory);
-	if (!m_bProxy && serversEntityId != INVALID_ENTITY_ID)
-		return StrongEntityPtr();
-
-	if (m_bProxy && serversEntityId == INVALID_ENTITY_ID)
-		return StrongEntityPtr();
 
 	StrongEntityPtr pActor = m_pEntityFactory->CreateEntity(EntityResource.c_str(), sName, extraComponents, initialTransform, serversEntityId);
 	if (pActor)
 	{
 		m_entities.insert(std::make_pair(pActor->GetId(), pActor));
-		/*if (!m_bProxy && (m_State==BGS_SpawningPlayersActors || m_State==BGS_Running))
-		{
-		shared_ptr<EvtData_Request_New_Actor> pNewActor(GCC_NEW EvtData_Request_New_Actor(actorResource, initialTransform, pActor->GetId()));
-		IEventManager::Get()->VTriggerEvent(pNewActor);
-		}*/
 		return pActor;
 	}
 	else
@@ -290,21 +257,11 @@ StrongEntityPtr BaseGameLogic::VCreateEntity(const std::string &EntityResource, 
 StrongEntityPtr BaseGameLogic::VCreateEntity(const std::string &actorResource, TiXmlElement* overrides, const Mat4x4* initialTransform, const EntityId serversActorId)
 {
     CHG_ASSERT(m_pEntityFactory);
-	if (!m_bProxy && serversActorId != INVALID_ENTITY_ID)
-		return StrongEntityPtr();
-
-	if (m_bProxy && serversActorId == INVALID_ENTITY_ID)
-		return StrongEntityPtr();
 
     StrongEntityPtr pActor = m_pEntityFactory->CreateEntity(actorResource.c_str(), overrides, initialTransform, serversActorId);
     if (pActor)
     {
         m_entities.insert(std::make_pair(pActor->GetId(), pActor));
-		/*if (!m_bProxy && (m_State==BGS_SpawningPlayersActors || m_State==BGS_Running))
-		{
-			shared_ptr<EvtData_Request_New_Actor> pNewActor(GCC_NEW EvtData_Request_New_Actor(actorResource, initialTransform, pActor->GetId()));
-			IEventManager::Get()->VTriggerEvent(pNewActor);
-		}*/
         return pActor;
     }
     else
@@ -317,21 +274,11 @@ StrongEntityPtr BaseGameLogic::VCreateEntity(const std::string &actorResource, T
 StrongEntityPtr BaseGameLogic::VCreateStaticEntity(TiXmlElement* overrides, const Mat4x4* initialTransform, const EntityId serversActorId)
 {
     CHG_ASSERT(m_pEntityFactory);
-	if (!m_bProxy && serversActorId != INVALID_ENTITY_ID)
-		return StrongEntityPtr();
-
-	if (m_bProxy && serversActorId == INVALID_ENTITY_ID)
-		return StrongEntityPtr();
 
     StrongEntityPtr pActor = m_pEntityFactory->CreateStaticObject(overrides, initialTransform, serversActorId);
     if (pActor)
     {
         m_entities.insert(std::make_pair(pActor->GetId(), pActor));
-		/*if (!m_bProxy && (m_State==BGS_SpawningPlayersActors || m_State==BGS_Running))
-		{
-			shared_ptr<EvtData_Request_New_Actor> pNewActor(GCC_NEW EvtData_Request_New_Actor(actorResource, initialTransform, pActor->GetId()));
-			IEventManager::Get()->VTriggerEvent(pNewActor);
-		}*/
         return pActor;
     }
     else
@@ -554,43 +501,5 @@ EntityFactory* BaseGameLogic::VCreateEntityFactory(void)
 {
     return CHG_NEW EntityFactory;
 }
-
-
-
-/*void BaseGameLogic::RequestDestroyActorDelegate(IEventDataPtr pEventData)
-{
-    shared_ptr<EvtData_Request_Destroy_Actor> pCastEventData = static_pointer_cast<EvtData_Request_Destroy_Actor>(pEventData);
-    VDestroyActor(pCastEventData->GetActorId());
-}
-
-
-
-// [mrmike] - These were moved here after the chapter for BaseGameLogic was written. 
-//            These were originally in TeapotWarsLogic class, but should really be in the BaseLogic class.
-
-void BaseGameLogic::MoveActorDelegate(IEventDataPtr pEventData)
-{
-    shared_ptr<EvtData_Move_Actor> pCastEventData = static_pointer_cast<EvtData_Move_Actor>(pEventData);
-    VMoveActor(pCastEventData->GetId(), pCastEventData->GetMatrix());
-}
-
-void BaseGameLogic::RequestNewActorDelegate(IEventDataPtr pEventData)
-{
-	// This should only happen if the game logic is a proxy, and there's a server asking us to create an actor.
-	GCC_ASSERT(m_bProxy);
-	if (!m_bProxy)
-		return;
-
-    shared_ptr<EvtData_Request_New_Actor> pCastEventData = static_pointer_cast<EvtData_Request_New_Actor>(pEventData);
-
-    // create the actor
-	StrongActorPtr pActor = VCreateActor(pCastEventData->GetActorResource(), NULL, pCastEventData->GetInitialTransform(), pCastEventData->GetServerActorId());
-	if (pActor)
-	{
-		shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId(), pCastEventData->GetViewId()));
-        IEventManager::Get()->VQueueEvent(pNewActorEvent);
-	}
-}
-*/
 
 

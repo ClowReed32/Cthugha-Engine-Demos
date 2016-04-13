@@ -41,7 +41,6 @@ public:
     void Update(int deltaMs);
 
     // editor functions
-    //bool SaveActorFromEditor(const char* path);      //[mrmike] - we can delete this.
 	std::string Entity::ToXML();
 
     // accessors

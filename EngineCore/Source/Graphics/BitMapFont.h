@@ -107,7 +107,7 @@ protected:
 
 
 // 
-//  class TextureResourceLoader				- Chapter 14, page 492
+//  class BitMapFontResourceLoader				
 //
 class BitMapFontResourceLoader : public IResourceLoader
 {

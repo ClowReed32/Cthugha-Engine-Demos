@@ -10,6 +10,7 @@
 template <typename T, size_t N> char (&ArraySizeHelper(T (&arr)[N]))[N];
 #define elementsOf(arr) (sizeof(ArraySizeHelper(arr)))
 
+// Constant buffer struct for shader
 struct Constant 
 {
 	char *name;
@@ -281,7 +282,8 @@ const int WIREFRAME = D3D11_FILL_WIREFRAME;
 
 D3D11_MAP D3D11MapModes[] = { D3D11_MAP_READ, D3D11_MAP_WRITE, D3D11_MAP_READ_WRITE, D3D11_MAP_WRITE_DISCARD, D3D11_MAP_WRITE_NO_OVERWRITE };
 
-HRESULT __stdcall CShaderInclude::Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes) {
+HRESULT __stdcall CShaderInclude::Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes) 
+{
 	try 
 	{
 		std::string finalPath;
@@ -352,6 +354,7 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
     };
 	UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
+	// Set device descriptor
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory( &sd, sizeof( sd ) );
     sd.BufferCount = 1;
@@ -366,6 +369,7 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
     sd.SampleDesc.Quality = 0;
 	sd.Windowed = !fullscreen;
 
+	// Create DirectX device and swap chain
     for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
         m_driverType = driverTypes[driverTypeIndex];
@@ -380,13 +384,11 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
 		return;
 	}
 
+	// Init member and render states to default value //////////////////////
 	eventQuery = NULL;
 
 	nImageUnits = 16;
 	maxAnisotropic = 16;
-	//Create DirectX 11 Device
-
-//	textureLod = CHG_NEW float[nImageUnits];
 
 	nMRTs = 8;
 	if (nMRTs > MAX_MRTS) nMRTs = MAX_MRTS;
@@ -406,21 +408,14 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
 
 	setD3Ddefaults();
 	resetToDefaults();
+	////////////////////////////////////////////////////////////////////////
 
 	//Create main depthStencilBuffer and renderTargetBuffer
-
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID *) &backBuffer);
 	if (FAILED(m_pd3dDevice->CreateRenderTargetView(backBuffer, NULL, &backBufferRTV)))
 	{
 		CHG_ERROR("Create renderTargetBuffer error");
 	}
-
-	/*if (sampleBackBuffer)
-	{
-		if ((backBufferTexture = ((Direct3D10Renderer *) renderer)->addTexture(backBuffer)) == TEXTURE_NONE) return false;
-		backBuffer->AddRef();
-	}*/
-
 
 	if (depthBufferFormat != DXGI_FORMAT_UNKNOWN)
 	{
@@ -454,6 +449,7 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
 		}
 	}
 
+	// Set main render target by default
 	m_pImmediateContext->OMSetRenderTargets(1, &backBufferRTV, depthBufferDSV);
 	m_uNumRenderTargets = 1;
 
@@ -467,20 +463,17 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
 	viewport.TopLeftY = 0;
 	m_pImmediateContext->RSSetViewports(1, &viewport);
 
+	// Create default rasterize state -> CULL_NONE
 	defaultRasterizeState = addRasterizerState(CULL_NONE);
 
+	// Create shader library reader
 	m_pShaderInclude = CHG_NEW CShaderInclude();
-
-	//this->setFrameBuffer(backBufferRTV, depthBufferDSV);
 }
 
 Direct3D11Renderer::~Direct3D11Renderer()
 {
+	//Delete queries
 	if (eventQuery) eventQuery->Release();
-
-/*
-	releaseFrameBufferSurfaces();
-*/
 
 	// Delete shaders
 	for (UINT i = 0; i < shaders.size(); i++)
@@ -635,14 +628,13 @@ Direct3D11Renderer::~Direct3D11Renderer()
 	}
 
 	SAFE_DELETE(m_pShaderInclude);
-
-//	if (rollingVB) rollingVB->Release();
 }
 
 void Direct3D11Renderer::reset(const UINT flags)
 {
 	Renderer::reset(flags);
 
+	// Empty all the texture and structured buffer slots
 	if (flags & RESET_TEX)
 	{
 		for (UINT i = 0; i < MAX_TEXTUREUNIT; i++)
@@ -668,6 +660,7 @@ void Direct3D11Renderer::reset(const UINT flags)
 		}
 	}
 
+	// Empty all the samplerstate slots
 	if (flags & RESET_SS)
 	{
 		for (UINT i = 0; i < MAX_SAMPLERSTATE; i++)
@@ -681,6 +674,7 @@ void Direct3D11Renderer::reset(const UINT flags)
 		}
 	}
 
+	// Empty all the RWstructured buffer slots
 	if (flags & RESET_RWSTRUCTUREDBUFFER)
 	{
 		for (UINT i = 0; i < MAX_RWSTRUCTUREBUFFERUNIT; i++)
@@ -696,6 +690,7 @@ void Direct3D11Renderer::reset(const UINT flags)
 		}
 	}
 
+	// Apply change to the renderer
 	apply();
 }
 
@@ -703,6 +698,7 @@ void Direct3D11Renderer::resetToDefaults()
 {
 	Renderer::resetToDefaults();
 
+	// Empty all the texture and structured buffer slots
 	for (UINT i = 0; i < MAX_TEXTUREUNIT; i++)
 	{
 		currentTexturesVS[i].id = TEXTURE_NONE;
@@ -725,6 +721,7 @@ void Direct3D11Renderer::resetToDefaults()
         currentTextureSlicesCS[i] = NO_SLICE;
 	}
 
+	// Empty all the samplerstate slots
 	for (UINT i = 0; i < MAX_SAMPLERSTATE; i++)
 	{
 		currentSamplerStatesVS[i] = SS_NONE;
@@ -735,6 +732,7 @@ void Direct3D11Renderer::resetToDefaults()
         currentSamplerStatesCS[i] = SS_NONE;
 	}
 
+	// Empty all the RWstructured buffer slots
 	for (UINT i = 0; i < MAX_RWSTRUCTUREBUFFERUNIT; i++)
 	{
 		currentRWStructuredBufferVS[i].id = STB_NONE;
@@ -749,104 +747,24 @@ void Direct3D11Renderer::resetToDefaults()
 
 	// TODO: Fix ...
 	currentRasterizerState = -2;
-
-
-/*
-	currentDepthRT = FB_DEPTH;
-*/
 }
 
+// Old methods
 void Direct3D11Renderer::setD3Ddefaults()
 {
+
+}
+
 /*
-	// Set some of my preferred defaults
-	dev->SetRenderState(D3DRS_LIGHTING, FALSE);
-	dev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-	dev->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-
-	if (maxAnisotropic > 1){
-		for (uint i = 0; i < nImageUnits; i++){
-			dev->SetSamplerState(i, D3DSAMP_MAXANISOTROPY, maxAnisotropic);
-		}
-	}
-*/
-}
-
-/*bool createRenderTarget(LPDIRECT3DDEVICE9 dev, Texture &tex){
-	if (isDepthFormat(tex.format)){
-		if (tex.surfaces == NULL) tex.surfaces = CHG_NEW LPDIRECT3DSURFACE9;
-		if (dev->CreateDepthStencilSurface(tex.width, tex.height, formats[tex.format], D3DMULTISAMPLE_NONE, 0, FALSE, tex.surfaces, NULL) != D3D_OK){
-			delete tex.surfaces;
-
-			ErrorMsg("Couldn't create depth surface");
-			return false;
-		}
-	} else {
-		bool mipMapped = (tex.filter.mipFilter != D3DTEXF_NONE);
-
-		if (tex.flags & CUBEMAP){
-			if (dev->CreateCubeTexture(tex.width, mipMapped? 0 : 1, tex.usage, formats[tex.format], D3DPOOL_DEFAULT, (LPDIRECT3DCUBETEXTURE9 *) &tex.texture, NULL) != D3D_OK){
-				ErrorMsg("Couldn't create render target");
-				return false;
-			}
-
-			if (tex.surfaces == NULL) tex.surfaces = CHG_NEW LPDIRECT3DSURFACE9[6];
-			for (uint i = 0; i < 6; i++){
-				((LPDIRECT3DCUBETEXTURE9) tex.texture)->GetCubeMapSurface((D3DCUBEMAP_FACES) i, 0, &tex.surfaces[i]);
-			}
-		} else {
-			if (dev->CreateTexture(tex.width, tex.height, mipMapped? 0 : 1, tex.usage, formats[tex.format], D3DPOOL_DEFAULT, (LPDIRECT3DTEXTURE9 *) &tex.texture, NULL) != D3D_OK){
-				ErrorMsg("Couldn't create render target");
-				return false;
-			}
-			if (tex.surfaces == NULL) tex.surfaces = CHG_NEW LPDIRECT3DSURFACE9;
-			((LPDIRECT3DTEXTURE9) tex.texture)->GetSurfaceLevel(0, tex.surfaces);
-		}
-	}
-
-	return true;
-}
-*/
-
-/*bool Direct3D10Renderer::resetDevice(){
-	for (uint i = 0; i < textures.getCount(); i++){
-		if (textures[i].surfaces){
-			int n = (textures[i].flags & CUBEMAP)? 6 : 1;
-
-			if (textures[i].texture) textures[i].texture->Release();
-			for (int k = 0; k < n; k++){
-				textures[i].surfaces[k]->Release();
-			}
-		}
-	}
-
-	if (!releaseFrameBufferSurfaces()) return false;
-
-	if (dev->Reset(&d3dpp) != D3D_OK){
-		ErrorMsg("Device reset failed");
-		return false;
-	}
-
-	if (!createFrameBufferSurfaces()) return false;
-
-	resetToDefaults();
-	setD3Ddefaults();
-
-	for (uint i = 0; i < textures.getCount(); i++){
-		if (textures[i].surfaces){
-			createRenderTarget(dev, textures[i]);
-		}
-	}
-
-	return true;
-}*/
+ *	Create texture from DirectX 11 resource
+ */
 
 TextureID Direct3D11Renderer::createTexture(ID3D11Resource *resource, UINT flags)
 {
 	Texture tex;
 	memset(&tex, 0, sizeof(tex));
 
+	// Create subresource view
 	tex.texture = resource;
 	tex.srv = createSRV(resource);
 	tex.flags = flags;
@@ -854,6 +772,7 @@ TextureID Direct3D11Renderer::createTexture(ID3D11Resource *resource, UINT flags
 	D3D11_RESOURCE_DIMENSION type;
 	resource->GetType(&type);
 
+	// Fill texture class members
 	switch (type)
 	{
 		case D3D11_RESOURCE_DIMENSION_TEXTURE1D:
@@ -884,8 +803,13 @@ TextureID Direct3D11Renderer::createTexture(ID3D11Resource *resource, UINT flags
 			break;
 	}
 	
+	// Add to texture array
 	return textures.add(tex);;
 }
+
+/*
+*	Create texture from raw memory data
+*/
 
 TextureID Direct3D11Renderer::createTexture(char* rawData, FORMAT rawDataFormat, const int width, const int height, const int depth, const SamplerStateID samplerState, UINT flags)
 {
@@ -900,6 +824,7 @@ TextureID Direct3D11Renderer::createTexture(char* rawData, FORMAT rawDataFormat,
     static D3D11_SUBRESOURCE_DATA texData[1024];
     D3D11_SUBRESOURCE_DATA *dest = texData;
 
+	// Fill subresource data
     for (UINT n = 0; n < arraySize; n++)
     {
         for (UINT k = 0; k < nSlices; k++)
@@ -934,6 +859,8 @@ TextureID Direct3D11Renderer::createTexture(char* rawData, FORMAT rawDataFormat,
     }
 
     HRESULT hr;
+
+	// Create texture according to image dimensions
 
     if (height == 0)
     {
@@ -989,6 +916,7 @@ TextureID Direct3D11Renderer::createTexture(char* rawData, FORMAT rawDataFormat,
         return TEXTURE_NONE;
     }
 
+	// Create subresource view
     tex.srvFormat = tex.texFormat;
     tex.srv = createSRV(tex.texture, tex.srvFormat);
     tex.width = width;
@@ -1001,6 +929,10 @@ TextureID Direct3D11Renderer::createTexture(char* rawData, FORMAT rawDataFormat,
 
     return id;
 }
+
+/*
+*	Create texture from preloaded image
+*/
 
 TextureID Direct3D11Renderer::createTexture(Image &img, const SamplerStateID samplerState, UINT flags)
 {
@@ -1031,6 +963,7 @@ TextureID Direct3D11Renderer::createTexture(Image &img, const SamplerStateID sam
 	static D3D11_SUBRESOURCE_DATA texData[1024];
 	D3D11_SUBRESOURCE_DATA *dest = texData;
 
+	// Fill subresource data
 	for (UINT n = 0; n < arraySize; n++)
 	{
 		for (UINT k = 0; k < nSlices; k++)
@@ -1074,6 +1007,7 @@ TextureID Direct3D11Renderer::createTexture(Image &img, const SamplerStateID sam
 
 	HRESULT hr;
 
+	// Create texture according to image dimensions
 	if (img.is1D())
 	{
 		D3D11_TEXTURE1D_DESC desc;
@@ -1148,7 +1082,12 @@ TextureID Direct3D11Renderer::createTexture(Image &img, const SamplerStateID sam
     return id;
 }
 
-TextureID Direct3D11Renderer::addRenderTarget(const int width, const int height, const int depth, const int mipMapCount, const int arraySize, const FORMAT format, const int msaaSamples, const SamplerStateID samplerState, UINT flags)
+/*
+ *	Create Render Target
+ */
+
+TextureID Direct3D11Renderer::addRenderTarget(const int width, const int height, const int depth, const int mipMapCount, const int arraySize, const FORMAT format, const int msaaSamples, 
+	const SamplerStateID samplerState, UINT flags)
 {
 	Texture tex;
 	memset(&tex, 0, sizeof(tex));
@@ -1173,7 +1112,7 @@ TextureID Direct3D11Renderer::addRenderTarget(const int width, const int height,
 		}
 	}
 
-
+	// Create a render target according to method parameters
 	if (depth == 1)
 	{
 		D3D11_TEXTURE2D_DESC desc;
@@ -1235,17 +1174,19 @@ TextureID Direct3D11Renderer::addRenderTarget(const int width, const int height,
 		}
 	}
 
-
+	// Create render target view and subresource target view
 	tex.srvFormat = tex.texFormat;
 	tex.rtvFormat = tex.texFormat;
 	tex.srv = createSRV(tex.texture, tex.srvFormat);
 	tex.rtv = createRTV(tex.texture, tex.rtvFormat);
 
+	// Create unordered access view if it's necessary
 	if (flags & UAV_TEXTURE)
 		tex.uav = createUAV(tex.texture, tex.srvFormat);
 
 	int sliceCount = (depth == 1)? arraySize : depth;
 
+	// Create multiple subresource views if it's got multiple slices /////////////
 	if (flags & SAMPLE_SLICES)
 	{
 		tex.srvArray = CHG_NEW ID3D11ShaderResourceView *[sliceCount];
@@ -1264,12 +1205,17 @@ TextureID Direct3D11Renderer::addRenderTarget(const int width, const int height,
 			tex.rtvArray[i] = createRTV(tex.texture, tex.rtvFormat, i);
 		}
 	}
-	
+	///////////////////////////////////////////////////////////////////////////////
+
     int id = textures.add(tex);
     CHG_INFO("Create new Target Surface: " + std::to_string(id));
 
 	return id;
 }
+
+/*
+*	Create Depth buffer
+*/
 
 TextureID Direct3D11Renderer::addRenderDepth(const int width, const int height, const int arraySize, const FORMAT format, const int msaaSamples, const SamplerStateID samplerState, UINT flags)
 {
@@ -1368,6 +1314,7 @@ bool Direct3D11Renderer::resizeRenderTarget(const TextureID renderTarget, const 
 	D3D11_RESOURCE_DIMENSION type;
 	textures[renderTarget].texture->GetType(&type);
 
+	// Release old render target and create a new render target with the new dimensions
 	switch (type)
 	{
 		case D3D11_RESOURCE_DIMENSION_TEXTURE2D:
@@ -1391,6 +1338,7 @@ bool Direct3D11Renderer::resizeRenderTarget(const TextureID renderTarget, const 
 			return false;
 	}
 
+	// Release old views and create new views with the new render target
 	if (textures[renderTarget].rtv)
 	{
 		textures[renderTarget].rtv->Release();
@@ -1489,18 +1437,12 @@ void Direct3D11Renderer::removeIndexBuffer(const IndexBufferID indexBuffer)
 
 void Direct3D11Renderer::removeTexture(const TextureID texture)
 {
+	// Must be released texture and views
 	SAFE_RELEASE(textures[texture].texture);
 	SAFE_RELEASE(textures[texture].srv);
 	SAFE_RELEASE(textures[texture].rtv);
 	SAFE_RELEASE(textures[texture].dsv);
-	delete[] textures[texture].uav;
-
-	/*for (int i = 0; i < textures[texture].nMipMaps; i++)
-	{
-		if (textures[texture].uav)
-			SAFE_RELEASE(textures[texture].uav[i]);
-	}*/
-	
+	delete[] textures[texture].uav;	
 
 	int sliceCount = (textures[texture].depth == 1)? textures[texture].arraySize : textures[texture].depth;
 
@@ -1562,14 +1504,18 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 	ID3D11ShaderReflection *psRefl = NULL;
 	ID3D11ShaderReflection *csRefl = NULL;
 
-	UINT compileFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS;// | D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION;
+	UINT compileFlags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR | D3DCOMPILE_ENABLE_STRICTNESS;
 
 #ifdef _DEBUG
 	compileFlags |= D3DCOMPILE_PREFER_FLOW_CONTROL | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
+	/*
+	* VERTEX SHADER
+	*/
 	if (vsText != NULL)
 	{
+		//Add extra data and shader header
 		std::string shaderString;
 		if (extra != NULL) shaderString += extra;
 		if (header != NULL) shaderString += header;
@@ -1580,11 +1526,15 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 		shaderString += vsText;
 
-
+		// Compile and create shader
 		if (SUCCEEDED(D3DCompile(shaderString.c_str(), shaderString.size(), fileName, NULL, m_pShaderInclude, "main", "vs_5_0", compileFlags, NULL, &shaderBuf, &errorsBuf)))
 		{
 			if (SUCCEEDED(m_pd3dDevice->CreateVertexShader(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), NULL, &shader.vertexShader)))
 			{
+				/*
+				* This function obtain information about constant buffer members,
+				* textures and buffer used in shaders
+				*/
 				D3DReflect( shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) &vsRefl);
 				D3DGetInputSignatureBlob(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), &shader.inputSignature);				
 			}
@@ -1599,8 +1549,12 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		if (shader.vertexShader == NULL) return SHADER_NONE;
 	}
 
+	/*
+	* GEOMETRY SHADER
+	*/
 	if (gsText != NULL)
 	{
+		//Add extra data and shader header
 		std::string shaderString;
 		if (extra != NULL) shaderString += extra;
 		if (header != NULL) shaderString += header;
@@ -1611,10 +1565,15 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 		shaderString += gsText;
 
+		// Compile and create shader
 		if (SUCCEEDED(D3DCompile(shaderString.c_str(), shaderString.size(), fileName, NULL, m_pShaderInclude, "main", "gs_5_0", compileFlags, NULL, &shaderBuf, &errorsBuf)))
 		{
 			if (SUCCEEDED(m_pd3dDevice->CreateGeometryShader(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), NULL, &shader.geometryShader)))
 			{
+				/*
+				* This function obtain information about constant buffer members,
+				* textures and buffer used in shaders
+				*/
 				D3DReflect( shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) &gsRefl);
 			}
 		} 
@@ -1628,8 +1587,12 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		if (shader.geometryShader == NULL) return SHADER_NONE;
 	}
 	
+	/*
+	* TESSELATION CONTROL SHADER
+	*/
 	if (tcsText != NULL)
 	{
+		//Add extra data and shader header
 		std::string shaderString;
 		if (extra != NULL) shaderString += extra;
 		if (header != NULL) shaderString += header;
@@ -1640,10 +1603,15 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 		shaderString += tcsText;
 
+		// Compile and create shader
 		if (SUCCEEDED(D3DCompile(shaderString.c_str(), shaderString.size(), fileName, NULL, m_pShaderInclude, "main", "hs_5_0", compileFlags, NULL, &shaderBuf, &errorsBuf)))
 		{
 			if (SUCCEEDED(m_pd3dDevice->CreateHullShader(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), NULL, &shader.hullShader)))
 			{
+				/*
+				* This function obtain information about constant buffer members,
+				* textures and buffer used in shaders
+				*/
 				D3DReflect(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) &tcsRefl);
 			}
 		}
@@ -1657,10 +1625,14 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		if (shader.hullShader == NULL) return SHADER_NONE;
 	}
 
+	/*
+	* TESSELATION EVALUATION SHADER
+	*/
 	if (tesText != NULL)
 	{
 		HRESULT hr;
 
+		//Add extra data and shader header
 		std::string shaderString;
 		if (extra != NULL) shaderString += extra;
 		if (header != NULL) shaderString += header;
@@ -1671,10 +1643,16 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 		shaderString += tesText;
 
+		// Compile and create shader
 		if (SUCCEEDED(D3DCompile(shaderString.c_str(), shaderString.size(), fileName, NULL, m_pShaderInclude, "main", "ds_5_0", compileFlags, NULL, &shaderBuf, &errorsBuf)))
 		{
 			if (SUCCEEDED(m_pd3dDevice->CreateDomainShader(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), NULL, &shader.domainShader)))
 			{
+
+				/*
+				* This function obtain information about constant buffer members,
+				* textures and buffer used in shaders
+				*/
 				hr = D3DReflect(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) &tesRefl);
 			}
 		}
@@ -1688,8 +1666,12 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		if (shader.domainShader == NULL) return SHADER_NONE;
 	}
 
+	/*
+	* FRAGMENT SHADER
+	*/
 	if (fsText != NULL)
 	{
+		//Add extra data and shader header
 		std::string shaderString;
 		if (extra != NULL) shaderString += extra;
 		if (header != NULL) shaderString += header;
@@ -1700,10 +1682,15 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 		shaderString += fsText;
 
+		// Compile and create shader
 		if (SUCCEEDED(D3DCompile(shaderString.c_str(), shaderString.size(), fileName, NULL, m_pShaderInclude, "main", "ps_5_0", compileFlags, NULL, &shaderBuf, &errorsBuf)))
 		{
 			if (SUCCEEDED(m_pd3dDevice->CreatePixelShader(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), NULL, &shader.pixelShader)))
 			{
+				/*
+				* This function obtain information about constant buffer members,
+				* textures and buffer used in shaders
+				*/
 				D3DReflect( shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) &psRefl);
 			}
 		} 
@@ -1717,8 +1704,12 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		if (shader.pixelShader == NULL) return SHADER_NONE;
 	}
 
+	/*
+	* COMPUTE SHADER
+	*/
 	if (csText != NULL)
 	{
+		//Add extra data and shader header
 		std::string shaderString;
 		if (extra != NULL) shaderString += extra;
 		if (header != NULL) shaderString += header;
@@ -1729,10 +1720,15 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 		shaderString += csText;
 
+		// Compile and create shader
 		if (SUCCEEDED(D3DCompile(shaderString.c_str(), shaderString.size(), fileName, NULL, m_pShaderInclude, "main", "cs_5_0", compileFlags, NULL, &shaderBuf, &errorsBuf)))
 		{
 			if (SUCCEEDED(m_pd3dDevice->CreateComputeShader(shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), NULL, &shader.computeShader)))
 			{
+				/*
+				* This function obtain information about constant buffer members,
+				* textures and buffer used in shaders
+				*/
 				D3DReflect( shaderBuf->GetBufferPointer(), shaderBuf->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) &csRefl);
 			}
 		} 
@@ -1746,6 +1742,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		if (shader.computeShader == NULL) return SHADER_NONE;
 	}
 
+	// Extract data from reflection buffer and create auxiliar constant buffers //////////////////
 	D3D11_SHADER_DESC vsDesc, gsDesc, tcsDesc, tesDesc, psDesc, csDesc;
 	if (vsRefl)
 	{
@@ -1819,6 +1816,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 			shader.csDirty = (bool*)malloc(sizeof(bool)*shader.nCSCBuffers);
 		}
 	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	D3D11_SHADER_BUFFER_DESC sbDesc;
 
@@ -1836,6 +1834,9 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 	UINT nPSConstants = 0;
 	UINT nCSConstants = 0;
 
+	// Obtain constant buffer member data ////////////////////////////////////////////////////////////////////////////
+
+	// Vertex Shader Constants //////////////////////////////////////////////////////////////////////////////
 	for (UINT i = 0; i < shader.nVSCBuffers; i++)
 	{
 		vsRefl->GetConstantBufferByIndex(i)->GetDesc(&sbDesc);
@@ -1886,6 +1887,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 
 	UINT maxConst = constants.size();
 
+	// Geometry Shader Constants //////////////////////////////////////////////////////////////////////////////
 	for (UINT i = 0; i < shader.nGSCBuffers; i++)
 	{
 		gsRefl->GetConstantBufferByIndex(i)->GetDesc(&sbDesc);
@@ -2094,6 +2096,8 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 	}
 
 	maxConst = constants.size();
+
+	// Frament Shader Constants //////////////////////////////////////////////////////////////////////////////
 	for (UINT i = 0; i < shader.nPSCBuffers; i++)
 	{
 		psRefl->GetConstantBufferByIndex(i)->GetDesc(&sbDesc);
@@ -2161,6 +2165,8 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 	}
 
 	maxConst = constants.size();
+
+	// Computer Shader Constants //////////////////////////////////////////////////////////////////////////////
 	for (UINT i = 0; i < shader.nCSCBuffers; i++)
 	{
 		csRefl->GetConstantBufferByIndex(i)->GetDesc(&sbDesc);
@@ -2227,6 +2233,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		shader.csDirty = (bool*) realloc(shader.csDirty, sizeof(bool)*shader.nCSCBuffers);
 	}
 
+	// Copy data from auxiliar list to final list and sort element
 	shader.nConstants = constants.size();
 	shader.constants = CHG_NEW Constant[shader.nConstants];
 	memcpy(shader.constants, constants.data(), shader.nConstants * sizeof(Constant));
@@ -2240,8 +2247,8 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 	UINT nMaxCSRes = csRefl? csDesc.BoundResources : 0;
 
     //Texture, Samples, buffer///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Vertex Shader//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Vertex Shader//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	int maxResources = nMaxVSRes + nMaxGSRes + nMaxPSRes + nMaxCSRes;
 	if (maxResources)
 	{
@@ -3001,6 +3008,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 			}
 		}
 
+		// Copy data from auxiliar list to final list and sort element
 		shader.textures = (Sampler *) realloc(shader.textures, shader.nTextures * sizeof(Sampler));
 		shader.samplers = (Sampler *) realloc(shader.samplers, shader.nSamplers * sizeof(Sampler));
 		shader.rwStructuredBuffer = (Sampler *) realloc(shader.rwStructuredBuffer, shader.nRWStructuredBuffers * sizeof(Sampler));
@@ -3037,6 +3045,11 @@ D3D11_USAGE imageBufferUsages[] =
     D3D11_USAGE_DYNAMIC,
     D3D11_USAGE_STAGING
 };
+
+/*
+ *	Create a indirect draw argument buffer, this buffer is used in drawElementsInstancedIndirect
+ *  and contains the arguments of primitive draw.
+ */
 
 StructuredBufferID Direct3D11Renderer::createIndirectDrawArgBuffer()
 {
@@ -3077,6 +3090,10 @@ StructuredBufferID Direct3D11Renderer::createIndirectDrawArgBuffer()
 
 	return structuredBuffers.size() - 1;
 }
+
+/*
+ *	Create structured buffer
+ */
 
 StructuredBufferID Direct3D11Renderer::createStructuredBuffer(const UINT elementSize, const UINT nElements, const bool bIsCPUWritable, const bool bIsGPUWritable, const UINT UAVFlags, const void *data)
 {
@@ -3124,7 +3141,7 @@ StructuredBufferID Direct3D11Renderer::createStructuredBuffer(const UINT element
 	ZeroMemory((&bufferInitData), sizeof(bufferInitData));
 	bufferInitData.pSysMem = data;
 
-	//Create Buffer
+	// Create Structured buffer
 	if (FAILED(m_pd3dDevice->CreateBuffer(&bufferDesc, (data) ? (&bufferInitData) : NULL, &structuredBuffer.structuredBuffer)))
 		return -1;
 
@@ -3133,7 +3150,8 @@ StructuredBufferID Direct3D11Renderer::createStructuredBuffer(const UINT element
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	srvDesc.Buffer.ElementWidth = nElements;
-
+	
+	// Create buffer view
 	if (FAILED(m_pd3dDevice->CreateShaderResourceView(structuredBuffer.structuredBuffer, &srvDesc, &structuredBuffer.structuredBufferView)))
 	{
 		return -1;
@@ -3155,6 +3173,10 @@ StructuredBufferID Direct3D11Renderer::createStructuredBuffer(const UINT element
 
 	return structuredBuffers.size() - 1;
 }
+
+/*
+*	Create shader vertex format
+*/
 
 VertexFormatID Direct3D11Renderer::addVertexFormat(const FormatDesc *formatDesc, const UINT nAttribs, const ShaderID shader)
 {
@@ -3221,6 +3243,10 @@ D3D11_USAGE usage[] =
 	D3D11_USAGE_DYNAMIC,
 };
 
+/*
+ *	Create vertex buffer
+ */
+
 VertexBufferID Direct3D11Renderer::addVertexBuffer(const long size, const BufferAccess bufferAccess, const void *data)
 {
 	VertexBuffer vb;
@@ -3252,6 +3278,10 @@ VertexBufferID Direct3D11Renderer::addVertexBuffer(const long size, const Buffer
 
     return id;
 }
+
+/*
+*	Create index buffer
+*/
 
 IndexBufferID Direct3D11Renderer::addIndexBuffer(const UINT nIndices, const UINT indexSize, const BufferAccess bufferAccess, const void *data)
 {
@@ -3286,6 +3316,7 @@ IndexBufferID Direct3D11Renderer::addIndexBuffer(const UINT nIndices, const UINT
     return id;
 }
 
+//	Not supported
 ObjectBufferID Direct3D11Renderer::createObjectBuffer(const ObjectBufferType type, const UINT objectSize, const UINT nObjects, const BufferAccess bufferAccess, const void *data)
 {
 	return -1;
@@ -3308,6 +3339,10 @@ D3D11_TEXTURE_ADDRESS_MODE address_modes[] =
 	D3D11_TEXTURE_ADDRESS_BORDER,
 	D3D11_TEXTURE_ADDRESS_MIRROR,
 };
+
+/*
+*	Create texture sampler state
+*/
 
 SamplerStateID Direct3D11Renderer::addSamplerState(const Filter filter, const AddressMode s, const AddressMode t, const AddressMode r, const float lod, const UINT maxAniso, const int compareFunc, const float *border_color)
 {
@@ -3352,6 +3387,10 @@ SamplerStateID Direct3D11Renderer::addSamplerState(const Filter filter, const Ad
 	return samplerStates.size() - 1;
 }
 
+/*
+*	Create blending state
+*/
+
 BlendStateID Direct3D11Renderer::addBlendState(const int srcFactorRGB, const int destFactorRGB, const int srcFactorAlpha, const int destFactorAlpha, const int blendModeRGB, const int blendModeAlpha, const int mask, const bool alphaToCoverage)
 {
 	BlendState blendState;
@@ -3387,6 +3426,10 @@ BlendStateID Direct3D11Renderer::addBlendState(const int srcFactorRGB, const int
 	return blendStates.size() - 1;
 }
 
+/*
+*	Create depth state
+*/
+
 DepthStateID Direct3D11Renderer::addDepthState(const bool depthTest, const bool depthWrite, const int depthFunc, const bool stencilTest, const UINT8 stencilReadMask, const UINT8 stencilWriteMask,
 		const int stencilFuncFront, const int stencilFuncBack, const int stencilFailFront, const int stencilFailBack,
 		const int depthFailFront, const int depthFailBack, const int stencilPassFront, const int stencilPassBack)
@@ -3421,6 +3464,10 @@ DepthStateID Direct3D11Renderer::addDepthState(const bool depthTest, const bool 
 	return depthStates.size() - 1;
 }
 
+/*
+*	Create rasterizer state
+*/
+
 RasterizerStateID Direct3D11Renderer::addRasterizerState(const int cullMode, const int fillMode, const bool multiSample, const bool scissor, const float depthBias, const float slopeDepthBias)
 {
 	RasterizerState rasterizerState;
@@ -3448,6 +3495,10 @@ RasterizerStateID Direct3D11Renderer::addRasterizerState(const int cullMode, con
 	return rasterizerStates.size() - 1;
 }
 
+/*
+* Only support on OpenGL renderer
+*/
+
 FontID Direct3D11Renderer::addFont(char *rawBuffer, UINT rawSize, const UINT size, const SamplerStateID samplerState)
 {
 	/*TTFFont font;
@@ -3470,6 +3521,10 @@ FontID Direct3D11Renderer::addFont(char *rawBuffer, UINT rawSize, const UINT siz
 	return TTFFonts.size() - 1;
 }
 
+/*
+* Only support on OpenGL renderer
+*/
+
 FontID Direct3D11Renderer::addFont(const char *ttfFontFile, const UINT size, const SamplerStateID samplerState)
 {
 	/*TTFFont font;
@@ -3489,6 +3544,10 @@ FontID Direct3D11Renderer::addFont(const char *ttfFontFile, const UINT size, con
 
 	return TTFFonts.size() - 1;
 }
+
+/*
+*	Looking for textures, buffer, etc... in shaders by name
+*/
 
 const Sampler *getSampler(const Sampler *samplers, const int count, const char *name)
 {
@@ -3520,7 +3579,6 @@ const Sampler *getSampler(const Sampler *samplers, const int count, const char *
 
 void Direct3D11Renderer::setTexture(const char *textureName, const TextureID texture)
 {
-	//ASSERT(selectedShader != SHADER_NONE);
 	if(selectedShader == SHADER_NONE)
 		return;
 
@@ -4892,6 +4950,12 @@ void Direct3D11Renderer::drawElementsInstancedIndirect(const Primitives primitiv
 {
 	m_pImmediateContext->IASetPrimitiveTopology(d3dPrim[primitive]);
 	m_pImmediateContext->DrawIndexedInstancedIndirect(structuredBuffers[bufferArgs].structuredBuffer, offset);
+}
+
+void Direct3D11Renderer::drawElementsInstanced(const Primitives primitive, const int firstIndex, const int nIndices, const int firstVertex, const int nVertices, UINT uNumInstances, UINT offset)
+{
+	m_pImmediateContext->IASetPrimitiveTopology(d3dPrim[primitive]);
+	m_pImmediateContext->DrawIndexedInstanced(nIndices, uNumInstances, firstIndex, 0, offset);
 }
 
 void Direct3D11Renderer::setup2DMode(const float left, const float right, const float top, const float bottom)

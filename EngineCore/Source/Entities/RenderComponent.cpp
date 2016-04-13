@@ -23,10 +23,6 @@ const char* MeshRenderComponent::g_Name = "MeshRenderComponent";
 const char* LightRenderComponent::g_Name = "LightRenderComponent";
 const char* ParticleSystemComponent::g_Name = "ParticleSystemComponent";
 const char* DecalRenderComponent::g_Name = "DecalRenderComponent";
-/*const char* SphereRenderComponent::g_Name = "SphereRenderComponent";
-const char* TeapotRenderComponent::g_Name = "TeapotRenderComponent";
-const char* GridRenderComponent::g_Name = "GridRenderComponent";
-const char* SkyRenderComponent::g_Name = "SkyRenderComponent";*/
 
 //---------------------------------------------------------------------------------------------------------------------
 // RenderComponent

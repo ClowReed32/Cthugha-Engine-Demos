@@ -185,29 +185,6 @@ public:
 	virtual ~IResourceFile() { }
 };
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-// enum RenderPass							
-//
-//   3D scenes are drawn in passes - this enum defines the render passes
-//   supported by the 3D scene graph created by class Scene.
-/////////////////////////////////////////////////////////////////////////////
-
-enum RenderPass
-{
-	RenderPass_0,
-	RenderPass_Static = RenderPass_0,
-	RenderPass_Entity,
-	RenderPass_Sky,
-	RenderPass_NotRendered,
-	RenderPass_Last
-};
-
-
-
-
 class Scene;
 class SceneNodeProperties;
 class RayCast;
@@ -222,36 +199,13 @@ public:
 	virtual std::string VToString()=0;
 };
 
-//
-// class IRenderer				- not described in the 4th edition
-//
-// class IRenderer abstracts the renderer implementation so the engine
-//   can use D3D9 or D3D11.
-//
-class IRenderer
-{
-public:
-	virtual void VSetBackgroundColor(BYTE bgA, BYTE bgR, BYTE bgG, BYTE bgB)=0; 
-	virtual bool VOnRestore()=0;
-	virtual void VShutdown()=0;
-	virtual bool VPreRender()=0;
-	virtual bool VPostRender()=0;
-	virtual void VCalcLighting(Lights *lights, int maximumLights)=0;
-	virtual void VSetWorldTransform(const Mat4x4 *m)=0;
-	virtual void VSetViewTransform(const Mat4x4 *m)=0;
-	virtual void VSetProjectionTransform(const Mat4x4 *m)=0;
-	virtual shared_ptr<IRenderState> VPrepareAlphaPass()=0;
-	virtual shared_ptr<IRenderState> VPrepareSkyBoxPass()=0;
-	virtual void VDrawLine(const Vec3& from,const Vec3& to,const Color& color)=0;
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // class ISceneNode					
 //
 //   This is the public interface for nodes in a 3D scene graph.
 /////////////////////////////////////////////////////////////////////////////
 
-enum SceneNodeType { TERRAIN_NODE, OCTREE_NODE, LIGHT_NODE, MESH_NODE, DECAL_NODE, SHADER_NODE, MATERIAL_NODE, CAMERA_NODE, GENERIC_NODE };
+enum SceneNodeType { FLUID_SIMULATOR_NODE, OCTREE_NODE, LIGHT_NODE, MESH_NODE, DECAL_NODE, SHADER_NODE, MATERIAL_NODE, CAMERA_NODE, GENERIC_NODE };
 
 class ISceneNode
 {

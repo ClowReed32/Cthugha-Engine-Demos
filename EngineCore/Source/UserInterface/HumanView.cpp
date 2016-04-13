@@ -27,8 +27,6 @@ const GameViewId gc_InvalidGameViewId = 0xffffffff;
 //
 HumanView::HumanView(shared_ptr<Renderer> renderer, bool bScene)
 {
-	//InitAudio(); 
-
 	m_pProcessManager = CHG_NEW ProcessManager;
 	m_runFullSpeed = true;
 
@@ -76,8 +74,6 @@ HumanView::~HumanView()
 	}
 
 	SAFE_DELETE(m_pProcessManager);
-
-	//SAFE_DELETE(g_pAudio);
 }
 
 bool HumanView::LoadGame(TiXmlElement* pLevelData)
@@ -156,47 +152,10 @@ bool HumanView::VOnLostDevice()
 	return true;
 }
 
-
-
-//
-// HumanView::InitAudio							
-//
-/*bool HumanView::InitAudio()
-{
-	if (!g_pAudio)
-	{
-		g_pAudio = GCC_NEW DirectSoundAudio();		// use this line for DirectSound
-	}
-
-	if (!g_pAudio)
-		return false;
-
-	if (!g_pAudio->VInitialize(g_pApp->GetHwnd()))
-		return false;
-
-	return true;
-}*/
-
-
-
 void HumanView::TogglePause(bool active)
 {
-	// Pause or resume audio	
-	/*if ( active )
-	{
-		if (g_pAudio) 
-			g_pAudio->VPauseAllSounds();
-	}
-	else
-	{
-		if (g_pAudio)
-			g_pAudio->VResumeAllSounds();
-	}*/
-
 	m_bPause = active;
 }
-
-
 
 //
 // HumanView::VOnMsgProc						
@@ -235,7 +194,7 @@ bool HumanView::VOnMsgProc( CHG_Event msg )
 				}
 				else if(('º' == msg.keyboardEvent.asciiCode) || ('`' == msg.keyboardEvent.asciiCode)) //See if it was the console key.
 				{
-					m_Console.SetActive(true);
+					//m_Console.SetActive(true);
 				}
 				else if (m_KeyboardHandler)
 				{
@@ -345,41 +304,12 @@ void HumanView::VSetCameraOffset(const Vec4 & camOffset )
 void HumanView::RegisterAllDelegates(void)
 {
     IEventManager* pGlobalEventManager = IEventManager::Get();
-//	pGlobalEventManager->VAddListener(MakeDelegate(this, &HumanView::GameStateDelegate), EvtData_Game_State::sk_EventType);
-    //pGlobalEventManager->VAddListener(MakeDelegate(this, &HumanView::PlaySoundDelegate), EvtData_PlaySound::sk_EventType);
 }
 
 void HumanView::RemoveAllDelegates(void)
 {
     IEventManager* pGlobalEventManager = IEventManager::Get();
-//	pGlobalEventManager->VRemoveListener(MakeDelegate(this, &HumanView::GameStateDelegate), EvtData_Game_State::sk_EventType);
-    //pGlobalEventManager->VRemoveListener(MakeDelegate(this, &HumanView::PlaySoundDelegate), EvtData_PlaySound::sk_EventType);
 }
-
-//
-// HumanView::PlaySoundDelegate							
-//
-/*void HumanView::PlaySoundDelegate(IEventDataPtr pEventData)
-{
-    shared_ptr<EvtData_PlaySound> pCastEventData = static_pointer_cast<EvtData_PlaySound>(pEventData);
-
-    // play the sound a bullet makes when it hits a teapot
-    Resource resource(pCastEventData->GetResource().c_str());
-    shared_ptr<ResHandle> srh = static_pointer_cast<ResHandle>(g_pApp->m_ResCache->GetHandle(&resource));
-    shared_ptr<SoundProcess> sfx(GCC_NEW SoundProcess(srh, 100, false));
-    m_pProcessManager->AttachProcess(sfx);
-}
-
-//
-// HumanView::GameStateDelegate							
-//
-void HumanView::GameStateDelegate(IEventDataPtr pEventData)
-{
-//    shared_ptr<EvtData_Game_State> pCastEventData = static_pointer_cast<EvtData_Game_State>(pEventData);
-//    m_BaseGameState = pCastEventData->GetGameState(); 
-}*/
-
-
 
 //==============================================================
 // HumanView::Console - defines the a class to manage a console to type in commands

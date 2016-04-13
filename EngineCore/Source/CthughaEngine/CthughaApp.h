@@ -20,7 +20,7 @@
 class Renderer;
 
 //
-// class GameCodeApp							- Chapter X, page Y
+// class CthughaApp							
 //
 class CthughaApp
 {
@@ -30,20 +30,14 @@ protected:
 	bool m_bIsRunning;						// true if everything is initialized and the game is in the main loop
 	bool m_bQuitRequested;					// true if the app should run the exit sequence
 	bool m_bQuitting;						// true if the app is running the exit sequence
-	Vec4 m_rcDesktop;						// current desktop size - not necessarilly the client window size
 	Vec2 m_screenSize;						// game screen size
-	int m_iColorDepth;						// current color depth (16 or 32)
-	bool m_bIsEditorRunning;				// true if the game editor is running
-	SDL_Window *m_pWindowHandle;			// handler window
-	SDL_GLContext m_MainContext;
+	SDL_Window *m_pWindowHandle;			// SDL window handler
 
 	//Time member
 	clock_t m_lastUpdateTime;				// last Update time in milliseconds
     float m_fElapsedTime;
 	int m_iFrameNumber;
-
 	clock_t m_lastDraw;
-
 
 public:
 	const Vec2 GetScreenSize()  { return m_screenSize; }
@@ -56,34 +50,49 @@ protected:
 	int m_HasModalDialog;					// determines if a modal dialog is up
 
 public:
+	// GameCode Specific Stuff
+	BaseGameLogic *m_pGame;
+	struct GameOptions m_Options;
 
+	// Graphics 
+	shared_ptr<Renderer> m_pRenderer;
+	shared_ptr<AdditionalShadowDataManager> m_pAditionalShadowDataManager;
+	shared_ptr<SDFShadowManager> m_pSDFShadowManager;
+	shared_ptr<VoxelManager> m_pVoxelManager;
+	shared_ptr<CHGTextHelper> m_pTextHelper; //WARNING. render letters very vlow.
+
+	// File and Resource System
+	class ResCache *m_ResCache;
+
+	// Event manager
+	EventManager *m_pEventManager;
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------
 	CthughaApp();
 
 	// Game Application Data
 	virtual char *VGetGameTitle()=0;
 
+	// Windows handler and renderer methods
 	SDL_Window* GetHwnd();
 	virtual bool InitInstance(int argc, char *argv[], int screenWidth = SCREEN_WIDTH, int screenHeight = SCREEN_HEIGHT, bool windowedMode = true);	
 	bool CreateWindowApp( const char* strWindowTitle, int x = -2147483648, int y = -2147483648 );
 	bool InitRenderer();
 
+	// Text management methods
 	bool LoadStrings(std::string language);
 	std::wstring GetString(std::wstring sID);				
 	int GetHotKeyForString(std::wstring sID);
 	UINT MapCharToKeycode(const char pHotkey);
 
+	// Time methods
 	void getTimeValues(double* fTime, float* fElapsedTime);
     float getElapsedTime() { return m_fElapsedTime; }
 	Uint32 getTick();
 
-	shared_ptr<Renderer> m_pRenderer;
-	shared_ptr<AdditionalShadowDataManager> m_pAditionalShadowDataManager;
-	shared_ptr<SDFShadowManager> m_pSDFShadowManager;
-	shared_ptr<VoxelManager> m_pVoxelManager;
-	shared_ptr<CHGTextHelper> m_pTextHelper;
-
 	static shared_ptr<Renderer> GetRendererImpl();
 
+	// Game loop 
 	int MainLoop();
 	int OnProcessEvent(SDL_Event* Event);
 	int OnUpdateGameAndRendering();
@@ -91,21 +100,9 @@ public:
 	void OnFrameRender(double fTime, float fElapsedTime);
 	void OnShutDownGame();
 
-	// GameCode Specific Stuff
-	BaseGameLogic *m_pGame;
-	struct GameOptions m_Options;
-
 	// You must define these functions to initialize your game.
 	virtual BaseGameLogic *VCreateGameAndView()=0;
 	virtual bool VLoadGame(void);
-
-	// File and Resource System
-	class ResCache *m_ResCache;
-
-	bool IsEditorRunning() { return m_bIsEditorRunning; }
-
-	// Event manager
-	EventManager *m_pEventManager;
 
 	void SetMouseMode(CHG_MouseMode mode);
 

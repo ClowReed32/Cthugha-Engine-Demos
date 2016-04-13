@@ -206,27 +206,6 @@ LightNode::LightNode(const EntityId entityId,
 		}
 
 		m_ToWorld = m_ToWorld * directionalLight->GetLightDirectionMatrix();
-
-		/*Old Shadow Map
-		float diagonalLength = distance(m_Aabb.vcMax, m_Aabb.vcMin);
-
-		m_pLight->m_LightFrustum.Init(LightVolume.x, LightVolume.y, 1.0f, -LightVolume.z, LightVolume.z);
-		m_pLight->m_ViewToProjLightMatrix = orthoMatrixX(LightVolume.x, LightVolume.y, -LightVolume.z, LightVolume.z);
-
-		Vec3 look = directionalLight->getLightDirection().xyz();
-		Vec3 right = normalize((abs(dot(Vec3(0.0f, 1.0f, 0.0f), look)) != 1.0f) ? normalize(cross(look, Vec3(0.0f, 1.0f, 0.0f))) : normalize(cross(look, Vec3(1.0f, 0.0f, 0.0f))));
-		right = normalize(cross(right, look));
-		Vec3 up = cross(look, right);
-
-		directionalLight->m_ViewLightMat = Mat4x4(right.x,									      up.x,									         look.x,								         0.0f,
-												  right.y,									      up.y,									         look.y,								         0.0f,
-												  right.z,									      up.z,									         look.z,								         0.0f,
-												  -dot(LightPos, right),                          -dot(LightPos, up),                            -dot(LightPos, look),                            1.0f);
-
-		//directionalLight->m_ViewLightMat = viewMatrix(LightPos, look, right);
-
-		directionalLight->m_NumFrustumPartition = 4;
-		directionalLight->m_FrustumPartitionBuffer = g_pApp->m_pRenderer->createObjectBuffer(SHADER_STORAGE_BUFFER, sizeof(FrustumPartition), directionalLight->m_NumFrustumPartition, STATIC, NULL); */
 	}
 	else if(m_pLight->getType() == POINT_LIGHT)
 	{
@@ -260,8 +239,6 @@ LightNode::LightNode(const EntityId entityId,
 			right.y, up.y, look.y, 0.0f,
 			right.z, up.z, look.z, 0.0f,
 			-dot(LightPos, right), -dot(LightPos, up), -dot(LightPos, look), 1.0f);
-
-		//directionalLight->m_ViewLightMat = viewMatrix(LightPos, look, right);
 	}
 
 	m_EntityID = entityId;
@@ -282,7 +259,7 @@ LightNode::~LightNode()
 }
 
 //
-// MeshNode::VOnRestore
+// LightNode::VOnRestore
 //
 bool LightNode::VOnRestore(Scene *pScene)
 {
@@ -292,7 +269,7 @@ bool LightNode::VOnRestore(Scene *pScene)
 }
 
 //
-// MeshNode::VRender
+// LightNode::VRender
 //
 bool LightNode::VOnRender(Scene *pScene)
 {
@@ -300,7 +277,7 @@ bool LightNode::VOnRender(Scene *pScene)
 }
 
 //
-// MeshNode::ActiveLight
+// LightNode::ActiveLight
 //
 bool LightNode::ActiveLight()
 {

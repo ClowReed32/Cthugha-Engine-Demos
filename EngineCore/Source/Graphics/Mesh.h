@@ -144,6 +144,7 @@ public:
 	void Remove();
 
 	void Render();
+	void RenderInstances(const UINT uNumInstances);
 };
 
 class COLLADAMesh
@@ -178,6 +179,7 @@ public:
 	}
 
 	void Render();
+	void RenderInstances(const UINT uNumInstances);
 
 	COLLADASubMesh GetSubMesh(UINT i) {	return m_vSubMeshes[i];	}
 	void RemoveSubMeshes();

@@ -62,14 +62,9 @@ protected:
 	int m_HumanGamesLoaded;
 
 	GameViewId m_CurrentHumanView;
-	
 	GameViewList m_gameViews;						// views that are attached to our game
 
-	//shared_ptr<PathingGraph> m_pPathingGraph;		// the pathing graph
     EntityFactory* m_pEntityFactory;
-    
-	bool m_bProxy;									// set if this is a proxy game logic, not a real one
-	int m_remotePlayerId;							// if we are a remote player - what is out socket number on the server
 
 	bool m_RenderDiagnostics;						// Are we rendering diagnostics?
 	shared_ptr<IGamePhysics> m_pPhysics;
@@ -84,16 +79,6 @@ public:
 	virtual ~BaseGameLogic();
     bool Init(void);
 
-	void SetProxy(bool isProxy) 
-	{ 
-		m_bProxy = isProxy; 
-	}
-	const bool IsProxy() const { return m_bProxy; }
-
-	// [mrmike] CanRunLua() is a bit of a hack - but I can't have Lua scripts running on the clients. They should belong to the logic.
-	// FUTURE WORK - Perhaps the scripts can have a marker or even a special place in the resource file for any scripts that can run on remote clients
-	//const bool CanRunLua() const { return !IsProxy() || GetState()!=BGS_Running; }
-
 	EntityId GetNewEntityID( void )
 	{
 		return ++m_LastEntityId;
@@ -104,7 +89,6 @@ public:
 		return ++m_LastGameViewId;
 	}
 
-	//shared_ptr<PathingGraph> GetPathingGraph(void) { return m_pPathingGraph; }
 	CHGRandom& GetRNG(void) { return m_random; }
 
 	virtual void VAddView(shared_ptr<IGameView> pView, EntityId actorId=INVALID_ENTITY_ID);
@@ -127,7 +111,6 @@ public:
 	// Level management
 	const LevelManager* GetLevelManager() { return m_pLevelManager; }
     virtual bool VLoadGame(const char* levelResource) override;  
-	//virtual void VSetProxy();
 
 	// Logic Update
 	virtual void VOnUpdate(float time, float elapsedTime);
@@ -157,8 +140,5 @@ protected:
 
     // [rez] Override this function to do any game-specific loading.
     virtual bool VLoadGameDelegate(TiXmlElement* pLevelData) { return true; }
-
-    //void MoveActorDelegate(IEventDataPtr pEventData);
-    //void RequestNewActorDelegate(IEventDataPtr pEventData);
 };
 

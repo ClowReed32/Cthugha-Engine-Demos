@@ -148,20 +148,6 @@ public:
 	void OnUpdateSDFObjectParameter(Scene *pScene);
 	void SetShaderSDFBuffersForLight(Scene* pScene);
 
-	bool GetSDFCoords(std::string resourceName, Vec4& coord, Vec4& dim) 
-	{
-		std::map<std::string, std::pair<Vec3, Vec3>>::iterator it = m_SDFTextureCoords.find(resourceName);
-
-		if (it != m_SDFTextureCoords.end())
-		{
-			coord = Vec4(it->second.first, 1.0f);
-			dim = Vec4(it->second.second, 0.0f);
-
-			return true;
-		}
-		
-		return false;
-	}
-
+	bool GetSDFCoords(std::string resourceName, Vec4& coord, Vec4& dim);
 	Vec3 GetSDFPackDimensions() { return m_vSDFShadowPackDim; }
 };
