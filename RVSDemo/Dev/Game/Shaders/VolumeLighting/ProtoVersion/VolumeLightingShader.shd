@@ -1,0 +1,90 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		VOLUME LIGHTING SHADER												   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+[Compute shader]
+
+#define COMPUTE_SHADER_GROUP_DIM_X 16
+#define COMPUTE_SHADER_GROUP_DIM_Y 8
+#define COMPUTE_SHADER_GROUP_DIM_Z 1
+
+#include "Shaders\VolumeLighting\Volume_Radiance_Common.shdl"
+//#include "Shaders\VolumeLighting\Volume_Radiance_GI.shdl"
+#include "Shaders\VolumeLighting\Volume_Common.shdl"
+
+RWTexture3D<float4> VolumeLightingData;
+
+// Uniform Volumetric Voxel Cascades ///////////////
+float4 vAmbientColorAndConstantDensity;
+////////////////////////////////////////////////////
+
+float fNear;
+float4x4 mInverseProjection;
+int g_iFrameNumber;
+float fInverseZDimension;
+
+// POISSON SAMPLES /////////////////////////////////
+static const uint SAMPLE_NUM = 8;
+static const float2 POISSON_SAMPLES[SAMPLE_NUM] =
+{
+    float2(0.228132254148f, 0.67232428631f),
+    float2(0.848556554824f, 0.135723477704f),
+    float2(0.74820789575f, 0.63965073852f),
+    float2(0.472544801767f, 0.351474129111f),
+    float2(0.962881642535f, 0.387342871273f),
+    float2(0.0875977149838f, 0.896250211998f),
+    float2(0.203231652569f, 0.12436704431f),
+    float2(0.56452806916f, 0.974024350484f),
+};
+////////////////////////////////////////////////////
+
+[numthreads(COMPUTE_SHADER_GROUP_DIM_X, COMPUTE_SHADER_GROUP_DIM_Y, COMPUTE_SHADER_GROUP_DIM_Z)]
+
+void main( uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex )
+{	
+	if(DTid.x < (uint)vGridDimension.x && DTid.y < (uint)vGridDimension.y && DTid.z < (uint)vGridDimension.z)
+	{
+		float4 outColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		
+		uint3 vVoxelPosition = uint3(DTid.x, DTid.y, DTid.z);
+		
+		//float2 currFrameJitter = POISSON_SAMPLES[(g_iFrameNumber + vVoxelPosition.x + vVoxelPosition.y * 2) % SAMPLE_NUM] - 0.5f;
+		
+		float3 vScreenPosition = ScreenCoordsFromThreadID(max(float3(vVoxelPosition) /*+ float3(currFrameJitter*/, 0.0f), 0.0f));
+		float fLinearDepth = VolumeZPosToDepth(vScreenPosition.z);
+		float fLayerThickness = VolumeZPosToDepth(vScreenPosition.z + fInverseZDimension) - fLinearDepth;
+		float3 viewRay = normalize(float3(vScreenPosition.x*mInverseProjection[0][0], vScreenPosition.y*mInverseProjection[1][1], 1.0f));
+		float4 vPosition_viewspace = float4(viewRay*fLinearDepth, 1.0f);
+		
+		float4 vDirectLighting = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		float4 vIndirectLighting = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		
+		// Point and Spot Lights
+        for (uint uLightIndex = 0; uLightIndex < iNumPointLights; ++uLightIndex) 
+		{
+			PointSpotLight light = sbPointLights[uLightIndex];
+			vDirectLighting += PointLightBRDFFunction(float4(vAmbientColorAndConstantDensity.rgb, 1.0f), 
+													  vPosition_viewspace, 
+													  light, 
+													  uLightIndex);
+        }
+			
+		// Directional Lights
+		for (uint uLightIndex = 0; uLightIndex < iNumDirectionalLights; ++uLightIndex) 
+		{
+            DirectionalLight light = cbDirectionalLights[uLightIndex];
+			vDirectLighting += DirectionalLightBRDFFunction(float4(vAmbientColorAndConstantDensity.rgb, 1.0f), 
+															vPosition_viewspace,
+															light, 
+															uLightIndex);
+        }  			
+		
+		//vIndirectLighting = ComputeIndirectLighting(vPosition_viewspace);
+		
+		outColor = float4(vDirectLighting.rgb + vIndirectLighting.rgb, vAmbientColorAndConstantDensity.a*fLayerThickness);
+		
+		VolumeLightingData[vVoxelPosition] = outColor;
+	}
+}

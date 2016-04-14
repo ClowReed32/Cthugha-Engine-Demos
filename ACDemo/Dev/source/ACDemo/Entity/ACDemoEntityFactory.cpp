@@ -7,7 +7,7 @@
 
 #include "ACDemoEntityFactory.h"
 
-//	EvolutioneEntityFactory class implementation
+//	ACDemoEntityFactory class implementation
 
 ACDemoEntityFactory::ACDemoEntityFactory() : EntityFactory()
 {

@@ -1,0 +1,86 @@
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+	float3 ViewRay				 	 : TexCoord1;
+};
+
+[Vertex shader]
+
+//Uniform Matrix
+float4x4 InverseView;
+float4x4 InverseProjection;
+
+float4 cameraPosition;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	float4 positionWS = mul(float4(In.vertexPosition_modelspace, 1.0f), mul(InverseProjection, InverseView));
+	positionWS /= positionWS.w;
+	
+	output.ViewRay = positionWS - cameraPosition;
+	
+	return output;
+ }
+
+[Fragment shader]
+
+Texture2D depthTarget;
+SamplerState targetSampler;
+
+float4x4 projectorView;
+float4x4 projectorProj;
+
+float4x4 View;
+float4x4 Projection;
+
+float4 cameraPosition;
+
+float4 GetClipCoord(float3 vertexPosition, float4x4 viewProjMat)
+{
+	float4 point_projectSpace =  mul(float4(vertexPosition, 1.0f), viewProjMat);
+	
+	return point_projectSpace;
+}
+
+float main(PsIn In) : SV_Target
+{
+	float depth = depthTarget.SampleLevel( targetSampler, In.vertexUV, 0 ).x;
+	
+	if(depth <= 0)
+	{
+		discard;
+		return 1.0f;
+	}
+	
+	//Obtain world space position coordinates
+	float3 viewRay = normalize(In.ViewRay.xyz);
+	float4 vPosition_worldspace = float4(cameraPosition.xyz + viewRay*depth, 1.0f);
+	
+	float4x4 projectorViewProj = mul(projectorView, projectorProj);
+	
+	float4 screenSpaceCoord = GetClipCoord(vPosition_worldspace.xyz, projectorViewProj);
+	
+	if(screenSpaceCoord.x < -screenSpaceCoord.w || screenSpaceCoord.y < -screenSpaceCoord.w || screenSpaceCoord.z < 0.0f ||
+	   screenSpaceCoord.x > screenSpaceCoord.w || screenSpaceCoord.y > screenSpaceCoord.w || screenSpaceCoord.z > screenSpaceCoord.w)
+	{
+		discard;
+		return 1.0f;
+	}
+		
+	return 1.0f;
+}

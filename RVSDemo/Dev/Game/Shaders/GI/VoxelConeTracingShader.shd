@@ -1,0 +1,298 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		VOXEL CONE TRACING SHADOWS SHADER					   				   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+#define PI 3.14159265359f
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+	float3 ViewRay				 	 : TexCoord1;
+};
+
+[Vertex shader]
+
+//Uniform Matrix
+float4x4 InverseView;
+float4x4 InverseProjection;
+
+float4 cameraPosition;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	float4 positionWS = mul(float4(In.vertexPosition_modelspace, 1.0f), mul(InverseProjection, InverseView));
+	positionWS /= positionWS.w;
+	
+	output.ViewRay = positionWS - cameraPosition;
+	
+	return output;
+}
+
+[Fragment shader]
+
+//Camera constant
+float4 cameraPosition;
+
+//Target Textures////////////////////////
+Texture2D depthTarget;
+Texture2D normalTarget;
+Texture2D baseTarget;
+Texture2D MREC_Target;
+Texture2D tangentTarget;
+/////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState TargetSample;
+SamplerState VoxelFilter;
+//////////////////////////////////////////
+
+//Voxel Textures////////////////////////////
+float minVoxelDiameter;
+float minVoxelDiameterInv;
+float4x4 worldToVoxelTex[6];
+float4x4 voxelTexToWorld[6];
+float4 cascadeBounds[12];
+int numCascades;
+
+int ActiveVoxel;
+
+Texture3D<float4> giSceneData;
+////////////////////////////////////////////
+
+// Returns a random number based on a vec3 and an int.
+float fract(float x)
+{
+	return x - floor(x);
+}
+
+float random(float3 seed, int i)
+{
+	float4 seed4 = float4(seed,i);
+	float dot_product = dot(seed4, float4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
+// Auxiliar Function Voxel Cone Tracing /////////////////////////////////////////////////////////////////////////////////////
+
+float4 voxelFetch(float3 pos, float3 dir, float lod, int cascade)
+{
+	float zCoords = (1.0f/numCascades)*(cascade + pos.z);
+	
+	float4 sampleX =
+		dir.x > 0.0
+		? giSceneData.SampleLevel(VoxelFilter, float3(pos.x, 0.125f*pos.y, zCoords), lod)
+		: giSceneData.SampleLevel(VoxelFilter, float3(pos.x, 0.125f + 0.125f*pos.y, zCoords), lod);
+	
+	float4 sampleY =
+		dir.y > 0.0
+		? giSceneData.SampleLevel(VoxelFilter, float3(pos.x, 0.25f + 0.125f*pos.y, zCoords), lod)
+		: giSceneData.SampleLevel(VoxelFilter, float3(pos.x, 0.375f + 0.125f*pos.y, zCoords), lod);
+	
+	float4 sampleZ =
+		dir.z > 0.0
+		? giSceneData.SampleLevel(VoxelFilter, float3(pos.x, 0.5f + 0.125f*pos.y, zCoords), lod)
+		: giSceneData.SampleLevel(VoxelFilter, float3(pos.x, 0.625f + 0.125f*pos.y, zCoords), lod);
+	
+	float3 sampleWeights = abs(dir);
+	float invSampleMag = 1.0f / (sampleWeights.x + sampleWeights.y + sampleWeights.z + 0.0001f);
+	sampleWeights *= invSampleMag;
+	
+	float4 filtered = 
+		sampleX * sampleWeights.x
+		+ sampleY * sampleWeights.y
+		+ sampleZ * sampleWeights.z;
+	
+	return filtered;
+}
+
+bool isInsideAabb(float3 minAabb, float3 maxAabb, float3 pointVec)
+{
+	if(pointVec.x > minAabb.x && pointVec.x < maxAabb.x &&
+    pointVec.y > minAabb.y && pointVec.y < maxAabb.y &&
+    pointVec.z > minAabb.z && pointVec.z < maxAabb.z)
+    {
+        return true;
+    }
+	
+	return false;
+}
+
+// Obtain voxel cascade for specific position
+int GetCascade(float3 pos)
+{
+	int count = 0;
+
+	for(uint i = 0; i < 2*numCascades; i+=2)
+	{
+		if(isInsideAabb(cascadeBounds[i].xyz, cascadeBounds[i + 1].xyz, pos))
+		{
+			return count;
+		}
+		
+		count++;
+	}
+	
+	return -1;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// coneRatio is the cone diameter to height ratio (2.0 for 90-degree cone)
+float4 voxelTraceCone(float3 origin, float3 dir, float coneRatio, float maxDist)
+{
+	//Calculate cascade
+	int cascade = GetCascade(origin);
+	
+	if(cascade != 0)
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	//Origin world to voxel texture coordinates
+	float4 origin_voxelspace = mul(float4(origin, 1.0f), worldToVoxelTex[cascade]);
+	origin_voxelspace.xyz *= 1.0 / origin_voxelspace.w;
+	//Scale distance to voxel texture coordinates
+	float fMaxDist = maxDist * worldToVoxelTex[cascade][0][0];
+	
+	float4 accum = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	// the starting sample diameter
+	float minDiameter = minVoxelDiameter;
+	
+	// push out the starting point to avoid self-intersection
+	float startDist = 2.0f*minDiameter;
+	
+	float dist = startDist;
+	//int count = 0;
+	while (dist <= fMaxDist && accum.a < 1.0)
+	{
+		// ensure the sample diameter is no smaller than the min
+		// desired diameter for this cone (ensuring we always
+		// step at least minDiameter each iteration, even for tiny
+		// cones - otherwise lots of overlapped samples)
+		float sampleDiameter = max(minDiameter, coneRatio * dist);		
+		float3 samplePos = origin_voxelspace.xyz + dir * dist;
+		
+		/*if(samplePos.x > 0.9f || samplePos.y > 0.9f || samplePos.z > 0.9f || samplePos.z < 0.1f || samplePos.z < 0.1f || samplePos.z < 0.1f)
+		{
+			float4 vPosition_worldspace = mul(float4(samplePos, 1.0f), voxelTexToWorld[cascade]);
+			vPosition_worldspace /= vPosition_worldspace.w;
+			//cascade = GetCascade(vPosition_worldspace.xyz);
+			cascade++;
+			
+			if(cascade > numCascades)
+				break;			
+			
+			dist *= 0.5f;
+			sampleDiameter *= 0.5f;
+			
+			vPosition_worldspace = mul(vPosition_worldspace, worldToVoxelTex[cascade]);
+			samplePos = vPosition_worldspace.xyz/vPosition_worldspace.w;
+			origin_voxelspace = mul(float4(origin, 1.0f), worldToVoxelTex[cascade]);
+		}*/
+		
+		// convert diameter to LOD
+		// for example:
+		// log2(1/256 * 256) = 0
+		// log2(1/128 * 256) = 1
+		// log2(1/64 * 256) = 2
+		float sampleLOD = log2(sampleDiameter * minVoxelDiameterInv);		
+		
+		float4 sampleValue = voxelFetch(samplePos, -dir, sampleLOD, cascade);
+		
+		float sampleWeight = (1.0f - accum.a);
+		accum += sampleValue * sampleWeight;
+		
+		dist += sampleDiameter;
+		
+		//count++;
+	}
+	
+	return accum;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float4 main(PsIn In) : SV_Target
+{
+	float4 output;
+	
+	float3 vertexNormal_worldspace = normalize(normalTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f ).xyz);
+	float depth = depthTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f ).x;
+	float4 vBaseColor = baseTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f );
+	float4 vMREC = MREC_Target.SampleLevel( TargetSample, In.vertexUV, 0.0f );
+	float3 vertexTangent_worldspace = normalize(tangentTarget.SampleLevel( TargetSample, In.vertexUV, 0.0f ).xyz);
+	
+	vBaseColor /= PI;
+	
+	float4 vRealAlbedo = vBaseColor - vBaseColor * vMREC.x/*metallic*/;
+	vRealAlbedo.a = 1.0f;
+			
+	// 0.03 default specular value for dielectric.
+	float3 vRealSpecularColor = lerp(0.06f, vBaseColor.xyz, vMREC.x/*metallic*/);
+	
+	//Obtain world space position coordinates	
+	float3 viewRay = normalize(In.ViewRay.xyz);
+	float4 vertexPosition_worldspace = float4(cameraPosition.xyz + viewRay*depth, 1.0f);
+	
+	float3 ddxTangent = normalize(ddx(vertexPosition_worldspace));
+	float fDenominator = dot(ddxTangent, vertexNormal_worldspace);
+	float fBeta = 1.0f/(fDenominator + 0.0001f);
+	float3 upVector = (abs(fDenominator) < 0.001f) ? ddxTangent : normalize(fBeta*ddxTangent);
+	
+	//Obtain tangent and binormal;
+	float3 vertexBinormal_worldspace = normalize(cross(vertexTangent_worldspace, vertexNormal_worldspace));
+	vertexTangent_worldspace = normalize(cross(vertexBinormal_worldspace, vertexNormal_worldspace));
+
+	float4 vSpecularRadiance = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	float4 vLambertRadiance = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	//Voxel Cone Tracing/////////////////////////////////////////////////////////////////////////////////////
+	
+	//Diffuse Light
+	
+	if(vMREC.y > 0.0f && vMREC.x < 1.0f)
+	{
+		float iblConeRatio = 1.0f;
+		float iblMaxDist = 5.0f;
+		
+		vLambertRadiance.rgb += 0.785f*voxelTraceCone(vertexPosition_worldspace.xyz, vertexNormal_worldspace, iblConeRatio, iblMaxDist).rgb;
+		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, 0.5f*vertexNormal_worldspace + 0.866025f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
+		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, 0.823639f*vertexTangent_worldspace + 0.5f*vertexNormal_worldspace + 0.267617f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
+		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, 0.509037f*vertexTangent_worldspace + 0.5f*vertexNormal_worldspace + -0.700629f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
+		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, -0.509037f*vertexTangent_worldspace + 0.5f*vertexNormal_worldspace + -0.700629f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
+		vLambertRadiance.rgb += 0.471f * voxelTraceCone(vertexPosition_worldspace.xyz, -0.823639f*vertexTangent_worldspace + 0.5f*vertexNormal_worldspace + -0.267617f*vertexBinormal_worldspace, iblConeRatio, iblMaxDist).rgb;
+	}
+	
+	//Specular Light
+	
+	if(vMREC.y < 0.6f || vMREC.x > 0.0f)
+	{
+		float3 eyeToFragment = normalize(vertexPosition_worldspace.xyz - cameraPosition.xyz);
+		float3 reflectionDir = reflect(eyeToFragment, vertexNormal_worldspace);		
+		
+		float coneRatio = 0.2f + 0.6f*(vMREC.y - 0.1f);
+		float maxDist = 5.0f;
+		vSpecularRadiance.rgb += voxelTraceCone(vertexPosition_worldspace.xyz, reflectionDir, coneRatio, maxDist).rgb;
+	}
+	
+	output =  vRealAlbedo*vLambertRadiance + float4(vRealSpecularColor, 1.0f)*max(0.0f, vSpecularRadiance);
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	return output;
+}

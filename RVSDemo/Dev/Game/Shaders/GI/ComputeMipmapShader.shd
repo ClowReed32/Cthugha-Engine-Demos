@@ -1,0 +1,102 @@
+[Compute shader]
+
+int srcMipLevel;
+
+int cascadeResolution;
+int cascade;
+int iReadOffset;
+int iWriteOffset;
+
+RWTexture3D<float4> dstMip;
+Texture3D<float4> srcTex;
+
+[numthreads(16, 8, 1)]
+
+void main( uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex )
+{
+	int3 dstPos = DTid;
+	int3 srcPos = 2*dstPos;
+	
+	int mipCascadeResolution = cascadeResolution >> 1;
+	
+	if(dstPos.x < mipCascadeResolution && dstPos.y < mipCascadeResolution && dstPos.z < mipCascadeResolution)
+	{
+				float4 srcColor1[6], srcColor2[6], srcColor3[6], srcColor4[6], srcColor5[6], srcColor6[6], srcColor7[6], srcColor0[6];
+		
+		for(int i = 0; i < 6; i++)
+		{
+			int3 offset = int3(0, cascadeResolution*i + iReadOffset, cascadeResolution*cascade);
+		
+			srcColor0[i] = srcTex.Load(int4(offset + srcPos + int3(0, 0, 0), srcMipLevel));
+			srcColor1[i] = srcTex.Load(int4(offset + srcPos + int3(1, 0, 0), srcMipLevel));
+			srcColor2[i] = srcTex.Load(int4(offset + srcPos + int3(0, 1, 0), srcMipLevel));
+			srcColor3[i] = srcTex.Load(int4(offset + srcPos + int3(1, 1, 0), srcMipLevel));
+			srcColor4[i] = srcTex.Load(int4(offset + srcPos + int3(0, 0, 1), srcMipLevel));
+			srcColor5[i] = srcTex.Load(int4(offset + srcPos + int3(1, 0, 1), srcMipLevel));
+			srcColor6[i] = srcTex.Load(int4(offset + srcPos + int3(0, 1, 1), srcMipLevel));
+			srcColor7[i] = srcTex.Load(int4(offset + srcPos + int3(1, 1, 1), srcMipLevel));
+		}
+		
+		float4 outColor;
+			
+		// +X
+		outColor =
+			srcColor0[0] + srcColor1[0] * (1.0 - srcColor0[0].w)
+			+ srcColor2[0] + srcColor3[0] * (1.0 - srcColor2[0].w)
+			+ srcColor4[0] + srcColor5[0] * (1.0 - srcColor4[0].w)
+			+ srcColor6[0] + srcColor7[0] * (1.0 - srcColor6[0].w);
+		
+		outColor *= 0.25f;
+		dstMip[int3(dstPos.x, dstPos.y + iWriteOffset, dstPos.z)] = outColor ;
+		
+		// -X
+		outColor =
+			srcColor1[1] + srcColor0[1] * (1.0 - srcColor1[1].w)
+			+ srcColor3[1] + srcColor2[1] * (1.0 - srcColor3[1].w)
+			+ srcColor5[1] + srcColor4[1] * (1.0 - srcColor5[1].w)
+			+ srcColor7[1] + srcColor6[1] * (1.0 - srcColor7[1].w);
+			
+		outColor *= 0.25f;
+		dstMip[int3(dstPos.x, dstPos.y + mipCascadeResolution + iWriteOffset, dstPos.z)] = outColor;
+		
+		// +Y
+		outColor =
+			srcColor0[2] + srcColor2[2] * (1.0 - srcColor0[2].w)
+			+ srcColor1[2] + srcColor3[2] * (1.0 - srcColor1[2].w)
+			+ srcColor4[2] + srcColor6[2] * (1.0 - srcColor4[2].w)
+			+ srcColor5[2] + srcColor7[2] * (1.0 - srcColor5[2].w);
+			
+		outColor *= 0.25f;
+		dstMip[int3(dstPos.x, dstPos.y + mipCascadeResolution*2 + iWriteOffset, dstPos.z)] = outColor;
+		
+		// -Y
+		outColor =
+			srcColor2[3] + srcColor0[3] * (1.0 - srcColor2[3].w)
+			+ srcColor3[3] + srcColor1[3] * (1.0 - srcColor3[3].w)
+			+ srcColor6[3] + srcColor4[3] * (1.0 - srcColor6[3].w)
+			+ srcColor7[3] + srcColor5[3] * (1.0 - srcColor7[3].w);
+			
+		outColor *= 0.25f;
+		dstMip[int3(dstPos.x, dstPos.y + mipCascadeResolution*3 + iWriteOffset, dstPos.z)] = outColor;
+		
+		// +Z
+		outColor =
+			srcColor0[4] + srcColor4[4] * (1.0 - srcColor0[4].w)
+			+ srcColor1[4] + srcColor5[4] * (1.0 - srcColor1[4].w)
+			+ srcColor2[4] + srcColor6[4] * (1.0 - srcColor2[4].w)
+			+ srcColor3[4] + srcColor7[4] * (1.0 - srcColor3[4].w);
+			
+		outColor *= 0.25f;
+		dstMip[int3(dstPos.x, dstPos.y + mipCascadeResolution*4 + iWriteOffset, dstPos.z)] = outColor;
+		
+		// -Z
+		outColor =
+			srcColor4[5] + srcColor0[5] * (1.0 - srcColor4[5].w)
+			+ srcColor5[5] + srcColor1[5] * (1.0 - srcColor5[5].w)
+			+ srcColor6[5] + srcColor2[5] * (1.0 - srcColor6[5].w)
+			+ srcColor7[5] + srcColor3[5] * (1.0 - srcColor7[5].w);
+				
+		outColor *= 0.25f;	
+		dstMip[int3(dstPos.x, dstPos.y + mipCascadeResolution*5 + iWriteOffset, dstPos.z)] = outColor;
+	}
+}

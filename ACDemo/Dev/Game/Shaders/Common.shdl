@@ -1,0 +1,89 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		COMMON_FUNCTIONS_AND_DEFINES   								   		   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+// Sphere-Sphere Intersection
+bool Sphere_Sphere_Intersection(float3 vSphereCenter0, float fSphereRadius0, float3 vSphereCenter1, float fSphereRadius1)
+{
+	float3 vCenter1ToCenter0 = vSphereCenter1 - vSphereCenter0;
+	float fSquareLength = dot(vCenter1ToCenter0, vCenter1ToCenter0);
+	float fSquareRadiusSum = fSphereRadius0 + fSphereRadius1;
+	fSquareRadiusSum *= fSquareRadiusSum;
+	
+	return fSquareRadiusSum > fSquareLength;
+}
+
+// Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
+
+/*
+* Clips a ray to an AABB.  Does not handle rays parallel to any of the planes.
+*
+* @param RayOrigin - The origin of the ray in world space.
+* @param RayEnd - The end of the ray in world space.  
+* @param BoxMin - The minimum extrema of the box.
+* @param BoxMax - The maximum extrema of the box.
+* @return - Returns the closest intersection along the ray in x, and furthest in y.  
+*			If the ray did not intersect the box, then the furthest intersection <= the closest intersection.
+*			The intersections will always be in the range [0,1], which corresponds to [RayOrigin, RayEnd] in worldspace.
+*			To find the world space position of either intersection, simply plug it back into the ray equation:
+*			WorldPos = RayOrigin + (RayEnd - RayOrigin) * Intersection;
+*/
+float2 Ray_Aabb_Intersect(float3 vRayOrigin, float3 vRayEnd, float3 vBoxMin, float3 vBoxMax)
+{
+	float3 vInvRayDir = 1.0f / (vRayEnd - vRayOrigin);
+	
+	//find the ray intersection with each of the 3 planes defined by the minimum extrema.
+	float3 vFirstPlaneIntersections = (vBoxMin - vRayOrigin) * vInvRayDir;
+	//find the ray intersection with each of the 3 planes defined by the maximum extrema.
+	float3 vSecondPlaneIntersections = (vBoxMax - vRayOrigin) * vInvRayDir;
+	//get the closest of these intersections along the ray
+	float3 vClosestPlaneIntersections = min(vFirstPlaneIntersections, vSecondPlaneIntersections);
+	//get the furthest of these intersections along the ray
+	float3 vFurthestPlaneIntersections = max(vFirstPlaneIntersections, vSecondPlaneIntersections);
+
+	float2 vBoxIntersections;
+	//find the furthest near intersection
+	vBoxIntersections.x = max(vClosestPlaneIntersections.x, max(vClosestPlaneIntersections.y, vClosestPlaneIntersections.z));
+	//find the closest far intersection
+	vBoxIntersections.y = min(vFurthestPlaneIntersections.x, min(vFurthestPlaneIntersections.y, vFurthestPlaneIntersections.z));
+	//clamp the intersections to be between RayOrigin and RayEnd on the ray
+	return saturate(vBoxIntersections);
+}
+
+bool Point_Cylinder_Intersect(float3 vCylinderInitPoint, float3 vCylinderDir, float fCylinderHeight, float vCylinderRadius, float3 vPoint)
+{
+	float fPointProj = dot(vCylinderDir, vPoint - vCylinderInitPoint);
+	
+	if(fPointProj < 0.0f || fPointProj > fCylinderHeight)
+		return false;
+	
+	float3 vPointToCylinderAxis = vPoint - (vCylinderInitPoint + vCylinderDir*fPointProj);
+	float fSqrDistanceToCylinderAxis = dot(vPointToCylinderAxis, vPointToCylinderAxis);
+	
+	return (vCylinderRadius*vCylinderRadius) > fSqrDistanceToCylinderAxis;
+}
+
+bool Sphere_Cylinder_Intersect(float3 vCylinderInitPoint, float3 vCylinderDir, float fCylinderHeight, float vCylinderRadius, float3 vSphereCenter, float fSphereRadius)
+{
+	float fPointProj = dot(vCylinderDir, vSphereCenter - vCylinderInitPoint);
+	
+	if((fPointProj + fSphereRadius) < 0.0f || (fPointProj - fSphereRadius) > fCylinderHeight)
+		return false;
+	
+	float3 vPointToCylinderAxis = vSphereCenter - (vCylinderInitPoint + vCylinderDir*fPointProj);
+	float fSqrDistanceToCylinderAxis = dot(vPointToCylinderAxis, vPointToCylinderAxis);
+	
+	float fSquareRadiusSum = vCylinderRadius + fSphereRadius;
+	fSquareRadiusSum *= fSquareRadiusSum;
+	
+	return fSquareRadiusSum > fSqrDistanceToCylinderAxis;
+}
+
+uint2 PackRGBA16(float4 c)
+{
+    return f32tof16(c.rg) | (f32tof16(c.ba) << 16);
+}

@@ -1,0 +1,91 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		DECAL_BLOOD_SHADER								   			   		   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexDepth_projectspace  : SV_Position;
+	float4 vertexPosition_projectspace : TexCoord0;
+};
+
+[Vertex shader]
+
+float4x4 World;
+float4x4 View;
+float4x4 Projection;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	float4 vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World);
+	float4 vertexPosition_viewSpace = mul(vertexPosition_worldspace, View);
+	float4 worldViewProjPosition = mul(vertexPosition_viewSpace, Projection);
+	output.vertexDepth_projectspace = worldViewProjPosition;
+	output.vertexPosition_projectspace = worldViewProjPosition;
+	
+	return output;
+ }
+
+[Fragment shader]
+
+#include "Shaders\Decals\Decals.shdl"
+
+struct PsOut 
+{
+	//float4 normalRT   : SV_Target0;
+	float4 albedoRT   : SV_Target1;
+	float4 MREC_RT	  : SV_Target2;
+};
+
+//Textures////////////////////////////////
+Texture2D t_DiffuseMap;
+//////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState BaseFilter;
+//////////////////////////////////////////
+
+//Camera constant
+float4 vCameraPosition;
+float2 vSymbolOffset;
+
+PsOut main(PsIn In)
+{
+	PsOut output;
+	
+	output.albedoRT = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	output.MREC_RT = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	float2 vVertexPosition_projectspace = In.vertexPosition_projectspace.xy/In.vertexPosition_projectspace.w;
+	float fDepth = tex_DepthTarget.SampleLevel(TargetSampler, float2(0.5f, -0.5f)*vVertexPosition_projectspace + 0.5f, 0.0f);
+	float2 vDecalCoods = GetDecalsCoords(vVertexPosition_projectspace, fDepth);
+	
+	// Offset Symbol decals
+	vDecalCoods = vSymbolOffset + float2(vDecalCoods.x * 0.25f, vDecalCoods.y * 0.5f);
+	
+	// Albedo //////////////////////////////////////////////////////////////////////////////////////////
+	float4 vDiffuse = t_DiffuseMap.Sample(BaseFilter, vDecalCoods).rgba;
+	output.albedoRT = vDiffuse;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// MREC ////////////////////////////////////////////////////////////////////////////////////////////	
+	output.MREC_RT.x = 0.0f;	
+	output.MREC_RT.y = 1.0f;	
+	output.MREC_RT.z = 1.0f;
+	output.MREC_RT.w = 1.0f*vDiffuse.a;
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	return output;
+}

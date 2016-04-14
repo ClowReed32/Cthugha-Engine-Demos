@@ -1,0 +1,118 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		ROCKS_MATERIAL									   			   		   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+	float3 vertexNormal_modelspace	 : Normal;
+	float2 vertexUV_modelspace		 : TexCoord;
+	float3 vertexTangent_modelspace	 : Tangent;
+	float3 vertexBinormal_modelspace : Binormal;
+};
+
+// Output data
+struct PsIn 
+{
+	float3 vertexNormal_worldspace   : Normal;
+	float4 vertexDepth_projectspace  : SV_Position;
+	float4 vertexPosition_viewSpace  : TexCoord0;
+	float4 vertexPosition_worldspace : TexCoord1;
+	float2 vertexUV					 : TexCoord2;
+	float3 vertexTangent_worldspace  : Tangent;
+	float3 vertexBinormal_worldspace : Binormal;
+};
+
+[Vertex shader]
+
+float4x4 World;
+float4x4 View;
+float4x4 Projection;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	float4 vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World);
+	output.vertexPosition_viewSpace = mul(vertexPosition_worldspace, View);
+	float4 worldViewProjPosition = mul(output.vertexPosition_viewSpace, Projection);
+	output.vertexDepth_projectspace = worldViewProjPosition;
+	
+	output.vertexPosition_worldspace = vertexPosition_worldspace;
+	output.vertexNormal_worldspace = normalize(mul(float4(In.vertexNormal_modelspace, 0.0f), World).xyz);
+	output.vertexUV.x = In.vertexUV_modelspace.x;
+	output.vertexUV.y = 1.0f - In.vertexUV_modelspace.y;
+	output.vertexTangent_worldspace = normalize(mul(float4(In.vertexTangent_modelspace, 0.0f), World).xyz);
+	output.vertexBinormal_worldspace = normalize(mul(float4(In.vertexBinormal_modelspace, 0.0f), World).xyz);
+	
+	return output;
+ }
+
+[Fragment shader]
+
+struct PsOut 
+{
+	float depthRT	  : SV_Target0;
+	float4 normalRT   : SV_Target1;
+	float4 albedoRT   : SV_Target2;
+	float4 MREC_RT	  : SV_Target3;
+	float4 tangentRT  : SV_Target4;
+};
+
+//Textures////////////////////////////////
+Texture2D t_DiffuseMap;
+Texture2D t_NormalMap;
+//////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState BaseFilter;
+//////////////////////////////////////////
+
+//Camera constant
+float4 vCameraPosition;
+
+PsOut main(PsIn In)
+{
+	PsOut output;
+	
+	output.albedoRT = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	output.normalRT = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	output.MREC_RT = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	// Normal ///////////////////////////////////////////////////////////////////////////////////////
+	float3 tangent_worldSpace = In.vertexTangent_worldspace;
+	float3 normal_worldSpace = In.vertexNormal_worldspace;
+	float3 binormal_worldSpace = In.vertexBinormal_worldspace;
+	float3x3 matInverse = float3x3(tangent_worldSpace, -binormal_worldSpace, normal_worldSpace);
+	
+	float3 bumpNormal = normalize(2.0f*(t_NormalMap.Sample(BaseFilter , In.vertexUV).rgb - 0.5f));
+	bumpNormal = mul(bumpNormal, matInverse);
+	output.normalRT = float4(bumpNormal, 0.0f);
+	output.tangentRT = float4(In.vertexTangent_worldspace, 0.0f);
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Albedo //////////////////////////////////////////////////////////////////////////////////////////
+	float3 vDiffuse = t_DiffuseMap.Sample(BaseFilter, In.vertexUV).rgb;
+	output.albedoRT = float4(vDiffuse, 1.0f);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// MREC ////////////////////////////////////////////////////////////////////////////////////////////	
+	output.MREC_RT.x = 0.0f;	
+	output.MREC_RT.y = 1.0f;	
+	output.MREC_RT.z = 0.0f;
+	output.MREC_RT.w = 1.0f;
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Depth ////////////////////////////////////////////////////////////////////////////////////////
+	output.depthRT = length(In.vertexPosition_viewSpace.xyz);
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	return output;
+}

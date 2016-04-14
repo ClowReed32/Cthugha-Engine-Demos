@@ -1,0 +1,233 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		GI_LIGHTING_FUNCTIONS_AND_DEFINES   								   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+#define MAX_LIGHTS 256
+#define MAX_DIRECTIONAL_LIGHT 32
+
+#define PI 3.14159265359f
+
+int iActiveShadows;
+
+// Lights Struct ///////////////////////////////////////////////////////////
+
+struct DirectionalLight
+{
+	float3 vColor;
+	float fIntensitive;
+	float3 vViewLightDirection;
+	int iShadows;
+	float3 vViewInitPosition;
+	float fLength;
+	float3 vPadding;
+	float fMaxRadius;	
+};
+
+struct PointSpotLight
+{
+	float3 vColor;
+	float fIntensitive;
+	float3 vViewPosition;
+	float fRadius;
+	int iShadows;
+	float fTheta;
+	float fPhi;
+	int iType;
+	float3 vLightDirection;
+	int iUnused;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
+// Lights Properties ////////////////////////////////////////////////////////
+
+StructuredBuffer<PointSpotLight> sbPointLights : register(t5);
+DirectionalLight cbDirectionalLights[MAX_DIRECTIONAL_LIGHT];
+
+int iNumDirectionalLights;
+int iNumPointLights;
+
+float4x4 mInverseView; //Change
+
+/////////////////////////////////////////////////////////////////////////////
+
+#include "Shaders\ShadowShaders\SignedDistanceFieldShadows.shdl"
+//#include "Shaders\Common.shdl"
+
+/////////////////////////////////////////////////////////////////////////////
+
+//Pixel Transform Function///////////////////////////////////////////////////////////////////////////////////////////////////////////
+float4 convRGBA8Tofloat4(uint val)
+{
+	return float4( float((val&0x000000FF)), float((val&0x0000FF00)>>8U), float((val&0x00FF0000)>>16U), float((val&0xFF000000)>>24U) );
+}
+
+float4 directionalLightDirectIllumination(float4 diffuseColor,									  
+										  float4 vertexNormal_viewspace, 
+										  float4 vPosition_viewspace, 
+										  DirectionalLight light, 
+										  uint uLightIndex)
+{
+	[branch]
+	if(light.fMaxRadius != 0 && !Point_Cylinder_Intersect(light.vViewInitPosition, light.vViewLightDirection, light.fLength, light.fMaxRadius, vPosition_viewspace.xyz))
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	//Shadow Calculate	
+	float shadowOcclusion = 1.0f;
+	
+	// Shadows /////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[branch]
+	if(light.iShadows && iActiveShadows == 1)
+	{
+		shadowOcclusion = SDFDirectionalShadowsGI(vPosition_viewspace, 
+												light, 
+												uLightIndex);
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	float3 vLightDirection = -light.vViewLightDirection;	
+	float fNoL = saturate(dot(vLightDirection, vertexNormal_viewspace.xyz));
+	
+	return shadowOcclusion*light.fIntensitive*float4(light.vColor, 1.0f)*(diffuseColor)*fNoL;
+}
+
+float4 pointLightDirectIllumination(float4 diffuseColor, 
+									float4 vertexNormal_viewspace, 
+									float4 vPosition_viewspace, 
+									PointSpotLight light, 
+									uint uLightIndex)
+{
+	float3 vLightingResult = float3(0.0f, 0.0f, 0.0f);
+	float3 vLightDirection = light.vViewPosition - vPosition_viewspace.xyz;
+	float Distance = length(vLightDirection);
+
+	[branch]
+	if(Distance > light.fRadius)
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+	//Shadow Calculate
+	float shadowOcclusion = 1.0f;
+	
+	// Shadows /////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[branch]
+	if(light.iShadows && iActiveShadows == 1)
+	{
+		shadowOcclusion = SDFSpotPointShadowsGI(vPosition_viewspace, 
+												light, 
+												uLightIndex);
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	vLightDirection /= Distance;
+	float fNoL = saturate(dot(vLightDirection, vertexNormal_viewspace.xyz));
+	
+	float att1 = 1 - pow(Distance/(light.fRadius + 1.0f), 4);
+	float att = saturate(att1*att1)/(Distance*Distance + 1);
+	
+	vLightingResult = att*shadowOcclusion*light.fIntensitive*light.vColor*(diffuseColor.rgb)*fNoL;
+	
+	return float4(vLightingResult, 1.0f);
+}
+
+float4 spotLightDirectIllumination(float4 diffuseColor,
+								   float4 vertexNormal_viewspace, 
+								   float4 vPosition_viewspace, 
+								   PointSpotLight light, 
+								   uint uLightIndex)
+{
+	//Shadow Calculate
+	float shadowOcclusion = 1.0f;
+	
+	float3 vLightDirection = light.vViewPosition - vPosition_viewspace.xyz;
+	float Distance = length(vLightDirection);
+	
+	vLightDirection /= Distance;
+	
+	float cos_cur_angle = dot(-light.vLightDirection, vLightDirection);
+	
+	float cos_thetaAngle = cos(light.fTheta*0.5f);
+	float cos_phiAngle = cos(light.fPhi*0.5f);
+	float cos_inner_minus_outer_angle = cos_thetaAngle - cos_phiAngle;
+	
+	[branch]
+	if(Distance > light.fRadius || cos_cur_angle < cos_phiAngle)
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);	
+	
+	// Shadows /////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[branch]
+	if(light.iShadows && iActiveShadows == 1)
+	{
+		shadowOcclusion = SDFSpotPointShadowsGI(vPosition_viewspace, 
+												light, 
+												uLightIndex);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	[branch]
+	if (cos_cur_angle > cos_thetaAngle) 
+	{
+		float fNoL = saturate(dot(vLightDirection, vertexNormal_viewspace.xyz));
+		
+		float att1 = 1 - pow(Distance/(light.fRadius + 0.0001), 4);
+		float att = saturate(att1*att1)/(Distance*Distance + 1);
+		
+		return att*shadowOcclusion*light.fIntensitive*float4(light.vColor, 1.0f)*(diffuseColor)*fNoL;
+	}
+	else if( cos_cur_angle > cos_phiAngle )
+	{
+		float falloff = (cos_cur_angle - cos_phiAngle) / 
+		cos_inner_minus_outer_angle;
+		
+		float fNoL = saturate(dot(vLightDirection, vertexNormal_viewspace.xyz));
+		
+		float att1 = 1 - pow(Distance/(light.fRadius + 0.0001), 4);
+		float att = saturate(att1*att1)/(Distance*Distance + 1);
+		
+		return falloff*att*shadowOcclusion*light.fIntensitive*float4(light.vColor, 1.0f)*(diffuseColor)*fNoL;
+	}
+	
+	return float4(0.0f, 0.0f, 0.0f, 0.0f);	
+}
+
+float4 PointLightBRDFFunction(float4 diffuseColor, 
+							  float4 vertexNormal_viewspace, 
+							  float4 vPosition_viewspace, 
+							  PointSpotLight light, 
+							  uint uLightIndex)
+{
+	[branch]
+	if(light.iType == 1)
+	{
+		return pointLightDirectIllumination(diffuseColor, 
+											vertexNormal_viewspace, 
+											vPosition_viewspace, 
+											light, 
+											uLightIndex);
+	}
+	else if(light.iType == 2)
+	{
+		return spotLightDirectIllumination(diffuseColor, 
+										   vertexNormal_viewspace, 
+										   vPosition_viewspace,
+										   light, 
+										   uLightIndex);
+	}
+	
+	return float4(0.0f, 0.0f, 0.0f, 0.0f);
+}
+
+float4 DirectionalLightBRDFFunction(float4 diffuseColor, 
+									float4 vertexNormal_viewspace, 
+									float4 vPosition_viewspace, 
+									DirectionalLight light, 
+									uint uLightIndex)
+{
+	return directionalLightDirectIllumination(diffuseColor, 
+											  vertexNormal_viewspace, 
+											  vPosition_viewspace, 
+											  light, 
+											  uLightIndex);
+}

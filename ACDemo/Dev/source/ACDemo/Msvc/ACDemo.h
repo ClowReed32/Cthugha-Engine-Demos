@@ -10,18 +10,13 @@ public:
 class CreatureEditor;
 
 //---------------------------------------------------------------------------------------------------------------------
-// EvolutioneLogic class                        
+// AncientCivilizationDemoLogic class                        
 //---------------------------------------------------------------------------------------------------------------------
 class AncientCivilizationDemoLogic : public BaseGameLogic
 {
 public:
 	AncientCivilizationDemoLogic();
 	virtual ~AncientCivilizationDemoLogic();
-
-	// Evolutione Methods
-
-	// Update
-    //virtual void VMoveActor(const EntityId id, Mat4x4 const &mat);
 
 	// Overloads
 	virtual void VChangeState(BaseGameState newState);

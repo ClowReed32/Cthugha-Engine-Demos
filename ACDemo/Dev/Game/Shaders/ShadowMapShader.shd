@@ -1,0 +1,37 @@
+
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+struct PsIn 
+{
+	float4 vertexPosition_projectspace : SV_Position;
+	float4 vertexPosition_projectspace1 : TexCoord0;
+};
+
+[Vertex shader]
+
+float4x4 View;
+float4x4 Projection;
+float4x4 World;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	float4 vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World);
+	output.vertexPosition_projectspace = mul(mul(vertexPosition_worldspace, View), Projection);
+	output.vertexPosition_projectspace1 = output.vertexPosition_projectspace;
+	
+	return output;
+}
+
+[Fragment shader]
+
+float main(PsIn In) : SV_Depth
+{
+	float fragmentDepth  = In.vertexPosition_projectspace1.z/In.vertexPosition_projectspace1.w;
+	
+	return fragmentDepth;
+}

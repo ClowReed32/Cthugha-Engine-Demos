@@ -1,0 +1,153 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		GLOBAL ILLUMINATION METHODS	  								   		   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+	float3 vertexNormal_modelspace	 : Normal;
+	float2 vertexUV_modelspace		 : TexCoord;
+};
+
+// Output data
+struct GsIn 
+{
+	float3 vertexNormal_worldspace   : Normal;
+	float4 vertexPosition_unitcube   : SV_Position;
+	float3 vertexPosition_worldspace : TexCoord0;
+	float2 vertexUV					 : TexCoord1;
+};
+
+struct PsIn
+{
+	float3 gs_VertexNormal_worldspace	: Normal;
+	float4 gs_VertexPosition_unitspace	: SV_Position;
+	float3 gs_VertexPosition_worldspace	: TexCoord0;
+	float2 gs_VertexUV					: TexCoord1;
+	float4 gs_VertexPosition_voxelspace : TexCoord2;
+};
+
+// Vertex Shader Uniform
+float4x4 worldToUnitCube;
+float4x4 World;
+
+// Pixel Shader Uniform
+
+//Voxel Grid Uniform/////////////////////
+RWTexture3D<uint> voxelDataGrid;
+int cascade;
+int cascadeResolution;
+/////////////////////////////////////////
+
+void VoxelizationGeometryShader(triangle GsIn input [3], inout TriangleStream <PsIn> outputStream)
+{
+	PsIn output;
+
+    // Calculate swizzle matrix based on eye space normal's dominant direction.
+    float3 unitSpaceV1 = normalize(input[1].vertexPosition_unitcube.xyz - input[0].vertexPosition_unitcube.xyz);
+	float3 unitSpaceV2 = normalize(input[2].vertexPosition_unitcube.xyz - input[0].vertexPosition_unitcube.xyz);
+	float3 unitSpaceNormal = abs(cross(unitSpaceV1, unitSpaceV2));
+	float dominantAxis = max(unitSpaceNormal.x, max(unitSpaceNormal.y, unitSpaceNormal.z));
+	float4x4 swizzleMatrix;
+	
+	if (dominantAxis == unitSpaceNormal.x)
+    {
+		swizzleMatrix = float4x4(float4(0.0, 0.0, 1.0, 0.0f),
+								 float4(0.0, 1.0, 0.0, 0.0f),
+								 float4(-1.0, 0.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, 0.0, 1.0f));
+    }
+	else if (dominantAxis == unitSpaceNormal.y)
+    {
+		swizzleMatrix = float4x4(float4(1.0, 0.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, -1.0, 0.0f),
+								 float4(0.0, 1.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, 0.0, 1.0f));
+    }
+	else if (dominantAxis == unitSpaceNormal.z)
+    {
+		swizzleMatrix = float4x4(float4(1.0, 0.0, 0.0, 0.0f),
+								 float4(0.0, 1.0, 0.0, 0.0f),
+								 float4(0.0, 0.0, 1.0, 0.0f),
+								 float4(0.0, 0.0, 0.0, 1.0f));
+    }
+	
+	float4x4 gridProjectionMatrix = float4x4(float4(1.0f, 0.0f, 0.0f, 0.0f),
+											 float4(0.0f, 1.0f, 0.0f, 0.0f),
+											 float4(0.0f, 0.0f, 0.5f, 0.0f),
+											 float4(0.0f, 0.0f, 0.5f, 1.0f));
+	
+	// Calculate screen coordinates for triangle.
+	float4 screenPos[3];
+	screenPos[0] = mul( mul( float4( input[0].vertexPosition_unitcube.xyz, 1.0 ), swizzleMatrix ), gridProjectionMatrix);
+	screenPos[1] = mul( mul( float4( input[1].vertexPosition_unitcube.xyz, 1.0 ), swizzleMatrix ), gridProjectionMatrix);
+	screenPos[2] = mul( mul( float4( input[2].vertexPosition_unitcube.xyz, 1.0 ), swizzleMatrix ), gridProjectionMatrix);
+    screenPos[0] /= screenPos[0].w;
+    screenPos[1] /= screenPos[1].w;
+    screenPos[2] /= screenPos[2].w;
+    
+    // Output triangle.
+	output.gs_VertexPosition_worldspace = input[0].vertexPosition_worldspace;
+	output.gs_VertexNormal_worldspace = input[0].vertexNormal_worldspace;
+	output.gs_VertexPosition_unitspace = screenPos[0];
+	output.gs_VertexUV = input[0].vertexUV;
+	output.gs_VertexPosition_voxelspace = input[0].vertexPosition_unitcube;
+	outputStream.Append(output);
+
+	output.gs_VertexPosition_worldspace = input[1].vertexPosition_worldspace;
+	output.gs_VertexNormal_worldspace = input[1].vertexNormal_worldspace;
+	output.gs_VertexPosition_unitspace = screenPos[1];
+	output.gs_VertexUV = input[1].vertexUV;
+	output.gs_VertexPosition_voxelspace = input[1].vertexPosition_unitcube;
+	outputStream.Append(output);
+
+	output.gs_VertexPosition_worldspace = input[2].vertexPosition_worldspace;
+	output.gs_VertexNormal_worldspace = input[2].vertexNormal_worldspace;
+	output.gs_VertexPosition_unitspace = screenPos[2];
+	output.gs_VertexUV = input[2].vertexUV;
+	output.gs_VertexPosition_voxelspace = input[2].vertexPosition_unitcube;
+	outputStream.Append(output);
+
+	outputStream.RestartStrip();
+}
+
+//Pixel Transform Function///////////////////////////////////////////////////////////////////////////////////////////////////////////
+uint convfloat4ToRGBA8(float4 val)
+{
+	return (uint(val.w)&0x000000FF)<<24U | (uint(val.z)&0x000000FF)<<16U | (uint(val.y)&0x000000FF)<<8U | (uint(val.x)&0x000000FF);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Average Storage Voxelization Function///////////////////////////////////////////////////////////////////
+void imageAtomicRGBA8Avg(RWTexture3D<uint> voxelGrid, int3 coords, float4 newVal) 
+{
+	newVal *= 255.0; // Optimise following calculations
+	//newVal.a = 1.0f;
+    uint newValU = convfloat4ToRGBA8(newVal);
+    uint lastValU = 0; 
+    uint currValU;
+    float4 currVal;
+    uint numIterations = 0;
+	
+    // Loop as long as destination value gets changed by other threads
+	InterlockedMax(voxelGrid[coords], newValU, currValU);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void StoreVoxel(float4 vColor, float4 vNormalAndEmission, float3 vVoxelPosition)
+{
+	int3 dimensions = int3(cascadeResolution, cascadeResolution, cascadeResolution);
+	int3 voxelPos = int3(dimensions * (vVoxelPosition * 0.5f + 0.5f));
+	
+	int3 voxelNormalPos = int3(voxelPos.x, voxelPos.y + cascadeResolution, voxelPos.z + cascadeResolution*cascade);
+	int3 voxelColorPos = int3(voxelPos.x, voxelPos.y, voxelPos.z + cascadeResolution*cascade);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	imageAtomicRGBA8Avg(voxelDataGrid, voxelColorPos, float4(vColor.rgb, 1.0f));
+	imageAtomicRGBA8Avg(voxelDataGrid, voxelNormalPos, float4(0.5f*vNormalAndEmission.rgb + 0.5f, vNormalAndEmission.a));
+}

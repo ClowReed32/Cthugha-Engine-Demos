@@ -1,0 +1,46 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		SMAA: BLENDING WEIGHT CALCULATION                         			   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+#include "Shaders\ScreenPostProcessing\SMAA_Common.shdl"
+
+[Vertex shader]
+ 
+float2 fPixelSize;
+ 
+void main(VsIn In, 
+		  out float4 svPosition : SV_POSITION,
+          out float2 vertexUV : TEXCOORD0,
+		  out float2 pixcoord : TEXCOORD1,
+          out float4 offset[3] : TEXCOORD2)
+{
+	svPosition = float4(In.vertexPosition_modelspace, 1.0f);
+	vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	vertexUV.y = 1.0f - vertexUV.y;
+	
+    pixcoord = vertexUV / fPixelSize;
+
+    // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
+    offset[0] = vertexUV.xyxy + fPixelSize.xyxy * float4(-0.25, -0.125,  1.25, -0.125);
+    offset[1] = vertexUV.xyxy + fPixelSize.xyxy * float4(-0.125, -0.25, -0.125,  1.25);
+
+    // And these for the searches, they indicate the ends of the loops:
+    offset[2] = float4(offset[0].xz, offset[1].yw) + 
+                float4(-2.0, 2.0, -2.0, 2.0) *
+                fPixelSize.xxyy * float(SMAA_MAX_SEARCH_STEPS);
+}
+
+[Fragment shader]
+
+float4 main(float4 position : SV_POSITION, out float2 vertexUV : TEXCOORD0, out float2 pixcoord : TEXCOORD1, out float4 offset[3] : TEXCOORD2) : SV_Target
+{
+	return SMAA_BlendingWeightCalculation(vertexUV, pixcoord, offset);
+}

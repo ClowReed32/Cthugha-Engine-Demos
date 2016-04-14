@@ -1,0 +1,172 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		SSAO SHADER							   				   				   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+};
+
+[Vertex shader]
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	return output;
+ }
+
+[Fragment shader]
+
+struct PsOut 
+{
+	float Ssao	    : SV_Target0;
+	float HalfDepth : SV_Target1;
+};
+
+Texture2D depthTexture;
+Texture2D normalTexture;
+SamplerState targetFilter;
+
+float4x4 View;
+float4x4 InverseProjection;
+float4 cameraPosition;
+
+float3 GetViewPosition(float2 uvCoord)
+{
+	float depth = depthTexture.SampleLevel(targetFilter, uvCoord, 0).x;
+	
+	//Obtain view space position coordinates	
+	uvCoord.y = 1.0f - uvCoord.y;
+	uvCoord = 2.0f*uvCoord - 1.0f;
+	float4 ViewDirection = mul(float4(uvCoord, 0.0f, 1.0f), InverseProjection);
+	ViewDirection /= ViewDirection.w;
+	
+	ViewDirection.xyz = normalize(ViewDirection.xyz);
+	return ViewDirection.xyz * depth;
+}
+
+// Returns a random number based on a vec3 and an int.
+float fract(float x)
+{
+	return x - floor(x);
+}
+
+float random(float3 seed, int i)
+{
+	float4 seed4 = float4(seed,i);
+	float dot_product = dot(seed4, float4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
+PsOut main(PsIn In)
+{
+	// Poisson Samples
+	float2 poissonDisk[4] = {
+		float2(0.9245183f, -0.008800444f),
+		float2(0.2358273f, 0.1075331f),
+		float2(-0.7228245f, 0.1074678f),
+		float2(-0.400057f, 0.9052021f)
+	};
+	
+	float depth = depthTexture.SampleLevel(targetFilter, In.vertexUV, 0).x;
+	
+	// Get current pixel view position
+	float3 vPos = GetViewPosition(In.vertexUV);
+	float3 vNormal = mul(float4(normalize(normalTexture.Sample( targetFilter, In.vertexUV ).xyz), 0.0f), View).xyz;
+	
+	/*float3 dx = ddx(vPos);
+	float3 dy = ddy(vPos);
+	float3 vNormal = normalize(cross(dx,dy));*/
+	
+	float afStepSizeMax = 0.2f;
+	float afRadius = 1.0f;
+	float fNegInvRadius = -0.5f;
+	float fEpsilon = 0.0001f;
+	float fIntensitive = 1.5f;
+	float fOffset = 0.0006f;
+	float fAO = 0.0f;
+	PsOut output;
+	
+	// SSAO Main loop
+
+	//Scale the radius based on how close to the camera it is
+	 float fStepSize = afStepSizeMax * afRadius / vPos.z;
+	 float fStepSizePart = 0.5 * fStepSize / ((2 + 16.0));
+	 
+	 uint diskIndex = 0;
+	 float3 vDelta0;	
+	
+	 for(float d = 0.0; d < 16.0; d+=4.0)
+	 {
+			///////////////////////////////
+			// Create random rotate matrix
+			
+			float rotateAngle = random(vPos, diskIndex)*2.0f*3.1416f;
+			
+			float cosAngle = cos(rotateAngle);
+			float sinAngle = sin(rotateAngle);
+			float2x2 mtxRot = float2x2( cosAngle, -sinAngle,
+										 sinAngle, cosAngle);
+	 
+			//////////////
+			// Sample four points at the same time
+			float4 vOffset = (d + float4(2, 3, 4, 5))* fStepSizePart;
+			
+			//////////////////////
+			// Rotate the samples
+			float2 vUV1 = mul(mtxRot, poissonDisk[diskIndex]);
+			float2 vUV0 = mul(mtxRot, vUV1);
+			
+			vDelta0 = GetViewPosition(In.vertexUV - vUV1 * vOffset.x);
+			float3 vDelta1 = GetViewPosition(In.vertexUV - vUV1 * vOffset.y) - vPos;
+			float3 vDelta2 = GetViewPosition(In.vertexUV + vUV0 * vOffset.z) - vPos;
+			float3 vDelta3 = GetViewPosition(In.vertexUV - vUV0 * vOffset.w) - vPos;
+
+			float4 vDistanceSqr = float4(dot(vDelta0, vDelta0),
+									 dot(vDelta1, vDelta1),
+									 dot(vDelta2, vDelta2),
+									 dot(vDelta3, vDelta3));
+
+			float4 vInvertedLength = 1.0f/(sqrt(vDistanceSqr) + fEpsilon);
+
+			float4 vFalloff = float4(1.0f, 1.0, 1.0, 1.0) + vDistanceSqr * vInvertedLength * fNegInvRadius;
+
+			float4 vAngle = float4(dot(vNormal, vDelta0),
+								dot(vNormal, vDelta1),
+								dot(vNormal, vDelta2),
+								dot(vNormal, vDelta3))*vInvertedLength + vPos.z*fOffset;
+
+
+			////////////////////
+			// Calculates the sum based on the angle to the normal and distance from point
+			fAO += dot(max(float4(0.0f, 0.0f, 0.0f, 0.0f), vAngle), max(float4(0.0f, 0.0f, 0.0f, 0.0f), vFalloff));
+			//fAO.xyz = vDelta0;			
+						
+			diskIndex++;
+	}
+	
+	//////////////////////////////////
+	// Get the final AO by multiplying by number of samples
+	fAO = max(0.0f, 1.0f - fAO * (fIntensitive/16.0f));
+	
+	output.Ssao = fAO;
+	output.HalfDepth = depth;
+	
+	return output;
+}

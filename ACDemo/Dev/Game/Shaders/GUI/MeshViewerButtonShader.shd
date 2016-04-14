@@ -1,0 +1,250 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		MESH VIEWER BUTTON SHADER			   				   				   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+	float3 vertexNormal_modelspace	 : Normal;
+	float2 vertexUV_modelspace		 : TexCoord;
+	float3 vertexTangent_modelspace	 : Tangent;
+	float3 vertexBinormal_modelspace : Binormal;
+};
+
+// Output data
+struct PsIn 
+{
+	float3 vertexNormal_worldspace   : Normal;
+	float4 vertexDepth_projectspace  : SV_Position;
+	float4 vertexPosition_worldspace : TexCoord0;
+	float2 vertexUV					 : TexCoord1;
+	float3 vertexTangent_worldspace  : Tangent;
+	float3 vertexBinormal_worldspace : Binormal;
+};
+
+[Vertex shader]
+
+float4x4 World;
+float fAspect;
+
+PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	float4x4 View = float4x4(1.0f, 0.0f,  0.0f, 0.0f,
+							 0.0f, 1.0f,  0.0f, 0.0f,
+							 0.0f, 0.0f, -1.0f, 0.0f,
+							 0.0f, 0.0f,  8.0f, 1.0f);
+							 
+	float4x4 Projection = float4x4(2.41421342f/fAspect,		   0.0f, 		  0.0f, 0.0f,
+												  0.0f,	2.41421342f, 		  0.0f, 0.0f,
+												  0.0f,		   0.0f,   1.00083399f, 1.0f,
+												  0.0f,		   0.0f, -0.100083403f, 0.0f);
+	
+	float4 vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World);
+	float4 vertexPosition_viewSpace = mul(vertexPosition_worldspace, View);
+	float4 worldViewProjPosition = mul(vertexPosition_viewSpace, Projection);
+	output.vertexDepth_projectspace = worldViewProjPosition;
+	
+	output.vertexPosition_worldspace = vertexPosition_worldspace;
+	output.vertexNormal_worldspace = mul(float4(In.vertexNormal_modelspace, 0.0f), World).xyz;
+	output.vertexUV.x = In.vertexUV_modelspace.x;
+	output.vertexUV.y = 1.0f - In.vertexUV_modelspace.y;
+	output.vertexTangent_worldspace = mul(float4(In.vertexTangent_modelspace, 0.0f), World).xyz;
+	output.vertexBinormal_worldspace = mul(float4(In.vertexBinormal_modelspace, 0.0f), World).xyz;
+	
+	return output;
+ }
+
+[Fragment shader]
+
+//Textures////////////////////////////////
+Texture2D ColorTexture;
+Texture2D NormalTexture;
+Texture2D SpecularTexture;
+//////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState BaseFilter;
+//////////////////////////////////////////
+
+//Material////////////////////////////////
+float4 DiffuseColor;
+
+float Exponent;
+float4 kE;
+float kS;
+
+int bColorTexture;
+int bSpecularTexture;
+int bNormalTexture;
+int bParallaxMap;
+
+float displacementDepth;
+////////////////////////////////////////////
+
+float fLightIntensitive;
+
+//Parallax Occlusion Mapping/////////////////////////////////////////////////////
+
+float2 parallaxMapping(float3 ViewDir_tangentspace, float3 ViewDir_worldspace, float2 T, float3 normal_worldSpace, out float parallaxHeight)
+{
+	ViewDir_worldspace = normalize(ViewDir_worldspace);
+
+	// determine optimal number of layers
+	const float minLayers = 10;
+	const float maxLayers = 100;
+	int nNumSteps = (int)lerp( maxLayers, minLayers, dot( ViewDir_worldspace, normal_worldSpace ) );
+	
+	parallaxHeight = 0.08f;
+	
+	float2 vParallaxDirection = -normalize(ViewDir_tangentspace.xy);
+	
+	// The length of this vector determines the furthest amount of displacement:
+    float fLength         = length(ViewDir_tangentspace);
+    float fParallaxLength = sqrt( fLength * fLength - ViewDir_tangentspace.z * ViewDir_tangentspace.z ) / ViewDir_tangentspace.z; 
+       
+    // Compute the actual reverse parallax displacement vector:
+    float2 vParallaxOffsetTS = vParallaxDirection * fParallaxLength * displacementDepth;
+	
+	// Compute all the derivatives:
+	float2 dx = ddx(T);
+	float2 dy = ddy(T);
+	
+	float fCurrHeight = 0.0;
+	float fStepSize   = 1.0 / (float) nNumSteps;
+	float fPrevHeight = 1.0;
+	float fNextHeight = 0.0;
+	
+	int    nStepIndex = 0;
+	bool   bCondition = true;
+
+	float2 vTexOffsetPerStep = fStepSize * vParallaxOffsetTS;
+	float2 vTexCurrentOffset = T;
+	float  fCurrentBound     = 1.0;
+	float  fParallaxAmount   = 0.0;
+
+	float2 pt1 = 0;
+	float2 pt2 = 0;
+
+	float2 texOffset2 = 0;
+   
+	while ( nStepIndex < nNumSteps ) 
+	{
+		vTexCurrentOffset -= vTexOffsetPerStep;
+
+		// Sample height map which in this case is stored in the alpha channel of the normal map:
+		fCurrHeight = NormalTexture.SampleGrad( BaseFilter, vTexCurrentOffset, dx, dy ).a;
+
+		fCurrentBound -= fStepSize;
+
+		if ( fCurrHeight > fCurrentBound ) 
+		{     
+			pt1 = float2( fCurrentBound, fCurrHeight );
+			pt2 = float2( fCurrentBound + fStepSize, fPrevHeight );
+
+			texOffset2 = vTexCurrentOffset - vTexOffsetPerStep;
+
+			nStepIndex = nNumSteps + 1;
+		}
+		else
+		{
+			nStepIndex++;
+			fPrevHeight = fCurrHeight;
+		}
+	}   // End of while ( nStepIndex < nNumSteps )
+   
+	float fDelta2 = pt2.x - pt2.y;
+	float fDelta1 = pt1.x - pt1.y;
+	float fDenominator = fDelta2 - fDelta1;
+      
+	// SM 3.0 and above requires a check for divide by zero since that operation will generate an 'Inf' number instead of 0
+	[flatten]if ( fDenominator == 0.0f ) 
+	{
+		fParallaxAmount = 0.0f;
+	}
+	else
+	{
+		fParallaxAmount = ( pt1.x * fDelta2 - pt2.x * fDelta1 ) / fDenominator;
+	}
+   
+	float2 vParallaxOffset = vParallaxOffsetTS * ( 1.0 - fParallaxAmount );
+	
+	return T - vParallaxOffset;
+}
+////////////////////////////////////////////////////////////////////////////////////
+
+float4 main(PsIn In) : SV_Target
+{
+	float4 output;
+	float2 parallaxUVCoord = In.vertexUV;	
+	float parallaxHeight;
+	
+	//Camera constant
+	float3 vCameraPosition = float3(0.0f, 0.0f, 8.0f);
+	
+	float4 vColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 vNormal = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float fSpecularConstant = 0.0f;
+	
+	if(bNormalTexture == 1)
+	{
+		float3 tangent_worldSpace = normalize(In.vertexTangent_worldspace);
+		tangent_worldSpace = float3(-tangent_worldSpace.x, tangent_worldSpace.y, -tangent_worldSpace.z);
+		float3 normal_worldSpace = normalize(In.vertexNormal_worldspace);
+		float3 binormal_worldSpace = normalize(In.vertexBinormal_worldspace);
+		float3x3 matInverse = float3x3(tangent_worldSpace, binormal_worldSpace, normal_worldSpace);		
+		
+		if(bParallaxMap == 1)
+		{
+			float3 ViewDir_worldspace = vCameraPosition - In.vertexPosition_worldspace;
+			float3 ViewDir_tangentspace = mul(matInverse, ViewDir_worldspace);
+			parallaxUVCoord = parallaxMapping(ViewDir_tangentspace, ViewDir_worldspace, In.vertexUV, In.vertexNormal_worldspace, parallaxHeight);
+		}
+		
+		float3 bumpNormal = normalize(2.0f*(NormalTexture.Sample(BaseFilter , parallaxUVCoord).rgb - 0.5f));
+				
+		bumpNormal = mul(bumpNormal, matInverse);
+		
+		vNormal = float4(bumpNormal, 0.0f);
+	}
+	else
+	{
+		vNormal.xyz = normalize(In.vertexNormal_worldspace);
+	}
+	
+	if(bColorTexture == 1)
+	{
+		vColor = ColorTexture.Sample(BaseFilter, parallaxUVCoord);
+	}
+	else
+	{
+		vColor = DiffuseColor;
+	}
+	
+	if(bSpecularTexture == 1)
+	{
+		fSpecularConstant = SpecularTexture.Sample(BaseFilter, parallaxUVCoord).x;
+	}
+	else
+	{
+		fSpecularConstant = kS;
+	}
+	
+	//Lighting
+	float3 vLightDirection = float3(0.5773f, 0.5773f, -0.5773f);
+
+	float4 diff = float4(1.0f, 1.0f, 1.0f, 1.0f)*max(0.0f, dot(-vLightDirection, vNormal.xyz));
+	float3 Refl = -normalize(reflect(-vLightDirection, vNormal.xyz));
+	float3 V = normalize(vCameraPosition - In.vertexPosition_worldspace.xyz);
+	float s = pow(max(0.0f, dot(Refl, V)), Exponent*128.0f);
+	float4 spec = (diff.x > 0.0f && fSpecularConstant > 0.0f) ? s : float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	output = vColor*0.2f + fLightIntensitive*(vColor*diff + fSpecularConstant*spec);
+	output.a = 1.0f;
+	
+	return output;
+}

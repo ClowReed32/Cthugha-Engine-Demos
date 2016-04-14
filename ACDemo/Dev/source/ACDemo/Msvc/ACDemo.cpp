@@ -3,7 +3,6 @@
 #include <Physics/Physics.h>
 #include <Physics/PhysicsEventListener.h>
 #include <MainLoop/Initialization.h>
-//#include "../GCC4/AI/Pathing.h"
 #include <EventManager/Events.h>
 #include <EventManager/EventManagerImpl.h>
 #include <Entities/Entity.h>

@@ -1,0 +1,63 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		VOXELIZATION SHADER	- TEMPLE_COLUMN      			   				   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+#include "Shaders\GI\GlobalIlluminationShared.shdl"
+
+[Vertex shader]
+
+GsIn main(VsIn In)
+{
+	GsIn output;
+	
+	output.vertexPosition_worldspace = mul(float4(In.vertexPosition_modelspace, 1.0f), World).xyz;
+
+	output.vertexPosition_unitcube = mul(float4(output.vertexPosition_worldspace, 1.0f), worldToUnitCube);
+	output.vertexUV.x = In.vertexUV_modelspace.x;
+	output.vertexUV.y = 1.0f - In.vertexUV_modelspace.y;
+	
+	output.vertexNormal_worldspace = mul(float4(In.vertexNormal_modelspace, 0.0f), World).xyz;
+	
+	return output;
+}
+
+[Geometry shader]
+
+[maxvertexcount(3)]
+void main(triangle GsIn input [3], inout TriangleStream <PsIn> outputStream)
+{
+	VoxelizationGeometryShader(input, outputStream);
+}
+
+[Fragment shader]
+
+//Textures////////////////////////////////
+Texture2D t_DiffuseMap;
+//////////////////////////////////////////
+
+//Material////////////////////////////////
+float4 vStoneColor;
+////////////////////////////////////////////
+
+//Sampler States//////////////////////////
+SamplerState BaseFilter;
+//////////////////////////////////////////
+
+void main(PsIn Input)
+{
+	// Albedo //////////////////////////////////////////////////////////////////////////////////////////
+	float4 vAlbedo = float4(t_DiffuseMap.Sample(BaseFilter, Input.gs_VertexUV).rgb, 1.0f);
+	vAlbedo.rgb = vAlbedo.rgb * 0.95f;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	float3 normal = normalize(Input.gs_VertexNormal_worldspace);
+	
+	// store voxel
+	float4 storagePos = Input.gs_VertexPosition_voxelspace;
+	storagePos.xyz /= storagePos.w;
+	
+	StoreVoxel(vAlbedo, float4(normal, 0.0f), storagePos.xyz);
+}

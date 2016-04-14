@@ -1,0 +1,85 @@
+/////////////////////////////////////////////////////////////////////////////////
+//																			   //
+//		BLOOM_SELECT_AND_REDUCE SHADER	                                	   //
+//																			   //
+/////////////////////////////////////////////////////////////////////////////////
+
+// Input data
+struct VsIn 
+{
+	float3 vertexPosition_modelspace : Position;
+};
+
+// Output data
+struct PsIn 
+{
+	float4 vertexPosition_worldspace : SV_Position;
+	float2 vertexUV					 : TexCoord0;
+};
+
+[Vertex shader]
+ 
+ PsIn main(VsIn In)
+{
+	PsIn output;
+	
+	output.vertexPosition_worldspace = float4(In.vertexPosition_modelspace, 1.0f);
+	output.vertexUV = (In.vertexPosition_modelspace.xy+float2(1,1))*0.5f;
+	output.vertexUV.y = 1.0f - output.vertexUV.y;
+	
+	return output;
+}
+
+[Fragment shader]
+
+//Target Textures
+StructuredBuffer<uint2> tex_DeferredRenderSource;
+Texture2D tex_ForwardRenderSource;
+
+SamplerState PointClampSampler;
+
+float2 vInverseScreenResolution;
+float2 vScreenResolution;
+
+float fSensitiveLuminance;
+
+float4 UnpackRGBA16(uint2 e)
+{
+    return float4(f16tof32(e), f16tof32(e >> 16));
+}
+
+float4 Luminance(float4 vColor)
+{
+	return 0.2126f*vColor.r + 0.7152f*vColor.g + 0.0722f*vColor.b;
+}
+
+float4 main(PsIn In) : SV_Target
+{
+	float4 vTotalPixelColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+	uint2 vPixelPosition = uint2(In.vertexUV * vScreenResolution);
+	
+	uint uClampOffset = (vPixelPosition.x == (uint)(vScreenResolution.x - 1)) ? 0 : 1;
+	
+	uint2 vPixelOffset[4] = {vPixelPosition, uint2(vPixelPosition.x + uClampOffset, vPixelPosition.y), uint2(vPixelPosition.x, vPixelPosition.y + 1), uint2(vPixelPosition.x + uClampOffset, vPixelPosition.y + 1)};
+	float2 vOffset[4] = {float2(0.0f, 0.0f), float2(vInverseScreenResolution.x, 0.0f), float2(0.0f, vInverseScreenResolution.y), vInverseScreenResolution};
+	
+	[unroll]
+	for(uint i = 0; i < 4; i++)
+	{
+		float4 vDeferredColor = UnpackRGBA16(tex_DeferredRenderSource[vPixelOffset[i].y * vScreenResolution.x + vPixelOffset[i].x]);
+		float4 vForwardColor = tex_ForwardRenderSource.SampleLevel(PointClampSampler, In.vertexUV + vOffset[i], 0.0f );
+		
+		// Merge two renderer result
+		float4 vPixelColor = vDeferredColor + vForwardColor;
+		float fPixelLuminance = Luminance(vPixelColor);
+		
+		[flatten]
+		if(fPixelLuminance >= fSensitiveLuminance)
+			vTotalPixelColor += vPixelColor;
+	}	
+		
+	vTotalPixelColor.a = 4.0f;
+	
+	return vTotalPixelColor*0.25f;
+}
