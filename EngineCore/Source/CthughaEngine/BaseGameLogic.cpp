@@ -108,85 +108,94 @@ std::string BaseGameLogic::GetEntityXml(const EntityId id)
 
 bool BaseGameLogic::VLoadGame(const char* levelResource)
 {
+	TiXmlElement* pRoot = NULL;
+
     // Grab the root XML node
-    TiXmlElement* pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(levelResource);
-    if (!pRoot)
-    {
-        CHG_ERROR("Failed to find level resource file: " + std::string(levelResource));
-        return false;
-    }
+	if (strcmp(levelResource, "") != 0)
+	{
+		pRoot = XmlResourceLoader::LoadAndReturnRootXmlElement(levelResource);
 
-    // pre and post load scripts
-    const char* preLoadScript = NULL;
-    const char* postLoadScript = NULL;
+		if (!pRoot)
+		{
+			CHG_ERROR("Failed to find level resource file: " + std::string(levelResource));
+			return false;
+		}		
+	}		
 
-    // parse the pre & post script attributes
-    TiXmlElement* pScriptElement = pRoot->FirstChildElement("Script");
-    if (pScriptElement)
-    {
-        preLoadScript = pScriptElement->Attribute("preLoad");
-        postLoadScript = pScriptElement->Attribute("postLoad");
-    }
+	// pre and post load scripts
+	const char* preLoadScript = NULL;
+	const char* postLoadScript = NULL;
 
-    // load the pre-load script if there is one
-    if (preLoadScript)
-    {
-        Resource resource(preLoadScript);
-        shared_ptr<ResHandle> pResourceHandle = g_pApp->m_ResCache->GetHandle(&resource);  // this actually loads the XML file from the zip file
-    }
+	if (pRoot)
+	{
+		// parse the pre & post script attributes
+		TiXmlElement* pScriptElement = pRoot->FirstChildElement("Script");
+		if (pScriptElement)
+		{
+			preLoadScript = pScriptElement->Attribute("preLoad");
+			postLoadScript = pScriptElement->Attribute("postLoad");
+		}
 
-	TiXmlElement* pAMapData = pRoot->FirstChildElement("MapData");
-	TiXmlElement* pMapContents = pAMapData->FirstChildElement("MapContents");
+		// load the pre-load script if there is one
+		if (preLoadScript)
+		{
+			Resource resource(preLoadScript);
+			shared_ptr<ResHandle> pResourceHandle = g_pApp->m_ResCache->GetHandle(&resource);  // this actually loads the XML file from the zip file
+		}
 
-    // load all initial StaticObjects
-    TiXmlElement* pStaticObjectsNode = pMapContents->FirstChildElement("StaticObjects");
-    if (pStaticObjectsNode)
-    {
-        for (TiXmlElement* pNode = pStaticObjectsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
-        {
-            StrongEntityPtr pEntity = VCreateStaticEntity(pNode);
-			if (pEntity)
+		TiXmlElement* pAMapData = pRoot->FirstChildElement("MapData");
+		TiXmlElement* pMapContents = pAMapData->FirstChildElement("MapContents");
+
+		// load all initial StaticObjects
+		TiXmlElement* pStaticObjectsNode = pMapContents->FirstChildElement("StaticObjects");
+		if (pStaticObjectsNode)
+		{
+			for (TiXmlElement* pNode = pStaticObjectsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
 			{
-				// fire an event letting everyone else know that we created a new actor
-				shared_ptr<EvtData_New_Actor> pNewActorEvent(CHG_NEW EvtData_New_Actor(pEntity->GetId()));
-				IEventManager::Get()->VQueueEvent(pNewActorEvent);
+				StrongEntityPtr pEntity = VCreateStaticEntity(pNode);
+				if (pEntity)
+				{
+					// fire an event letting everyone else know that we created a new actor
+					shared_ptr<EvtData_New_Actor> pNewActorEvent(CHG_NEW EvtData_New_Actor(pEntity->GetId()));
+					IEventManager::Get()->VQueueEvent(pNewActorEvent);
+				}
 			}
-        }
-    }
+		}
 
-	// load all Entities
-	TiXmlElement* pEntitiesNode = pMapContents->FirstChildElement("Entities");
-    if (pEntitiesNode)
-    {
-        for (TiXmlElement* pNode = pEntitiesNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
-        {
-			std::string resourceFileName = pNode->Attribute("resource");
-
-            StrongEntityPtr pEntity = VCreateEntity(resourceFileName, pNode);
-			if (pEntity)
+		// load all Entities
+		TiXmlElement* pEntitiesNode = pMapContents->FirstChildElement("Entities");
+		if (pEntitiesNode)
+		{
+			for (TiXmlElement* pNode = pEntitiesNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
 			{
-				// fire an event letting everyone else know that we created a new actor
-				shared_ptr<EvtData_New_Actor> pNewActorEvent(CHG_NEW EvtData_New_Actor(pEntity->GetId()));
-				IEventManager::Get()->VQueueEvent(pNewActorEvent);
-			}
-        }
-    }
+				std::string resourceFileName = pNode->Attribute("resource");
 
-	// load all Ligths
-    TiXmlElement* pLightsNode = pMapContents->FirstChildElement("Lights");
-    if (pLightsNode)
-    {
-        for (TiXmlElement* pNode = pLightsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
-        {
-            StrongEntityPtr pEntity = VCreateStaticEntity(pNode);
-			if (pEntity)
-			{
-				// fire an event letting everyone else know that we created a new actor
-				shared_ptr<EvtData_New_Actor> pNewActorEvent(CHG_NEW EvtData_New_Actor(pEntity->GetId()));
-				IEventManager::Get()->VQueueEvent(pNewActorEvent);
+				StrongEntityPtr pEntity = VCreateEntity(resourceFileName, pNode);
+				if (pEntity)
+				{
+					// fire an event letting everyone else know that we created a new actor
+					shared_ptr<EvtData_New_Actor> pNewActorEvent(CHG_NEW EvtData_New_Actor(pEntity->GetId()));
+					IEventManager::Get()->VQueueEvent(pNewActorEvent);
+				}
 			}
-        }
-    }
+		}
+
+		// load all Ligths
+		TiXmlElement* pLightsNode = pMapContents->FirstChildElement("Lights");
+		if (pLightsNode)
+		{
+			for (TiXmlElement* pNode = pLightsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
+			{
+				StrongEntityPtr pEntity = VCreateStaticEntity(pNode);
+				if (pEntity)
+				{
+					// fire an event letting everyone else know that we created a new actor
+					shared_ptr<EvtData_New_Actor> pNewActorEvent(CHG_NEW EvtData_New_Actor(pEntity->GetId()));
+					IEventManager::Get()->VQueueEvent(pNewActorEvent);
+				}
+			}
+		}
+	}
 
     // initialize all human views
     for (auto it = m_gameViews.begin(); it != m_gameViews.end(); ++it)

@@ -168,6 +168,7 @@ public:
 	
 	void RegisterLoader( shared_ptr<IResourceLoader> loader );
 
+	bool LoadFromFile(Resource * r);
 	shared_ptr<ResHandle> GetHandle(Resource * r);
 
 	int Preload(const std::string pattern, void (*progressCallback)(int, bool &));

@@ -64,7 +64,7 @@ public:
 	bool IsViewActive() { return m_bActive; }
 
 	virtual ~HumanView();
-    HumanView(shared_ptr<Renderer> renderer, bool bScene = true);
+    HumanView(shared_ptr<Renderer> renderer, bool bScene = true, bool bGUI = true);
 
 	ScreenElementList m_ScreenElements;						// a game screen entity
 

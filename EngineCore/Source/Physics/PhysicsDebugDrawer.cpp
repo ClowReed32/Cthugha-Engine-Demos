@@ -45,6 +45,8 @@ bool BulletDebugDrawer::Init(UINT MaxVertex)
 	if (m_PhysicDebugRenderShader != SHADER_NONE)
 		m_PhysicDebugRenderShaderVF = g_pApp->m_pRenderer->addVertexFormat(vertexDesc, 2, m_PhysicDebugRenderShader);
 
+	delete[] vertexDesc;
+
 	return true;
 }
 

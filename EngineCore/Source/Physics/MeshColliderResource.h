@@ -27,7 +27,8 @@ public:
 
 	virtual ~MeshColliderResourceExtraData()
 	{
-
+		SAFE_DELETE_ARRAY(m_pColliderVertex);
+		SAFE_DELETE_ARRAY(m_pColliderIndex);
 	}
 
 	virtual std::string VToString()
@@ -36,8 +37,8 @@ public:
 	}
 
 	//Collider Attributes
-	std::shared_ptr<Vec3>		m_pColliderVertex;
-	std::shared_ptr<UINT>		m_pColliderIndex;
+	Vec3*		m_pColliderVertex;
+	UINT*		m_pColliderIndex;
 
 	UINT		m_NumVertex;
 	UINT		m_NumIndices;

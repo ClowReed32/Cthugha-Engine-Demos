@@ -240,19 +240,6 @@ void SceneNode::Transform(Mat4x4 *toWorld, Mat4x4 *fromWorld) const
 		*fromWorld = m_FromWorld;
 }
 
-/*HRESULT SceneNode::VPick(Scene *pScene, RayCast *raycast) 
-{
-	for(SceneNodeList::const_iterator i=m_Children.begin(); i!=m_Children.end(); ++i)
-	{
-		HRESULT hr = (*i)->VPick(pScene, raycast);
-
-		if (hr==E_FAIL)
-			return E_FAIL;
-	}
-
-	return S_OK;
-}*/
-
 ////////////////////////////////////////////////////
 // RootNode Implementation
 ////////////////////////////////////////////////////
@@ -749,94 +736,6 @@ void OctreeNode::TraverseOctreeFromAabb(std::list<std::shared_ptr<SceneNode>> &A
 		printf("No se ve el nodo");*/
 }
 
-//
-// RootNode::RootNode					- Chapter 16, page 545
-//
-/*RootNode::RootNode()
-: SceneNode(INVALID_ACTOR_ID, WeakBaseRenderComponentPtr(), RenderPass_0, &Mat4x4::g_Identity)
-{
-	m_Children.reserve(RenderPass_Last);
-
-	shared_ptr<SceneNode> staticGroup(GCC_NEW SceneNode(INVALID_ACTOR_ID,  WeakBaseRenderComponentPtr(),  RenderPass_Static, &Mat4x4::g_Identity));
-	m_Children.push_back(staticGroup);	// RenderPass_Static = 0
-
-	shared_ptr<SceneNode> actorGroup(GCC_NEW SceneNode(INVALID_ACTOR_ID,  WeakBaseRenderComponentPtr(),  RenderPass_Actor, &Mat4x4::g_Identity));
-	m_Children.push_back(actorGroup);	// RenderPass_Actor = 1
-
-	shared_ptr<SceneNode> skyGroup(GCC_NEW SceneNode(INVALID_ACTOR_ID,  WeakBaseRenderComponentPtr(),  RenderPass_Sky, &Mat4x4::g_Identity));
-	m_Children.push_back(skyGroup);	// RenderPass_Sky = 2
-
-	shared_ptr<SceneNode> invisibleGroup(GCC_NEW SceneNode(INVALID_ACTOR_ID,  WeakBaseRenderComponentPtr(),  RenderPass_NotRendered, &Mat4x4::g_Identity));
-	m_Children.push_back(invisibleGroup);	// RenderPass_NotRendered = 3
-}
-
-//
-// RootNode::VAddChild					- Chapter 16, page 546
-//
-bool RootNode::VAddChild(shared_ptr<ISceneNode> kid)
-{
-	// The Root node has children that divide the scene graph into render passes.
-	// Scene nodes will get added to these children based on the value of the
-	// render pass member variable.
-
-	RenderPass pass = kid->VGet()->RenderPass();
-	if ((unsigned)pass >= m_Children.size() || !m_Children[pass])
-	{
-		GCC_ASSERT(0 && _T("There is no such render pass"));
-		return false;
-	}
-
-	return m_Children[pass]->VAddChild(kid);
-}
-
-//
-// RootNode::VRemoveChild						- not described in the book 
-//
-//   Returns false if nothing was removed
-//
-bool RootNode::VRemoveChild(ActorId id)
-{
-	bool anythingRemoved = false;
-	for(int i=RenderPass_0; i<RenderPass_Last; ++i)
-	{
-		if(m_Children[i]->VRemoveChild(id))
-		{
-			anythingRemoved = true;
-		}
-	}
-	return anythingRemoved;
-}
-
-//
-// RootNode::VRenderChildren					- Chapter 16, page 547
-//
-HRESULT RootNode::VRenderChildren(Scene *pScene)
-{
-	// This code creates fine control of the render passes.
-
-	for (int pass = RenderPass_0; pass < RenderPass_Last; ++pass)
-	{
-		switch(pass)
-		{
-			case RenderPass_Static:
-			case RenderPass_Actor:
-				m_Children[pass]->VRenderChildren(pScene);
-				break;
-
-			case RenderPass_Sky:
-			{
-				shared_ptr<IRenderState> skyPass = pScene->GetRenderer()->VPrepareSkyBoxPass();
-				m_Children[pass]->VRenderChildren(pScene);
-				break;
-			}
-		}
-	}
-
-	return S_OK;
-}
-*/
-
-
 ////////////////////////////////////////////////////
 // CameraNode Implementation
 ////////////////////////////////////////////////////
@@ -855,7 +754,6 @@ bool CameraNode::VOnRestore(Scene *pScene)
 
 	m_InverseProjection = !m_Projection;
 
-	//pScene->GetRenderer()->VSetProjectionTransform(&m_Projection);
 	return true;
 }
 
@@ -866,28 +764,9 @@ bool CameraNode::VOnRestore(Scene *pScene)
 //
 bool CameraNode::SetViewTransform(Scene *pScene)
 {
-	//If there is a target, make sure the camera is
-	//rigidly attached right behind the target
-	/*if(m_pTarget)
-	{
-		Mat4x4 mat = m_pTarget->ToWorld();
-		Vec4 at = 0.0f;
-		Vec4 atWorld = mat*at;
-		Vec3 pos = mat.GetPosition() + atWorld.xyz();
-		mat.SetPosition(pos);
-		
-		Mat4x4 FromWorld = Mat4x4(-mat.rows[0].x,									mat.rows[0].y,									 -mat.rows[0].z,								   0.0f,
-								  -mat.rows[1].x,									mat.rows[1].y,									 -mat.rows[1].z,								   0.0f,
-								  -mat.rows[2].x,									mat.rows[2].y,									 -mat.rows[2].z,								   0.0f,
-								  -dot(pos, Vec3(-mat.rows[0].x, -mat.rows[1].x, -mat.rows[2].x)), -dot(pos, Vec3(mat.rows[0].y, mat.rows[1].y, mat.rows[2].y)), dot(pos, Vec3(mat.rows[0].z, mat.rows[1].z, mat.rows[2].z)), 1.0f);
-
-		VSetTransform(&mat, &FromWorld);
-	}*/
-
 	m_View = FromWorld();
 	m_InverseView = !FromWorld();
 
-	//pScene->GetRenderer()->VSetViewTransform(&m_View);
 	return true;
 }
 

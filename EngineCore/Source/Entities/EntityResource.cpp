@@ -5,6 +5,59 @@
 
 #include "EntityResource.h"
 
+// PhysicComponentResourceData class implementation
+
+PhysicComponentResourceData::PhysicComponentResourceData()
+{
+	sDensity = "";
+	sMaterial = "";
+
+	//Constrains
+	vRigidBodyTranslationConstrain = Vec3();
+	vRigidBodyRotationConstrain = Vec3();
+	bRigidBodyTranslationConstrain = false;
+	bRigidBodyRotationConstrain = false;
+
+	//Offsets
+	vRigidBodyTranslation = Vec3();
+	vRigidBodyRotation = Vec3();
+	VRigidBodyScale = Vec3();
+	bRigidBodyTranslation = false;
+	bRigidBodyRotation = false;
+	bRigidBodyScale = false;
+
+	//Shape
+	sShapeType = "";
+	bGhostObject = false;
+
+	//Common Sphere, Box and Capsule
+	vShapeOffset = Vec3();
+
+	//Sphere
+	fSphereRadius = 0.0f;
+
+	//Box
+	vBoxDimensions = Vec3();
+
+	//Capsule
+	fCapsuleRadius = 0.0f;
+	fCapsuleHeight = 0.0f;
+
+	//Convex Hull and Triangle Mesh
+	sShapeResourceName = "";
+
+	//Terrain
+	m_sHeightMapResource = "";
+	m_iWidth = 0;
+	m_iDepth = 0;
+	m_fMaxHeight = 0.0f;
+	m_fMinHeight = 0.0f;
+	m_fWorldWidth = 0.0f;
+	m_fWorldDepth = 0.0f;
+	m_sUpAxis = "";
+	m_sHeightMapValueType = "";
+}
+
 // EntityResourceExtraData class implementation
 
 void EntityResourceExtraData::AddComponentResource(std::string componentName, std::shared_ptr<ComponentResource> componentResource)
@@ -214,7 +267,7 @@ std::shared_ptr<ComponentResourceData> EntityResourceLoader::LoadPhysicComponent
 	CHG_ASSERT(pData);
 
     std::shared_ptr<PhysicComponentResourceData> pComponentData(CHG_NEW PhysicComponentResourceData);
-	memset((void*)pComponentData.get(), 0, sizeof(PhysicComponentResourceData));
+	//memset((void*)pComponentData.get(), 0, sizeof(PhysicComponentResourceData));
 
     // shape
     TiXmlElement* pShapeElement = pData->FirstChildElement("Shape");

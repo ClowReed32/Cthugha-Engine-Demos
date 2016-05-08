@@ -29,8 +29,6 @@ CthughaApp::CthughaApp()
 	g_pApp = this;
 	m_pGame = NULL;
 
-	m_screenSize = Vec2(0,0);
-
 	m_bIsRunning = false;
 
 	m_pEventManager = NULL;
@@ -70,7 +68,7 @@ bool CthughaApp::CreateWindowApp( const char* strWindowTitle, int x, int y )
 		flags |= SDL_WINDOW_FULLSCREEN;
 
 	m_pWindowHandle = SDL_CreateWindow(strWindowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        m_screenSize.x, m_screenSize.y, flags);
+        m_screenSize[0].x, m_screenSize[0].y, flags);
 
     if (!m_pWindowHandle)
 	{
@@ -82,20 +80,31 @@ bool CthughaApp::CreateWindowApp( const char* strWindowTitle, int x, int y )
     return true;
 }
 
-bool CthughaApp::InitRenderer()
+bool CthughaApp::InitRenderer(HWND *hwndArray, UINT *screenWidth, UINT *screenHeight, UINT numWindows)
 {
-	// Obtain window handle from sdl window
-	SDL_SysWMinfo wmInfo;
-	SDL_VERSION(&wmInfo.version);
-	SDL_GetWindowWMInfo(m_pWindowHandle, &wmInfo);
-	HWND hwnd = wmInfo.info.win.window;
+	if (!hwndArray)
+	{
+		// Obtain window handle from sdl window
+		SDL_SysWMinfo wmInfo;
+		SDL_VERSION(&wmInfo.version);
+		SDL_GetWindowWMInfo(m_pWindowHandle, &wmInfo);
+		HWND hwnd = wmInfo.info.win.window;
 
-	m_pRenderer.reset(CHG_NEW Direct3D11Renderer(hwnd, m_screenSize.y, m_screenSize.x, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, 1, !m_bWindowedMode));
+		HWND hwndArray[] = { hwnd };
+		UINT heightArray[] = { m_screenSize[0].y };
+		UINT widthArray[] = { m_screenSize[0].x };
+
+		m_pRenderer.reset(CHG_NEW Direct3D11Renderer(hwndArray, heightArray, widthArray, 1, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, 1, !m_bWindowedMode));
+	}
+	else
+	{
+		m_pRenderer.reset(CHG_NEW Direct3D11Renderer(hwndArray, screenHeight, screenWidth, numWindows, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_D24_UNORM_S8_UINT, 1, !m_bWindowedMode));
+	}	
 
 	return true;
 }
 
-bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int screenHeight, bool windowedMode)
+bool CthughaApp::InitInstance(int argc, char *argv[], HWND *hwndArray, int *screenWidth, int *screenHeight, UINT numWindows, bool windowedMode)
 {
 	// Check for adequate machine resources. I don't use this
 	/*bool resourceCheck = false;
@@ -184,30 +193,45 @@ bool CthughaApp::InitInstance(int argc, char *argv[], int screenWidth, int scree
 	}
 
 	// Init SDL window and graphics stuff ///////////////////////////////////////////////
-	m_screenSize.x = screenWidth;
-	m_screenSize.y = screenHeight;
-	m_bWindowedMode = windowedMode;
-
-	CreateWindowApp(VGetGameTitle());
-	
-	if (!GetHwnd())
+	if (!hwndArray)
 	{
-		return FALSE;
+		m_screenSize.push_back(Vec2(screenWidth[0], screenHeight[0]));
+		m_bWindowedMode = windowedMode;
+
+		CreateWindowApp(VGetGameTitle());
+
+		if (!GetHwnd())
+		{
+			return FALSE;
+		}
+
+		//Init Renderer
+		if (!InitRenderer())
+		{
+			CHG_ERROR("Renderer not Created");
+			return false;
+		}
+	}
+	else
+	{
+		for (UINT i = 0; i < numWindows; ++i)
+			m_screenSize.push_back(Vec2(screenWidth[i], screenHeight[i]));
+		
+		m_bWindowedMode = true;
+
+		//Init Renderer
+		if (!InitRenderer(hwndArray, (UINT*)screenWidth, (UINT*)screenHeight, m_screenSize.size()))
+		{
+			CHG_ERROR("Renderer not Created");
+			return false;
+		}
 	}
 
-	m_screenSize = Vec2(screenWidth, screenHeight);
 	m_iFrameNumber = 0;
-
-    //Init Renderer
-	if(!InitRenderer())
-	{
-		CHG_ERROR("Renderer not Created");
-		return false;
-	}
 
 	m_pRenderer->resetToDefaults();
 	m_pRenderer->reset();
-	m_pRenderer->setViewport(screenWidth, screenHeight);
+	m_pRenderer->setViewport(screenWidth[0], screenHeight[0]);
 	m_pRenderer->changeToMainFramebuffer();
 
 	//Init ShadowMap Manager
@@ -353,6 +377,114 @@ int CthughaApp::OnProcessEvent(SDL_Event* Event)
 		default: 
 		{
 			
+			break;
+		}
+	}
+
+	return 0;
+}
+
+int CthughaApp::OnProcessEvent(UINT msg, UINT wParam, UINT lParam)
+{
+	CHG_Event CHGEvent;
+
+	switch (msg)
+	{
+		case WM_POWERBROADCAST:
+		{
+			break;
+		}
+
+		case WM_DISPLAYCHANGE:
+		{
+			/*int colorDepth = (int)wParam;
+			int width = (int)(short)LOWORD(lParam);
+			int height = (int)(short)HIWORD(lParam);
+
+			result = g_pApp->OnDisplayChange(colorDepth, width, height);*/
+			break;
+		}
+
+		case WM_SYSCOMMAND:
+		{
+			break;
+		}
+
+		case WM_SYSKEYDOWN:
+		{
+			/*if (wParam == VK_RETURN)
+			{
+				*pbNoFurtherProcessing = true;
+				return g_pApp->OnAltEnter();
+			}
+			return DefWindowProc(hWnd, uMsg, wParam, lParam);*/
+		}
+
+
+		case WM_CLOSE:
+		{
+			break;
+		}
+
+
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+		case WM_CHAR:
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		{
+			if (msg == WM_KEYDOWN || msg == WM_KEYUP)
+			{
+				CHGEvent.eventType = (CHG_EventType)(msg + 512);
+				CHGEvent.keyboardEvent.asciiCode = (char)tolower(wParam);
+			}
+			else if (msg == WM_LBUTTONDOWN || msg == WM_LBUTTONUP)
+			{
+				CHGEvent.eventType = (msg == WM_LBUTTONDOWN) ? CHG_MOUSEBUTTONDOWN : CHG_MOUSEBUTTONUP;
+				CHGEvent.mouseEvent.x = GET_X_LPARAM(lParam);
+				CHGEvent.mouseEvent.y = GET_Y_LPARAM(lParam);
+				CHGEvent.mouseEvent.relX = 0;
+				CHGEvent.mouseEvent.relY = 0;
+				CHGEvent.mouseEvent.pressed = (wParam & 0x0001) > 0;
+				CHGEvent.mouseEvent.mouseButton = CHG_BUTTON_LEFT;
+
+			}
+			else if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONUP)
+			{
+				CHGEvent.eventType = (msg == WM_RBUTTONDOWN) ? CHG_MOUSEBUTTONDOWN : CHG_MOUSEBUTTONUP;
+				CHGEvent.mouseEvent.x = GET_X_LPARAM(lParam);
+				CHGEvent.mouseEvent.y = GET_Y_LPARAM(lParam);
+				CHGEvent.mouseEvent.relX = 0;
+				CHGEvent.mouseEvent.relY = 0;
+				CHGEvent.mouseEvent.pressed = (wParam & 0x0002) > 0;
+				CHGEvent.mouseEvent.mouseButton = CHG_BUTTON_RIGHT;
+
+			}
+			else if (msg == WM_MOUSEMOVE)
+			{
+				CHGEvent.eventType = CHG_MOUSEMOTION;
+				CHGEvent.mouseEvent.x = GET_X_LPARAM(lParam);
+				CHGEvent.mouseEvent.y = GET_Y_LPARAM(lParam);
+				CHGEvent.mouseEvent.relX = 0;
+				CHGEvent.mouseEvent.relY = 0;
+				CHGEvent.mouseEvent.pressed = (wParam & 0x0001)  > 0 || (wParam & 0x0002)  > 0;
+			}
+						
+			if (g_pApp->m_pGame)
+			{
+				BaseGameLogic *pGame = g_pApp->m_pGame;
+
+				for (GameViewList::reverse_iterator i = pGame->m_gameViews.rbegin(); i != pGame->m_gameViews.rend(); ++i)
+				{
+					if ((*i)->VOnMsgProc(CHGEvent))
+					{
+						break;				// WARNING! This breaks out of the for loop.
+					}
+				}
+			}
 			break;
 		}
 	}

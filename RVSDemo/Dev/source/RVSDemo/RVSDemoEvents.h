@@ -74,37 +74,6 @@ public:
     {
         m_id = id;
     }
-
-    /*virtual bool VBuildEventFromScript(void)
-    {
-        if (m_eventData.IsTable())
-        {
-            // ID
-            LuaPlus::LuaObject temp = m_eventData.GetByName("id");
-            if (temp.IsInteger())
-            {
-                m_id = temp.GetInteger();
-            }
-            else
-            {
-                CHG_ERROR("Invalid id sent to EvtData_StartThrust; type = " + std::string(temp.TypeName()));
-                return false;
-            }
-
-            // acceleration
-            temp = m_eventData.GetByName("acceleration");
-            if (temp.IsNumber())
-                m_acceleration = temp.GetFloat();
-            else
-                m_acceleration = 5.0f;  // something reasonable
-
-            return true;
-        }
-
-        return false;
-    }*/
-
-    //EXPORT_FOR_SCRIPT_EVENT(EvtData_StartThrust);
 };
 
 
@@ -163,30 +132,6 @@ public:
     {
         m_id = id;
     }
-
-    /*virtual bool VBuildEventFromScript(void)
-    {
-        if (m_eventData.IsTable())
-        {
-            // ID
-            LuaPlus::LuaObject temp = m_eventData.GetByName("id");
-            if (temp.IsInteger())
-            {
-                m_id = temp.GetInteger();
-            }
-            else
-            {
-                GCC_ERROR("Invalid id sent to EvtData_EndThrust; type = " + std::string(temp.TypeName()));
-                return false;
-            }
-
-            return true;
-        }
-
-        return false;
-    }*/
-
-    //EXPORT_FOR_SCRIPT_EVENT(EvtData_EndThrust);
 };
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -321,37 +266,6 @@ public:
     {
         m_id = id;
     }
-
-    /*virtual bool VBuildEventFromScript(void)
-    {
-        if (m_eventData.IsTable())
-        {
-            // ID
-            LuaPlus::LuaObject temp = m_eventData.GetByName("id");
-            if (temp.IsInteger())
-            {
-                m_id = temp.GetInteger();
-            }
-            else
-            {
-                GCC_ERROR("Invalid id sent to EvtData_StartSteer; type = " + std::string(temp.TypeName()));
-                return false;
-            }
-
-            // acceleration
-            temp = m_eventData.GetByName("acceleration");
-            if (temp.IsNumber())
-                m_acceleration = temp.GetFloat();
-            else
-                m_acceleration = 5.0f;  // something reasonable
-
-            return true;
-        }
-
-        return false;
-    }*/
-
-    //EXPORT_FOR_SCRIPT_EVENT(EvtData_StartSteer);
 };
 
 
@@ -410,30 +324,6 @@ public:
     {
         m_id = id;
     }
-
-    /*virtual bool VBuildEventFromScript(void)
-    {
-        if (m_eventData.IsTable())
-        {
-            // ID
-            LuaPlus::LuaObject temp = m_eventData.GetByName("id");
-            if (temp.IsInteger())
-            {
-                m_id = temp.GetInteger();
-            }
-            else
-            {
-                GCC_ERROR("Invalid id sent to EvtData_EndSteer; type = " + std::string(temp.TypeName()));
-                return false;
-            }
-
-            return true;
-        }
-
-        return false;
-    }*/
-
-    //EXPORT_FOR_SCRIPT_EVENT(EvtData_EndSteer);
 };
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -481,8 +371,4 @@ public:
     {
         return "EvtData_Set_Controlled_Actor";
     }
-
-    //virtual bool VBuildEventFromScript(void);
-
-    //EXPORT_FOR_SCRIPT_EVENT(EvtData_Set_Controlled_Actor);
 };

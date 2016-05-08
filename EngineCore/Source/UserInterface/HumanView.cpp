@@ -25,7 +25,7 @@ const GameViewId gc_InvalidGameViewId = 0xffffffff;
 //
 // HumanView::HumanView - Chapter 10, page 272
 //
-HumanView::HumanView(shared_ptr<Renderer> renderer, bool bScene)
+HumanView::HumanView(shared_ptr<Renderer> renderer, bool bScene, bool bGUI)
 {
 	m_pProcessManager = CHG_NEW ProcessManager;
 	m_runFullSpeed = true;
@@ -55,10 +55,13 @@ HumanView::HumanView(shared_ptr<Renderer> renderer, bool bScene)
             m_pScene->SetCamera(m_pCamera);
         }
 
-		// Init GUI scene
-		m_pGUI.reset(CHG_NEW ScreenElementUIScene(renderer, m_ViewId));
+		if (bGUI)
+		{
+			// Init GUI scene
+			m_pGUI.reset(CHG_NEW ScreenElementUIScene(renderer, m_ViewId));
 
-        VPushElement(m_pGUI);
+			VPushElement(m_pGUI);
+		}		
 	}
 }
 

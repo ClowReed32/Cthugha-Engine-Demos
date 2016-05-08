@@ -40,6 +40,8 @@ Renderer::Renderer()
 	fontBuffer = NULL;
 	fontBufferCount = 0;
 
+	currentWindowRenderer = 0;
+
 #ifdef PROFILE
 	profileFrame = false;
 	profileReset = true;
@@ -59,6 +61,8 @@ Renderer::~Renderer()
 
 void Renderer::resetToDefaults()
 {
+	currentWindowRenderer = 0;
+
 	currentShader = SHADER_NONE;
 
 	currentVertexFormat = VF_NONE;

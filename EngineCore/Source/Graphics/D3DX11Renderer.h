@@ -122,7 +122,7 @@ class Direct3D11Renderer : public Renderer
 {
 public:
 
-	Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_FORMAT format, DXGI_FORMAT depthFormat, UINT msaaSamples, bool fullscreen);
+	Direct3D11Renderer(const HWND* hwnd, const UINT* height, const UINT* width, UINT uNumWindows, DXGI_FORMAT format, DXGI_FORMAT depthFormat, UINT msaaSamples, bool fullscreen);
 	~Direct3D11Renderer();
 
 	void resetToDefaults();
@@ -287,8 +287,8 @@ public:
 
 	void setFrameBuffer(ID3D11RenderTargetView *colorRTV, ID3D11DepthStencilView *depthDSV)
 	{
-		backBufferRTV  = colorRTV;
-		depthBufferDSV = depthDSV;
+		//backBufferRTV  = colorRTV;
+		//depthBufferDSV = depthDSV;
 	}
 
 	ID3D11Resource *getResource(const TextureID texture) const;
@@ -305,10 +305,10 @@ protected:
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Main render target and depth buffer ////////////////
-	ID3D11Texture2D *backBuffer;
-	ID3D11Texture2D *depthBuffer;
-	ID3D11RenderTargetView *backBufferRTV;
-	ID3D11DepthStencilView *depthBufferDSV;
+	ID3D11Texture2D **backBuffer;
+	ID3D11Texture2D **depthBuffer;
+	ID3D11RenderTargetView **backBufferRTV;
+	ID3D11DepthStencilView **depthBufferDSV;
 	///////////////////////////////////////////////////////
 
 	// Current and selected textures and buffers on shader slots ////////////////////////////////////////////////////////////////
@@ -375,7 +375,7 @@ private:
 	D3D_FEATURE_LEVEL m_featureLevel;
 	ID3D11Device* m_pd3dDevice;
 	ID3D11DeviceContext* m_pImmediateContext;
-	IDXGISwapChain* m_pSwapChain;
+	IDXGISwapChain** m_pSwapChain;
 	//////////////////////////////////////////
 
 	CShaderInclude* m_pShaderInclude;

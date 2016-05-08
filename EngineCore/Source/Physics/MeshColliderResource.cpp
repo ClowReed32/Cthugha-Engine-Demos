@@ -39,11 +39,11 @@ bool MeshColliderResourceLoader::VLoadResource(char *rawBuffer, unsigned int raw
 	memread(&extra->m_NumIndices, sizeof(UINT), 1, &cpPtr);
 
 	//Load vertex data and index data
-	extra->m_pColliderVertex.reset(CHG_NEW Vec3[extra->m_NumVertex]);
-	extra->m_pColliderIndex.reset(CHG_NEW UINT[extra->m_NumIndices]);
+	extra->m_pColliderVertex = CHG_NEW Vec3[extra->m_NumVertex];
+	extra->m_pColliderIndex = CHG_NEW UINT[extra->m_NumIndices];
 
-	memread(extra->m_pColliderVertex.get(), sizeof(Vec3), extra->m_NumVertex, &cpPtr);
-	memread(extra->m_pColliderIndex.get(), sizeof(UINT), extra->m_NumIndices, &cpPtr);
+	memread(extra->m_pColliderVertex, sizeof(Vec3), extra->m_NumVertex, &cpPtr);
+	memread(extra->m_pColliderIndex, sizeof(UINT), extra->m_NumIndices, &cpPtr);
 
 	handle->SetExtra(shared_ptr<MeshColliderResourceExtraData>(extra));
 

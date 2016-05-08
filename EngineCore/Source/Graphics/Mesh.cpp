@@ -353,6 +353,9 @@ bool COLLADAMeshResourceLoader::VLoadResource(char *rawBuffer, unsigned int rawS
 		
 		extra->m_pMesh->m_vSubMeshes[i].m_SubMeshAabb.SetFromVertexSet(m_vTempStaticMeshes[i].Positions.data(), m_vTempStaticMeshes[i].Positions.size());
 		extra->m_pMesh->m_MeshAabb = extra->m_pMesh->m_MeshAabb.Union(extra->m_pMesh->m_vSubMeshes[i].m_SubMeshAabb);
+
+		SAFE_DELETE_ARRAY(vertexData);
+		SAFE_DELETE_ARRAY(indexData);
 	}
 
 	std::string name = handle->GetName();
@@ -1143,8 +1146,11 @@ MeshNode::MeshNode(const EntityId entityId,
 
 	m_pMesh = ((COLLADAMeshResourceExtraData*)handle->GetExtra().get())->m_pMesh;
 
-    m_pMaterialNode.reset(CHG_NEW MaterialNode(sMaterialResource, renderComponent));
-	m_pMaterialNode->setActivePOM(renderProperties.ActivePOM);
+	if (sMaterialResource != "")
+	{
+		m_pMaterialNode.reset(CHG_NEW MaterialNode(sMaterialResource, renderComponent));
+		m_pMaterialNode->setActivePOM(renderProperties.ActivePOM);
+	}		
 
 	// Vertex Format Shader Description //////////////////////////////////////////
 
@@ -1315,6 +1321,9 @@ bool MeshNode::VOnRender(Scene *pScene)
 {
 	if(pScene->m_RenderPass != 3)
 	{
+		//if (!m_vShaderNode || !m_pMaterialNode)
+			//CHG_ERROR("Mesh haven't got any material or material shader");
+
 		m_vShaderNode->setActiveShader();
 		
 		m_pMaterialNode->setActiveMaterial();

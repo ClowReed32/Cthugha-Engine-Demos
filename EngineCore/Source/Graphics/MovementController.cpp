@@ -100,7 +100,7 @@ bool MovementController::VOnPointerMove(const int &posX, const int &posY, const 
 			m_fTargetYaw = m_fTargetYaw + (m_lastMousePos.x - mousePos.x);
 			m_fTargetPitch = m_fTargetPitch + (mousePos.y - m_lastMousePos.y);
 
-			m_relativeMousePos = Vec2((float)relPosX, (float)relPosY);
+			m_relativeMousePos = m_lastMousePos - mousePos;
 
 			m_lastMousePos = mousePos;
 		}
@@ -111,7 +111,7 @@ bool MovementController::VOnPointerMove(const int &posX, const int &posY, const 
 		m_fTargetYaw = m_fTargetYaw + (m_lastMousePos.x - mousePos.x);
 		m_fTargetPitch = m_fTargetPitch + (mousePos.y - m_lastMousePos.y);
 
-		m_relativeMousePos = Vec2((float)relPosX, (float)relPosY);
+		m_relativeMousePos = m_lastMousePos - mousePos;
 
 		m_lastMousePos = mousePos;
 	}

@@ -1416,6 +1416,47 @@ Mat4x4 identity4()
 	return Mat4x4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
 }
 
+void Aabb::SetFromVertexSet(const Vec4* pPoints, const int numPoints)
+{
+	vcMin = pPoints[0].xyz();
+	vcMax = pPoints[0].xyz();
+
+	for (int i = 0; i<numPoints; i++)
+	{
+		if (vcMin.x > pPoints[i].x)
+		{
+			vcMin.x = pPoints[i].x;
+		}
+		if (vcMin.y > pPoints[i].y)
+		{
+			vcMin.y = pPoints[i].y;
+		}
+		if (vcMin.z > pPoints[i].z)
+		{
+			vcMin.z = pPoints[i].z;
+		}
+		if (vcMax.x < pPoints[i].x)
+		{
+			vcMax.x = pPoints[i].x;
+		}
+		if (vcMax.y < pPoints[i].y)
+		{
+			vcMax.y = pPoints[i].y;
+		}
+		if (vcMax.z < pPoints[i].z)
+		{
+			vcMax.z = pPoints[i].z;
+		}
+	}
+
+	//avoid precision error
+	vcMin -= 0.05f;
+	vcMax += 0.05f;
+
+
+	vcCenter = (vcMin + vcMax)*0.5;
+}
+
 void Aabb::SetFromVertexSet(const Vec3* pPoints, const int numPoints)
 {
     vcMin = pPoints[0];

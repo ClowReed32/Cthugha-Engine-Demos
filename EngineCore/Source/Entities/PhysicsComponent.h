@@ -71,11 +71,11 @@ public:
 	ConvexHullProperties(std::string collisionMeshFilename);
 	~ConvexHullProperties();
 
-	std::shared_ptr<Vec3> GetVertexList() { return m_pVertex; }
+	Vec3* GetVertexList() { return m_pVertex; }
 	UINT GetNumVertex() { return m_NumVertex; }
 
 private:
-	std::shared_ptr<Vec3> m_pVertex;
+	Vec3* m_pVertex;
 	UINT m_NumVertex;
 };
 
@@ -86,14 +86,14 @@ public:
 	TriangleMeshProperties(std::string collisionMeshFilename);
 	~TriangleMeshProperties();
 
-	std::shared_ptr<Vec3> GetVertexList() { return m_pVertex; }
-	std::shared_ptr<UINT> GetIndexList() { return m_pIndex; }
+	Vec3* GetVertexList() { return m_pVertex; }
+	UINT* GetIndexList() { return m_pIndex; }
 	UINT GetNumVertex() { return m_NumVertex; }
 	UINT GetNumIndex() { return m_NumIndex; }
 
 private:
-	std::shared_ptr<Vec3> m_pVertex;
-	std::shared_ptr<UINT> m_pIndex;
+	Vec3* m_pVertex;
+	UINT* m_pIndex;
 	UINT m_NumVertex;
 	UINT m_NumIndex;
 };

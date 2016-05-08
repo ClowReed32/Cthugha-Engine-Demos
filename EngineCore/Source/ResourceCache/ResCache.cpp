@@ -326,6 +326,113 @@ shared_ptr<ResHandle> ResCache::GetHandle(Resource * r)
 }
 
 //
+// ResCache::LoadFromFile								
+//
+bool ResCache::LoadFromFile(Resource * r)
+{
+	// Create a new resource and add it to the lru list and map
+
+	shared_ptr<IResourceLoader> loader;
+	shared_ptr<ResHandle> handle;
+
+	for (ResourceLoaders::iterator it = m_resourceLoaders.begin(); it != m_resourceLoaders.end(); ++it)
+	{
+		shared_ptr<IResourceLoader> testLoader = *it;
+
+		if (WildcardMatch(testLoader->VGetPattern().c_str(), r->m_name.c_str()))
+		{
+			loader = testLoader;
+			break;
+		}
+	}
+
+	if (!loader)
+	{
+		CHG_ASSERT(loader && _T("Default resource loader not found!"));
+		return false;
+	}
+
+	// Open file and obtain file size
+	FILE* pFile = fopen(r->m_name.c_str(), "r");
+
+	if (!pFile)
+	{
+		CHG_ASSERT("Resource size returned -1 - Resource not found: ");
+		return false;
+	}
+
+	fseek(pFile, 0L, SEEK_END);
+	int rawSize = ftell(pFile);
+	rewind(pFile);
+
+	if (rawSize < 0)
+	{
+		CHG_ASSERT(rawSize > 0 && "Resource size returned -1 - Resource not found: ");
+		return false;
+	}
+
+	int allocSize = rawSize + ((loader->VAddNullZero()) ? (1) : (0));
+	char *rawBuffer = loader->VUseRawFile() ? Allocate(allocSize) : CHG_NEW char[allocSize];
+	memset(rawBuffer, 0, allocSize);
+
+	if (rawBuffer == NULL || fread(rawBuffer, 1, rawSize, pFile) == 0)
+	{
+		// resource cache out of memory
+		CHG_ASSERT("Resource cache out of memory.");
+		return false;
+	}
+
+	fclose(pFile);
+
+	char *buffer = NULL;
+	unsigned int size = 0;
+
+	if (loader->VUseRawFile())
+	{
+		buffer = rawBuffer;
+		handle = shared_ptr<ResHandle>(CHG_NEW ResHandle(*r, buffer, rawSize, this));
+	}
+	else
+	{
+		size = loader->VGetLoadedResourceSize(rawBuffer, rawSize);
+		buffer = Allocate(size);
+		if (rawBuffer == NULL || buffer == NULL)
+		{
+			// resource cache out of memory
+			CHG_ASSERT("Resource cache out of memory.");
+			return false;
+		}
+		handle = shared_ptr<ResHandle>(CHG_NEW ResHandle(*r, buffer, size, this));
+		bool success = loader->VLoadResource(rawBuffer, rawSize, handle);
+
+		// [mrmike] - This was added after the chapter went to copy edit. It is used for those
+		//            resoruces that are converted to a useable format upon load, such as a compressed
+		//            file. If the raw buffer from the resource file isn't needed, it shouldn't take up
+		//            any additional memory, so we release it.
+		//
+		if (loader->VDiscardRawBufferAfterLoad())
+		{
+			SAFE_DELETE_ARRAY(rawBuffer);
+		}
+
+		if (!success)
+		{
+			// resource cache out of memory
+			CHG_ASSERT("Resource cache out of memory.");
+		}
+	}
+
+	if (handle)
+	{
+		m_lru.push_front(handle);
+		m_resources[r->m_name] = handle;
+	}
+
+	CHG_ASSERT(loader && _T("Default resource loader not found!"));
+	return true;		// ResCache is out of memory!
+}
+
+//
 // ResCache::Load								- Chapter 8, page 228-230
 //
 shared_ptr<ResHandle> ResCache::Load(Resource *r)

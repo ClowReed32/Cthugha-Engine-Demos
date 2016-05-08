@@ -729,6 +729,7 @@ public:
 	};
 
     void SetFromVertexSet(const Vec3* pPoints, const int numPoints);
+	void SetFromVertexSet(const Vec4* pPoints, const int numPoints);
     Aabb Union(const Aabb aabb); //Generate the envolved aabb of two aabbs
     Aabb Union(Vec3 vMin, Vec3 vMax);
 	Aabb Union(const Vec3 vPoint);

@@ -99,7 +99,7 @@ public:
 class PhysicComponentResourceData : public ComponentResourceData
 {
 private:
-	PhysicComponentResourceData() { }
+	PhysicComponentResourceData();
 
 	friend class EntityResourceLoader;
 

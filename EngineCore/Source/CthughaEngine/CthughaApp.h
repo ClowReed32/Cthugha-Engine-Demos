@@ -30,7 +30,7 @@ protected:
 	bool m_bIsRunning;						// true if everything is initialized and the game is in the main loop
 	bool m_bQuitRequested;					// true if the app should run the exit sequence
 	bool m_bQuitting;						// true if the app is running the exit sequence
-	Vec2 m_screenSize;						// game screen size
+	std::vector<Vec2> m_screenSize;			// game screen size
 	SDL_Window *m_pWindowHandle;			// SDL window handler
 
 	//Time member
@@ -40,7 +40,8 @@ protected:
 	clock_t m_lastDraw;
 
 public:
-	const Vec2 GetScreenSize()  { return m_screenSize; }
+	const Vec2 GetScreenSize() 	{	return m_screenSize.size() > 0 ? m_screenSize[0] : Vec2(0,0);	}
+	const Vec2 GetScreenSize(UINT uWindowId) { return m_screenSize.size() > uWindowId ? m_screenSize[uWindowId] : Vec2(0, 0); }
 	const int GetFrameNumber() { return m_iFrameNumber; }
 
 protected:
@@ -75,9 +76,9 @@ public:
 
 	// Windows handler and renderer methods
 	SDL_Window* GetHwnd();
-	virtual bool InitInstance(int argc, char *argv[], int screenWidth = SCREEN_WIDTH, int screenHeight = SCREEN_HEIGHT, bool windowedMode = true);	
+	virtual bool InitInstance(int argc, char *argv[], HWND *hwndArray, int *screenWidth, int *screenHeight, UINT numWindows = 1, bool windowedMode = true);
 	bool CreateWindowApp( const char* strWindowTitle, int x = -2147483648, int y = -2147483648 );
-	bool InitRenderer();
+	bool InitRenderer(/*Several windows*/HWND *hwndArray = NULL, UINT *screenWidth = NULL, UINT *screenHeight = NULL, UINT numWindows = 1);
 
 	// Text management methods
 	bool LoadStrings(std::string language);
@@ -94,7 +95,8 @@ public:
 
 	// Game loop 
 	int MainLoop();
-	int OnProcessEvent(SDL_Event* Event);
+	int OnProcessEvent(SDL_Event* Event);	// SDL Event
+	int OnProcessEvent(UINT msg, UINT wParam, UINT lParam);	// Windows Event
 	int OnUpdateGameAndRendering();
 	void OnUpdateGame(double fTime, float fElapsedTime);
 	void OnFrameRender(double fTime, float fElapsedTime);

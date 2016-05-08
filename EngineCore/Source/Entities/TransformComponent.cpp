@@ -117,7 +117,7 @@ Mat4x4 TransformComponent::RotateXYZ(float fAngleX, float fAngleY, float fAngleZ
 {
 	m_Rotation += Vec3(fAngleX, fAngleY, fAngleZ);
 
-	Mat4x4 mat = RotateXYZ(fAngleX, fAngleY, fAngleZ);
+	Mat4x4 mat = rotateXYZ(fAngleX, fAngleY, fAngleZ);
 	m_Position = (mat * Vec4(m_Position, 1.0f)).xyz();
 	m_transform = mat * m_transform;
 

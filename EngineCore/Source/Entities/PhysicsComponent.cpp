@@ -315,17 +315,17 @@ void PhysicsComponent::VPostInit(void)
 
 			if(!m_pShapeProperties->IsGhost())
 			{
-				m_pGamePhysics->VAddConvexHull(pConvexHullProperties->GetVertexList().get(), pConvexHullProperties->GetNumVertex(), m_pOwner, m_density, m_material, m_RigidBodyRotateConstrains, m_RigidBodyTranslateConstrains);
+				m_pGamePhysics->VAddConvexHull(pConvexHullProperties->GetVertexList(), pConvexHullProperties->GetNumVertex(), m_pOwner, m_density, m_material, m_RigidBodyRotateConstrains, m_RigidBodyTranslateConstrains);
 			}
 			else
 			{
-				m_pGamePhysics->VAddGhostConvexHull(pConvexHullProperties->GetVertexList().get(), pConvexHullProperties->GetNumVertex(), m_pOwner);
+				m_pGamePhysics->VAddGhostConvexHull(pConvexHullProperties->GetVertexList(), pConvexHullProperties->GetNumVertex(), m_pOwner);
 			}
 		}
 		else if (m_pShapeProperties->GetShapeType() == "TriangleMesh")
 		{
 			std::shared_ptr<TriangleMeshProperties> pTriangleMeshProperties = std::static_pointer_cast<TriangleMeshProperties>(m_pShapeProperties);
-			m_pGamePhysics->VAddTriangleMesh((float*)pTriangleMeshProperties->GetVertexList().get(), pTriangleMeshProperties->GetNumVertex(), pTriangleMeshProperties->GetIndexList().get(), pTriangleMeshProperties->GetNumIndex()/3, m_pOwner, m_density, m_material, m_RigidBodyRotateConstrains, m_RigidBodyTranslateConstrains);
+			m_pGamePhysics->VAddTriangleMesh((float*)pTriangleMeshProperties->GetVertexList(), pTriangleMeshProperties->GetNumVertex(), pTriangleMeshProperties->GetIndexList(), pTriangleMeshProperties->GetNumIndex()/3, m_pOwner, m_density, m_material, m_RigidBodyRotateConstrains, m_RigidBodyTranslateConstrains);
 		}
 		else if (m_pShapeProperties->GetShapeType() == "HeightField")
 		{

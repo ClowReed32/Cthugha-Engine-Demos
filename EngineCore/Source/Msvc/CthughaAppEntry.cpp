@@ -7,14 +7,18 @@ int CthughaAppEntry(int argc, char *argv[])
 	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF;					
 
 	_CrtSetDbgFlag(tmpDbgFlag);
+	//_CrtSetBreakAlloc(63365); // breakpoint where create memory leaks
 
 	//Initialize Logger
     Logger::Init("logging.xml");
 
 	g_pApp->m_Options.Init("PlayerOptions.xml", argc, argv);
 
+	int iWidth[] = { g_pApp->m_Options.m_ScreenSize.x };
+	int iHeight[] = { g_pApp->m_Options.m_ScreenSize.y };
+
 	// Perform application initialization
-	if (!g_pApp->InitInstance(argc, argv, g_pApp->m_Options.m_ScreenSize.x, g_pApp->m_Options.m_ScreenSize.y, g_pApp->m_Options.m_bWindowedMode)) 
+	if (!g_pApp->InitInstance(argc, argv, NULL, iWidth, iHeight, 1, g_pApp->m_Options.m_bWindowedMode))
 	{
 		return FALSE;
 	}

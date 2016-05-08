@@ -11,7 +11,7 @@
 // Forward declarations
 ////////////////////////////////////////////////////
 //
-// SceneActorMap Description				- Chapter 16, page Y
+// SceneActorMap Description				
 //
 //   An STL map that allows fast lookup of a scene node given an ActorId.
 //
@@ -29,7 +29,7 @@ struct FramebufferFlatElement
 
 ////////////////////////////////////////////////////
 //
-// Scene Description						- Chapter 16, page 536
+// Scene Description						
 //
 // A heirarchical container of scene nodes, which
 // are classes that implemente the ISceneNode interface
@@ -57,7 +57,6 @@ protected:
 	//Manage blocks of light for shader
 	shared_ptr<LightManager> m_pLightManager;
 
-	//ID3DXMatrixStack 		*m_MatrixStack;
 	SceneActorMap 			m_ActorMap;
 
 	std::list<shared_ptr<SceneNode>> m_RenderQueue;
@@ -88,7 +87,6 @@ protected:
 	TextureID		   m_MREC_RT;
 	TextureID		   m_ForwardRenderSceneRT;
 	StructuredBufferID m_LightingSceneRT;
-	//TextureID	       m_PostProcessingRT;
 	
 	//Custom Postprocessing Effect
 	void* m_pUserContext;
@@ -155,10 +153,9 @@ public:
 
     // event delegates
     void NewRenderComponentDelegate(IEventDataPtr pEventData);
-    void ModifiedRenderComponentDelegate(IEventDataPtr pEventData);			// added post-press!
+    void ModifiedRenderComponentDelegate(IEventDataPtr pEventData);			
     void DestroyActorDelegate(IEventDataPtr pEventData);
     void MoveActorDelegate(IEventDataPtr pEventData);
-    //void LevelLoadedDelegate(IEventDataPtr pEventData);
 
 	void SetCamera(shared_ptr<CameraNode> camera) { m_Camera = camera; }
 	const shared_ptr<CameraNode> GetCamera() const { return m_Camera; }
@@ -179,8 +176,6 @@ public:
 		m_tOnCustomPostProcessingEffect = pOnRenderShadowMethods;
 		m_pUserContext = pUserContext;
 	}
-
-	//HRESULT Pick(RayCast *pRayCast) { return m_Root->VPick(this, pRayCast); }
 
 	shared_ptr<Renderer> GetRenderer() { return m_pRenderer; }
 };

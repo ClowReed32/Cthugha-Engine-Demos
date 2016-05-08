@@ -18,11 +18,6 @@ public:
 	RVSDemoLogic();
 	virtual ~RVSDemoLogic();
 
-	// Evolutione Methods
-
-	// Update
-    //virtual void VMoveActor(const EntityId id, Mat4x4 const &mat);
-
 	// Overloads
 	virtual void VChangeState(BaseGameState newState);
 	virtual void VAddView(shared_ptr<IGameView> pView, EntityId entityId=INVALID_ENTITY_ID);

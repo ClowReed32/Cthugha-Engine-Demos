@@ -424,6 +424,16 @@ BulletPhysics::~BulletPhysics()
 		RemoveCollisionObject( obj );
 	}
 	
+	for (auto ghostCollisionIt : m_GhostCollisionObjectToEntityId)
+	{
+		GhostCollisionObject* ghostCollision = (GhostCollisionObject*)ghostCollisionIt.first;
+
+		SAFE_DELETE(ghostCollision->pGhostObjectShape);
+		SAFE_DELETE(ghostCollision);
+	}
+
+	m_GhostCollisionObjectToEntityId.clear();
+	m_EntityIdToGhostCollisionObject.clear();
 	m_rigidBodyToActorId.clear();
 
 	SAFE_DELETE(m_debugDrawer);
@@ -661,7 +671,6 @@ void BulletPhysics::RemoveCollisionObject( btCollisionObject * const removeMe )
 		delete body->getMotionState();
 		delete body->getCollisionShape();
 		delete body->getUserPointer();
-		delete body->getUserPointer();
 		
 		for ( int ii=body->getNumConstraintRefs()-1; ii >= 0; --ii )
 		{
@@ -831,7 +840,7 @@ void BulletPhysics::VAddConvexHull(Vec3 *verts, int numPoints, WeakEntityPtr pGa
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// BulletPhysics::VAddTriangleMesh				
+// BulletPhysics::VAddTriangleMesh. This shape can create memory leaks, due to bullets bug implementation		
 //
 void BulletPhysics::VAddTriangleMesh(float *verts, int num_Vertex, UINT *index, int num_Triangles, WeakEntityPtr gameEntity, /*const Mat4x4& initialTransform, */ const std::string& densityStr, const std::string& physicsMaterial, const Vec3& rotateConstrains, const Vec3& translateConstrains)
 {

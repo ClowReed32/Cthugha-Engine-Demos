@@ -326,7 +326,7 @@ HRESULT __stdcall CShaderInclude::Close(LPCVOID pData)
 }
 
 
-Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_FORMAT format, DXGI_FORMAT depthBufferFormat, UINT msaaSamples, bool fullscreen) : Renderer()
+Direct3D11Renderer::Direct3D11Renderer(const HWND* hwnd, const UINT* height, const UINT* width, UINT uNumWindows, DXGI_FORMAT format, DXGI_FORMAT depthBufferFormat, UINT msaaSamples, bool fullscreen) : Renderer()
 {
 	HRESULT hr = S_OK;
 	m_driverType = D3D_DRIVER_TYPE_NULL;
@@ -354,35 +354,73 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
     };
 	UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
-	// Set device descriptor
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = width;
-    sd.BufferDesc.Height = height;
-    sd.BufferDesc.Format = format;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = hwnd;
-    sd.SampleDesc.Count = msaaSamples;
-    sd.SampleDesc.Quality = 0;
-	sd.Windowed = !fullscreen;
-
-	// Create DirectX device and swap chain
+	// Create DirectX device
     for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
         m_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain( NULL, m_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                                            D3D11_SDK_VERSION, &sd, &m_pSwapChain, &m_pd3dDevice, &m_featureLevel, &m_pImmediateContext );
+
+		hr = D3D11CreateDevice(NULL, m_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+							   D3D11_SDK_VERSION, &m_pd3dDevice, &m_featureLevel, &m_pImmediateContext);
+
         if( SUCCEEDED( hr ) )
             break;
     }
     if( FAILED( hr ) )
 	{
-        printf("Create DirectX 11 Renderer failed. Try to use other Renderer");
+        CHG_ERROR("Create DirectX 11 Renderer failed. Try to use other Renderer");
 		return;
 	}
+
+	// Create DirectX 11 Swap Chains
+	numWindowRenderer = uNumWindows;
+	m_pSwapChain = CHG_NEW IDXGISwapChain*[uNumWindows];
+
+	// Attempt to create the DXGI Factory.
+
+	IDXGIDevice * pDXGIDevice;
+	m_pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
+
+	IDXGIAdapter * pDXGIAdapter;
+	pDXGIDevice->GetParent(__uuidof(IDXGIAdapter), (void **)&pDXGIAdapter);
+
+	IDXGIFactory * pFactory;
+	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory), (void **)&pFactory);
+
+	for (UINT swapChainIndex = 0; swapChainIndex < uNumWindows; ++swapChainIndex)
+	{
+		if (fullscreen && swapChainIndex > 0)
+		{
+			CHG_WARNING("Cannot create multiple fullscreen swap chain.");
+		}
+
+		// Set swap descriptor
+		DXGI_SWAP_CHAIN_DESC sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.BufferCount = 1;
+		sd.BufferDesc.Width = width[swapChainIndex];
+		sd.BufferDesc.Height = height[swapChainIndex];
+		sd.BufferDesc.Format = format;
+		sd.BufferDesc.RefreshRate.Numerator = 60;
+		sd.BufferDesc.RefreshRate.Denominator = 1;
+		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		sd.OutputWindow = hwnd[swapChainIndex];
+		sd.SampleDesc.Count = msaaSamples;
+		sd.SampleDesc.Quality = 0;
+		sd.Windowed = !fullscreen;
+
+		hr = pFactory->CreateSwapChain(m_pd3dDevice, &sd, &m_pSwapChain[swapChainIndex]);
+
+		if (FAILED(hr))
+		{
+			CHG_ERROR("Cannot create a swap chain.");
+			return;
+		}
+	}
+
+	// Release factory
+	pDXGIDevice->Release();
+	pDXGIAdapter->Release();
+	pFactory->Release();
 
 	// Init member and render states to default value //////////////////////
 	eventQuery = NULL;
@@ -411,52 +449,61 @@ Direct3D11Renderer::Direct3D11Renderer(HWND hwnd, UINT height, UINT width, DXGI_
 	////////////////////////////////////////////////////////////////////////
 
 	//Create main depthStencilBuffer and renderTargetBuffer
-	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID *) &backBuffer);
-	if (FAILED(m_pd3dDevice->CreateRenderTargetView(backBuffer, NULL, &backBufferRTV)))
-	{
-		CHG_ERROR("Create renderTargetBuffer error");
-	}
+	backBuffer = CHG_NEW ID3D11Texture2D*[uNumWindows];
+	depthBuffer = CHG_NEW ID3D11Texture2D*[uNumWindows];
+	backBufferRTV = CHG_NEW ID3D11RenderTargetView*[uNumWindows];
+	depthBufferDSV = CHG_NEW ID3D11DepthStencilView*[uNumWindows];
 
-	if (depthBufferFormat != DXGI_FORMAT_UNKNOWN)
+	for (UINT swapChainIndex = 0; swapChainIndex < uNumWindows; ++swapChainIndex)
 	{
-		// Create depth stencil texture
-		D3D11_TEXTURE2D_DESC descDepth;
-		descDepth.Width  = width;
-		descDepth.Height = height;
-		descDepth.MipLevels = 1;
-		descDepth.ArraySize = 1;
-		descDepth.Format = depthBufferFormat;
-		descDepth.SampleDesc.Count = msaaSamples;
-		descDepth.SampleDesc.Quality = 0;
-		descDepth.Usage = D3D11_USAGE_DEFAULT;
-		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		descDepth.CPUAccessFlags = 0;
-		descDepth.MiscFlags = 0;
-		if (FAILED(m_pd3dDevice->CreateTexture2D(&descDepth, NULL, &depthBuffer)))
+		m_pSwapChain[swapChainIndex]->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID *)&backBuffer[swapChainIndex]);
+
+		if (FAILED(m_pd3dDevice->CreateRenderTargetView(backBuffer[swapChainIndex], NULL, &backBufferRTV[swapChainIndex])))
 		{
-			CHG_ERROR("Create depth Buffer error");
+			CHG_ERROR("Create renderTargetBuffer error");
 		}
 
-		// Create the depth stencil view
-		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-		ZeroMemory( &descDSV, sizeof(descDSV) );
-		descDSV.Format = descDepth.Format;
-		descDSV.ViewDimension = msaaSamples > 1? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
-		descDSV.Texture2D.MipSlice = 0;
-		if (FAILED(m_pd3dDevice->CreateDepthStencilView(depthBuffer, &descDSV, &depthBufferDSV)))
+		if (depthBufferFormat != DXGI_FORMAT_UNKNOWN)
 		{
-			CHG_ERROR("Create depth view error");
+			// Create depth stencil texture
+			D3D11_TEXTURE2D_DESC descDepth;
+			descDepth.Width = width[swapChainIndex];
+			descDepth.Height = height[swapChainIndex];
+			descDepth.MipLevels = 1;
+			descDepth.ArraySize = 1;
+			descDepth.Format = depthBufferFormat;
+			descDepth.SampleDesc.Count = msaaSamples;
+			descDepth.SampleDesc.Quality = 0;
+			descDepth.Usage = D3D11_USAGE_DEFAULT;
+			descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			descDepth.CPUAccessFlags = 0;
+			descDepth.MiscFlags = 0;
+			if (FAILED(m_pd3dDevice->CreateTexture2D(&descDepth, NULL, &depthBuffer[swapChainIndex])))
+			{
+				CHG_ERROR("Create depth Buffer error");
+			}
+
+			// Create the depth stencil view
+			D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+			ZeroMemory(&descDSV, sizeof(descDSV));
+			descDSV.Format = descDepth.Format;
+			descDSV.ViewDimension = msaaSamples > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
+			descDSV.Texture2D.MipSlice = 0;
+			if (FAILED(m_pd3dDevice->CreateDepthStencilView(depthBuffer[swapChainIndex], &descDSV, &depthBufferDSV[swapChainIndex])))
+			{
+				CHG_ERROR("Create depth view error");
+			}
 		}
 	}
 
 	// Set main render target by default
-	m_pImmediateContext->OMSetRenderTargets(1, &backBufferRTV, depthBufferDSV);
+	m_pImmediateContext->OMSetRenderTargets(1, &backBufferRTV[0], depthBufferDSV[0]); // default -> swap chain 0
 	m_uNumRenderTargets = 1;
 
 	// Setup the viewport
 	D3D11_VIEWPORT viewport;
-	viewport.Width  = (float)width;
-	viewport.Height = (float)height;
+	viewport.Width  = (float)width[0];
+	viewport.Height = (float)height[0];
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0;
@@ -626,6 +673,26 @@ Direct3D11Renderer::~Direct3D11Renderer()
 	{
 		removeStructuredBuffer(i);
 	}
+
+	// Delete back buffers and depth stencil buffers and swap chains
+	for (UINT i = 0; i < numWindowRenderer; ++i)
+	{
+		SAFE_RELEASE(backBuffer[i]);
+		SAFE_RELEASE(depthBuffer[i]);
+		SAFE_RELEASE(backBufferRTV[i]);
+		SAFE_RELEASE(depthBufferDSV[i]);
+
+		SAFE_RELEASE(m_pSwapChain[i]);
+	}
+
+	SAFE_DELETE_ARRAY(backBuffer);
+	SAFE_DELETE_ARRAY(depthBuffer);
+	SAFE_DELETE_ARRAY(backBufferRTV);
+	SAFE_DELETE_ARRAY(depthBufferDSV);
+	SAFE_DELETE_ARRAY(m_pSwapChain);
+
+	// Release device
+	SAFE_RELEASE(m_pd3dDevice);
 
 	SAFE_DELETE(m_pShaderInclude);
 }
@@ -1541,7 +1608,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		} 
 		else 
 		{
-			printf((const char *) errorsBuf->GetBufferPointer());
+			CHG_ERROR((const char *) errorsBuf->GetBufferPointer());
 		}
 		SAFE_RELEASE(shaderBuf);
 		SAFE_RELEASE(errorsBuf);
@@ -1579,7 +1646,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		} 
 		else 
 		{
-			printf((const char *) errorsBuf->GetBufferPointer());
+			CHG_ERROR((const char *)errorsBuf->GetBufferPointer());
 		}
 		SAFE_RELEASE(shaderBuf);
 		SAFE_RELEASE(errorsBuf);
@@ -1617,7 +1684,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		}
 		else
 		{
-			printf((const char *)errorsBuf->GetBufferPointer());
+			CHG_ERROR((const char *)errorsBuf->GetBufferPointer());
 		}
 		SAFE_RELEASE(shaderBuf);
 		SAFE_RELEASE(errorsBuf);
@@ -1658,7 +1725,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		}
 		else
 		{
-			printf((const char *)errorsBuf->GetBufferPointer());
+			CHG_ERROR((const char *)errorsBuf->GetBufferPointer());
 		}
 		SAFE_RELEASE(shaderBuf);
 		SAFE_RELEASE(errorsBuf);
@@ -1696,7 +1763,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		} 
 		else
 		{
-			printf((const char *) errorsBuf->GetBufferPointer());
+			CHG_ERROR((const char *)errorsBuf->GetBufferPointer());
 		}
 		SAFE_RELEASE(shaderBuf);
 		SAFE_RELEASE(errorsBuf);
@@ -1734,7 +1801,7 @@ ShaderID Direct3D11Renderer::createShader(const char *vsText, const char *gsText
 		} 
 		else
 		{
-			printf((const char *) errorsBuf->GetBufferPointer());
+			CHG_ERROR((const char *)errorsBuf->GetBufferPointer());
 		}
 		SAFE_RELEASE(shaderBuf);
 		SAFE_RELEASE(errorsBuf);
@@ -4466,7 +4533,7 @@ void Direct3D11Renderer::changeRenderTargets(const TextureID *colorRTs, const UI
 
 	if (depthRT == FB_DEPTH)
 	{
-		dsv = depthBufferDSV;
+		dsv = depthBufferDSV[currentWindowRenderer];
 	} 
 	else if (depthRT == TEXTURE_NONE)
 	{
@@ -4491,7 +4558,7 @@ void Direct3D11Renderer::changeRenderTargets(const TextureID *colorRTs, const UI
 		{
 			if (rt == FB_COLOR)
 			{
-				rtv[i] = backBufferRTV;
+				rtv[i] = backBufferRTV[currentWindowRenderer];
 			} 
 			else 
 			{
@@ -4586,7 +4653,7 @@ void Direct3D11Renderer::changeToMainFramebuffer()
 	}
 	applyTextures();
 
-	m_pImmediateContext->OMSetRenderTargets(1, &backBufferRTV, depthBufferDSV);
+	m_pImmediateContext->OMSetRenderTargets(1, &backBufferRTV[currentWindowRenderer], depthBufferDSV[currentWindowRenderer]);
 
 	D3D11_VIEWPORT vp = { 0, 0, (float)viewportWidth, (float)viewportHeight, 0.0f, 1.0f };
 	m_pImmediateContext->RSSetViewports(1, &vp);
@@ -4854,7 +4921,7 @@ void Direct3D11Renderer::clear(const bool clearColor, const bool clearDepth, con
 	{
 		if (currentColorRT[0] == FB_COLOR)
 		{
-			m_pImmediateContext->ClearRenderTargetView(backBufferRTV, color);
+			m_pImmediateContext->ClearRenderTargetView(backBufferRTV[currentWindowRenderer], color);
 		}
 
 		for (int i = 0; i < MAX_MRTS; i++)
@@ -4880,7 +4947,7 @@ void Direct3D11Renderer::clear(const bool clearColor, const bool clearDepth, con
 
 		if (currentDepthRT == FB_DEPTH)
 		{
-			m_pImmediateContext->ClearDepthStencilView(depthBufferDSV, clearFlags, depth, stencil);
+			m_pImmediateContext->ClearDepthStencilView(depthBufferDSV[currentWindowRenderer], clearFlags, depth, stencil);
 		}
 		else if (currentDepthRT >= 0)
 		{
@@ -5570,7 +5637,8 @@ void Direct3D11Renderer::flush()
 
 void Direct3D11Renderer::endFrame()
 {
-	m_pSwapChain->Present(0, 0);
+	for (UINT uSwapChain = 0; uSwapChain < numWindowRenderer; ++uSwapChain)
+		m_pSwapChain[uSwapChain]->Present(0, 0);
 }
 
 void Direct3D11Renderer::finish()

@@ -603,7 +603,8 @@ public:
 	virtual void changeRenderTargets(const TextureID *colorRTs, const UINT nRenderTargets, const TextureID depthRT = TEXTURE_NONE, const int depthSlice = NO_SLICE, const int *slices = NULL, 
 		const UINT flags = DEFAULT_SIZE) = 0;
 	virtual void changeToMainFramebuffer() = 0;
-
+	
+	void setWindowRenderer(UINT uWindow) { currentWindowRenderer = uWindow; }
 	void setViewport(const int width, const int height, const int posX = 0, const int posY = 0);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -681,6 +682,7 @@ public:
 	ShaderID getSelectedShaderID() { return selectedShader; }
 	VertexFormatID getSelectedVertexFormatID() { return selectedVertexFormat; }
 	VertexFormatID getCurrentVertexFormatID() { return currentVertexFormat; }
+	//UINT getNumWindowRenderer() { return numWindowRenderer; }
 	/////////////////////////////////////////////////////////////////////////////
 
 #ifdef PROFILE
@@ -737,6 +739,9 @@ protected:
 	BlendStateID currentBlendState, selectedBlendState;
 	UINT currentSampleMask, selectedSampleMask;
 	RasterizerStateID currentRasterizerState, selectedRasterizerState;
+
+	UINT currentWindowRenderer;
+	UINT numWindowRenderer;
 
 	TextureID currentColorRT[MAX_MRTS], currentDepthRT;
 	int currentColorRTSlice[MAX_MRTS], currentDepthSlice;

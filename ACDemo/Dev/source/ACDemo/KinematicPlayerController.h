@@ -52,7 +52,6 @@ protected:
 
 public:
 	KinematicPlayerController(shared_ptr<Entity> object, shared_ptr<SceneNode> camera);
-//	void SetObject(shared_ptr<SceneNode> newObject);
 
 	void OnUpdate(DWORD const elapsedMs);
 

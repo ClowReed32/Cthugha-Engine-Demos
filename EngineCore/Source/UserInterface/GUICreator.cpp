@@ -40,7 +40,7 @@ std::shared_ptr<UINode> GUICreator::OnCreateCheckBox(GameViewId viewID, std::str
 
     TiXmlElement* pButtonEntityNode = doc.RootElement();
 
-    // Load and create Terrain entity
+    // Load and create entity
     if (pButtonEntityNode)
     {
         StrongEntityPtr pEntity = g_pApp->m_pGame->VCreateStaticEntity(pButtonEntityNode);
@@ -95,7 +95,7 @@ std::shared_ptr<UINode> GUICreator::OnCreateButton(GameViewId viewID, std::strin
 
 	TiXmlElement* pButtonEntityNode = doc.RootElement();
 
-	// Load and create Terrain entity
+	// Load and create entity
 	if (pButtonEntityNode)
 	{
 		StrongEntityPtr pEntity = g_pApp->m_pGame->VCreateStaticEntity(pButtonEntityNode);
@@ -138,7 +138,7 @@ std::shared_ptr<UINode> GUICreator::OnCreateImage(GameViewId viewID, std::string
 
 	TiXmlElement* pImageEntityNode = doc.RootElement();
 
-	// Load and create Terrain entity
+	// Load and create entity
 	if (pImageEntityNode)
 	{
 		StrongEntityPtr pEntity = g_pApp->m_pGame->VCreateStaticEntity(pImageEntityNode);
@@ -181,7 +181,7 @@ std::shared_ptr<UINode> GUICreator::OnCreatePanel(GameViewId viewID, std::string
 
 	TiXmlElement* pPanelEntityNode = doc.RootElement();
 
-	// Load and create Terrain entity
+	// Load and create entity
 	if (pPanelEntityNode)
 	{
 		StrongEntityPtr pEntity = g_pApp->m_pGame->VCreateStaticEntity(pPanelEntityNode);
@@ -224,7 +224,7 @@ std::shared_ptr<UINode> GUICreator::OnCreateText(GameViewId viewID, std::string 
 
 	TiXmlElement* pTextEntityNode = doc.RootElement();
 
-	// Load and create Terrain entity
+	// Load and create entity
 	if (pTextEntityNode)
 	{
 		StrongEntityPtr pEntity = g_pApp->m_pGame->VCreateStaticEntity(pTextEntityNode);

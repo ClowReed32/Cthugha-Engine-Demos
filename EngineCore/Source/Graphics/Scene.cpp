@@ -258,23 +258,10 @@ bool Scene::OnRender()
 
     float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     UINT offset[] = {0};
-	static int iFlipTargetIndex = 0;
-
-    // Temporal blur //////////////////////
-    static float timeCount = 0.0f;
-    static float fps = 1.0f;
-    static int ticks = 0;
-
-    fps = (float)ticks / timeCount;
-
-    timeCount += g_pApp->getElapsedTime();
-    ticks++;
-    ////////////////////////////////////////
 
 	if (m_Root && m_Camera)
 	{
 		m_Camera->SetViewTransform(this);		        
-        iFlipTargetIndex = (iFlipTargetIndex + 1) % 2;
 
         Mat4x4 inverseViewMat = m_Camera->GetInverseView();
         Mat4x4 inverseProjMat = m_Camera->GetInverseProjection();

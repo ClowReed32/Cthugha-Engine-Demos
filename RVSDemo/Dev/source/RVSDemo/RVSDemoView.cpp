@@ -1,12 +1,9 @@
 #include <Msvc\CthughaStd.h>
 
 #include <CthughaEngine\CthughaApp.h>
-//#include "../GCC4/Audio/Audio.h"
-//#include "../GCC4/Audio/SoundProcess.h"
 #include <Graphics\Renderer.h>
 #include <Graphics\Geometry.h>
 #include <Graphics\MovementController.h>
-//#include "../GCC4/Graphics3D/Raycast.h"
 #include <Graphics\SceneNodes.h>
 #include <MainLoop\Initialization.h>
 #include <EventManager\Events.h>
@@ -17,10 +14,8 @@
 #include <Entities\Entity.h>
 #include <Entities\RenderComponent.h>
 #include <Utilities\String.h>
-//#include "../GCC4/LUAScripting/LuaStateManager.h"
 #include <UserInterface\GUICreator.h>
 #include "RVSDemoView.h"
-//#include "TeapotWarsNetwork.h"
 #include "RVSDemoEvents.h"
 #include <Graphics\GUI\UIFunctionText.h>
 #include <Graphics\GUI\UIFunctionButton.h>
@@ -102,9 +97,6 @@ AncientCivilizationDemoHumanView::AncientCivilizationDemoHumanView(shared_ptr<Re
 
 	//Camera Init Position ---------------------------------------------------------->Change
 	m_pCamera->VSetTransform(&Mat4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 10.0f, 0.0f, 0.0f, 0.0f, 1.0f));
-
-    //m_pEscMenuBackGround = GUICreator::OnCreateImage(m_ViewId, "EscBackMenu", "", Vec4(0.0f, 0.0f, 0.0f, 0.5f), Vec2(), g_pApp->GetScreenSize(), Vec2(1.0f, 1.0f), 0);
-    //m_pEscMenuBackGround->SetVisible(m_bPauseState);
 
 	m_pPauseMenuDialog = GUICreator::OnCreateImage(m_ViewId, "PauseMenuDialog", "Art\\GUI\\BubblePauseMenu.dds", Vec4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(), Vec2(CROSS_MULTIPLY_W(656.0f, vScreenSize.x), CROSS_MULTIPLY_H(1080.0f, vScreenSize.y)), Vec2(1.0f, 1.0f), 0);
     m_pPauseMenuDialog->SetVisible(m_bPauseState);
@@ -534,14 +526,6 @@ bool AncientCivilizationDemoHumanView::VOnMsgProc(CHG_Event msg)
 
 	if (msg.eventType==CHG_KEYDOWN)
 	{
-		/*if (msg.keyboardEvent.asciiCode=='p')
-		{
-			m_KeyboardHandler = m_pFreeCameraController;
-			m_PointerHandler = m_pFreeCameraController;
-			m_pCamera->ClearTarget();
-			
-			return 1;
-		}*/
         if (msg.keyboardEvent.asciiCode == '\x1b')
         {
             m_bPauseState = !m_bPauseState;
@@ -617,99 +601,6 @@ void AncientCivilizationDemoHumanView::VRenderText()
 
     g_pApp->m_pRenderer->setViewport((int)g_pApp->GetScreenSize().x, (int)g_pApp->GetScreenSize().y);
 	g_pApp->m_pRenderer->changeToMainFramebuffer();
-	//g_pApp->m_pTextHelper->DrawTextLine( bufferText );
-	//printf("FPS: %f\n", fps);
-	/*if (!D3DRenderer::g_pTextHelper)
-		return;
-
-	HumanView::VRenderText();
-
-	D3DRenderer::g_pTextHelper->Begin();
-
-    // Gameplay UI (with shadow)....
-    if (!m_gameplayText.empty())
-    {
-	    D3DRenderer::g_pTextHelper->SetInsertionPos( g_pApp->GetScreenSize().x/2, 5 );
-	    D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 0.0f, 0.0f, 0.0f, 1.0f ) );
-	    D3DRenderer::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
-	    D3DRenderer::g_pTextHelper->SetInsertionPos( g_pApp->GetScreenSize().x/2-1, 5-1 );
-	    D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 0.25f, 1.0f, 0.25f, 1.0f ) );
-	    D3DRenderer::g_pTextHelper->DrawTextLine(m_gameplayText.c_str());
-    }
-	// ...Gameplay UI
-
-	if( m_bShowUI )
-	{
-		// Output statistics...
-		D3DRenderer::g_pTextHelper->SetInsertionPos( 5, 5 );
-		D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 1.0f, 1.0f, 0.0f, 1.0f ) );
-		D3DRenderer::g_pTextHelper->DrawTextLine( DXUTGetFrameStats() );
-		D3DRenderer::g_pTextHelper->DrawTextLine( DXUTGetDeviceStats() );
-		//...output statistics
-		
-		D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 0.0f, 0.0f, 0.0f, 0.5f ) );
-
-		//Game State...
-		switch (m_BaseGameState)
-		{
-			case BGS_Initializing:
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_INITIALIZING")).c_str());
-				break;
-
-			case BGS_MainMenu:
-				D3DRenderer::g_pTextHelper->DrawTextLine(L"Main Menu");
-				break;
-
-//			case BGS_SpawnAI:
-//				D3DRenderer::g_pTextHelper->DrawTextLine(L"Spawn AI");
-//				break;
-
-			case BGS_WaitingForPlayers:
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_WAITING")).c_str());
-				break;
-
-			case BGS_LoadingGameEnvironment:
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_LOADING")).c_str());
-				break;
-
-			case BGS_Running:
-#ifndef DISABLE_PHYSICS
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_RUNNING")).c_str());
-#else
-				D3DRenderer::g_pTextHelper->DrawTextLine(g_pApp->GetString(_T("IDS_NOPHYSICS")).c_str());
-#endif //!DISABLE_PHYSICS
-				break;
-		}
-		//...Game State
-
-		//Camera...
-		TCHAR buffer[256];
-		const TCHAR *s = NULL;
-		Mat4x4 toWorld;
-		Mat4x4 fromWorld;
-		if (m_pCamera)
-		{	
-			m_pCamera->VGet()->Transform(&toWorld, &fromWorld);
-		}
-		swprintf(buffer, g_pApp->GetString(_T("IDS_CAMERA_LOCATION")).c_str(), toWorld.m[3][0], toWorld.m[3][1], toWorld.m[3][2]);
-		D3DRenderer::g_pTextHelper->DrawTextLine( buffer );
-		//...Camera
-
-		//Help text.  Right justified, lower right of screen.
-		RECT helpRect;
-		helpRect.left = 0;
-		helpRect.right = g_pApp->GetScreenSize().x - 10;
-		helpRect.top = g_pApp->GetScreenSize().y - 15*8;
-		helpRect.bottom = g_pApp->GetScreenSize().y;
-		D3DRenderer::g_pTextHelper->SetInsertionPos( helpRect.right, helpRect.top );
-		D3DRenderer::g_pTextHelper->SetForegroundColor( D3DXCOLOR( 1.0f, 0.75f, 0.0f, 1.0f ) );
-		D3DRenderer::g_pTextHelper->DrawTextLine( helpRect, DT_RIGHT, g_pApp->GetString(_T("IDS_CONTROLS_HEADER")).c_str() );
-		helpRect.top = g_pApp->GetScreenSize().y-15*7;
-		D3DRenderer::g_pTextHelper->DrawTextLine( helpRect, DT_RIGHT, g_pApp->GetString(_T("IDS_CONTROLS")).c_str() );
-		//...Help
-	}//end if (m_bShowUI)
-
-	D3DRenderer::g_pTextHelper->End();*/
 }
 
 
@@ -752,9 +643,6 @@ bool AncientCivilizationDemoHumanView::VLoadGameDelegate(TiXmlElement* pLevelDat
 	if (!HumanView::VLoadGameDelegate(pLevelData))
 		return false;
 
-    //m_StandardHUD.reset(GCC_NEW StandardHUD); 
-    //VPushElement(m_StandardHUD);
-
     // A movement controller is going to control the camera, 
     m_pFreeCameraController.reset(CHG_NEW MovementController(m_pCamera, 0, 0, false));
 
@@ -778,7 +666,6 @@ void AncientCivilizationDemoHumanView::VSetControlledActor(EntityId entityId)
 
 	HumanView::VSetControlledActor(entityId);
 
-	//m_pCamera->SetTarget(m_pPlayer);
     m_pPlayerController.reset(CHG_NEW KinematicPlayerController(m_pPlayer, m_pCamera));
     m_KeyboardHandler = m_pPlayerController;
     m_PointerHandler = m_pPlayerController;
@@ -788,11 +675,6 @@ void AncientCivilizationDemoHumanView::VSetControlledActor(EntityId entityId)
 
 void AncientCivilizationDemoHumanView::GameplayUiUpdateDelegate(IEventDataPtr pEventData)
 {
-    /*shared_ptr<EvtData_Gameplay_UI_Update> pCastEventData = static_pointer_cast<EvtData_Gameplay_UI_Update>(pEventData);
-    if (!pCastEventData->GetUiString().empty())
-        m_gameplayText = s2ws(pCastEventData->GetUiString());
-    else
-        m_gameplayText.clear();*/
 }
 
 void AncientCivilizationDemoHumanView::SetControlledActorDelegate(IEventDataPtr pEventData)
@@ -806,13 +688,11 @@ void AncientCivilizationDemoHumanView::RegisterAllDelegates(void)
 	// [mrmike] Move, New, and Destroy actor events are now handled by the HumanView, as are the PlaySound and GameState events
 
     IEventManager* pGlobalEventManager = IEventManager::Get();
-    //pGlobalEventManager->VAddListener(MakeDelegate(this, &TeapotWarsHumanView::GameplayUiUpdateDelegate), EvtData_Gameplay_UI_Update::sk_EventType);
     pGlobalEventManager->VAddListener(MakeDelegate(this, &AncientCivilizationDemoHumanView::SetControlledActorDelegate), EvtData_Set_Controlled_Actor::sk_EventType);
 }
 
 void AncientCivilizationDemoHumanView::RemoveAllDelegates(void)
 {
     IEventManager* pGlobalEventManager = IEventManager::Get();
-    //pGlobalEventManager->VRemoveListener(MakeDelegate(this, &TeapotWarsHumanView::GameplayUiUpdateDelegate), EvtData_Gameplay_UI_Update::sk_EventType);
     pGlobalEventManager->VRemoveListener(MakeDelegate(this, &AncientCivilizationDemoHumanView::SetControlledActorDelegate), EvtData_Set_Controlled_Actor::sk_EventType);
 }
