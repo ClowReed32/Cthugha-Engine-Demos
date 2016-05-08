@@ -11659,6 +11659,7 @@ Line: 68
 [INFO] Remove Texture: 78
 [INFO] Remove Texture: 79
 [INFO] Remove Texture: 80
+<<<<<<< HEAD
 [INFO] ---------------- 2016-04-20 20:43:26 ----------------
 [INFO] Create new texture: 0
 [INFO] Create new Target Surface: 1
@@ -12805,3 +12806,5 @@ Line: 68
 [INFO] Remove Texture: 78
 [INFO] Remove Texture: 79
 [INFO] Remove Texture: 80
+=======
+>>>>>>> ccee45cb3ec1b11d0d2e11bf67ca5dc1b5bbf46e
